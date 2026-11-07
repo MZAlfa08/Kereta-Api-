@@ -1,5 +1,5 @@
 /* Audio realistis: semua suara dibuat langsung oleh browser (WebAudio), tanpa file eksternal */
-let AC,M,NZ,RV,E={},HR=null;
+let AC,M,NZ,RV,E={},HR=null,HD=0;
 function au(){if(AC){AC.resume();return}
  try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return}
  const cp=AC.createDynamicsCompressor();M=AC.createGain();M.gain.value=.9;M.connect(cp);cp.connect(AC.destination);
@@ -27,12 +27,13 @@ function chuff(sp){if(!AC||!S.snd)return;const s=AC.createBufferSource(),f=AC.cr
  s.connect(f);f.connect(g);g.connect(M);s.start(t,Math.random(),.2)}
 /* klakson angin (air horn) akor 3 nada + sedikit getaran + gema, tahan untuk membunyikan */
 const HN={krl:[466,587,698],mrt:[523,659,784],loco:[196,247,294],steam:[262,330,392],bullet:[622,784,932]};
-function hornOn(k){if(!AC||HR||!S.snd)return;const t=AC.currentTime,g=AC.createGain(),lp=AC.createBiquadFilter(),rv=AC.createGain(),os=[];
+function hornOn(k){HD=1;if(!AC||HR||!S.snd)return;const t=AC.currentTime,g=AC.createGain(),lp=AC.createBiquadFilter(),rv=AC.createGain(),os=[];
  lp.type='lowpass';lp.frequency.value=2400;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.085,t+.06);g.connect(lp);lp.connect(M);rv.gain.value=.7;lp.connect(rv);rv.connect(RV);
  (HN[k]||HN.loco).forEach(f=>[0,1].forEach(j=>{const o=AC.createOscillator(),lf=AC.createOscillator(),lg=AC.createGain();
   o.type=j?'square':'sawtooth';o.frequency.value=f*(j?1.004:.997);lf.frequency.value=5.5;lg.gain.value=f*.004;lf.connect(lg);lg.connect(o.frequency);o.connect(g);o.start();lf.start();os.push(o,lf)}));
  const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=1400;nf.Q.value=.8;ng.gain.value=.5;s.connect(nf);nf.connect(ng);ng.connect(g);s.start();os.push(s);
  HR={g,os}}
-function hornOff(){if(!HR||!AC)return;const{g,os}=HR,t=AC.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.35);os.forEach(o=>{try{o.stop(t+.4)}catch(e){}});HR=null}
+function hornOff(){HD=0;if(!HR||!AC)return;const{g,os}=HR,t=AC.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.35);os.forEach(o=>{try{o.stop(t+.4)}catch(e){}});HR=null}
 function tone(f,d,ty,v,f2,dl){if(!S.snd||!AC)return;const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+(dl||0);o.type=ty;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.linearRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(M);o.start(t);o.stop(t+d)}
 const ding=()=>{tone(988,.5,'sine',.18);tone(1319,.7,'sine',.18,0,.14)},bad=()=>tone(160,.6,'sawtooth',.14,60),tk=()=>tone(260,.05,'square',.05);
+const bell=()=>{tone(1650,.2,'triangle',.07);tone(1760,.2,'triangle',.05)};
