@@ -23,17 +23,17 @@ function hud(on){$('hud').classList.toggle('on',on);$('ctl').classList.toggle('o
 function toMenu(){hornOff();G={m:'menu',pos:0,v:10,r:{st:[],sg:[]},pf:[],lp:0,lv:1,sc:0,sf:100,cg:0};hud(0);$('mi').textContent='🪙 '+S.coin+'  •  🏆 Skor Tertinggi '+S.hi;show('menu')}
 /* level */
 function gen(l){const t=TR[S.sel],f=.8+t.v/400,st=[{x:0,nm:NM[((l-1)*3)%NM.length],done:1}],sg=[],n=Math.min(2+l,7),mx=Math.min(1+Math.floor(l/2),5),L=[60,80,100,120,160,200],pk=()=>L[Math.floor(Math.random()*(mx+1))];let xx=0;
- for(let i=1;i<=n;i++){xx+=(1700+hs(l*9+i)*600+l*80)*f;st.push({x:xx,nm:NM[(((l-1)*3)+i)%NM.length],done:0})}
+ for(let i=1;i<=n;i++){xx+=(2800+hs(l*9+i)*800+l*120)*f;st.push({x:xx,nm:NM[(((l-1)*3)+i)%NM.length],done:0})}
  for(let i=0;i<n;i++){const a=st[i].x+SP+40,b=st[i+1].x;sg.push({x:a,l:pk()},{x:a+(b-a)*.35,l:pk()},{x:b-1000,l:100},{x:b-550,l:60},{x:b-300,l:40})}
  return{st,sg}}
 function newLevel(){G.r=gen(G.lv);G.pos=SP;G.v=0;G.ni=1;G.dw=0;G.ts=0;G.fin=0;th=bk=em=0;G.dg=0;G.tl=segT(1);G.m='play';G.pf=[];show(null);hud(1);toast('Level '+G.lv+' → '+G.r.st[1].nm)}
 function startGame(){G={m:'play',pos:0,v:0,lv:1,sc:0,sf:100,cg:0,pf:[],lp:0};newLevel()}
 const limAt=p=>{let l=60;for(const s of G.r.sg)if(s.x<=p)l=s.l;return l};
-function lvlDone(){G.m='lvl';const t=TR[S.sel],c=Math.round(100*G.lv*t.m);G.sc+=500*G.lv;S.coin+=c;G.cg+=c;S.hi=Math.max(S.hi,Math.floor(G.sc));sv();$('lt').innerHTML='Skor: '+Math.floor(G.sc)+'<br>Bonus level: +'+500*G.lv+'<br>Koin: +'+c+' 🪙';hud(0);show('lvl');ding()}
+function lvlDone(){G.m='lvl';const t=TR[S.sel],c=Math.round(300*G.lv*t.m);G.sc+=500*G.lv;S.coin+=c;G.cg+=c;S.hi=Math.max(S.hi,Math.floor(G.sc));sv();$('lt').innerHTML='Skor: '+Math.floor(G.sc)+'<br>Bonus level: +'+500*G.lv+'<br>Koin: +'+c+' 🪙';hud(0);show('lvl');ding()}
 function gameOver(msg){hornOff();G.m='over';S.hi=Math.max(S.hi,Math.floor(G.sc));sv();$('ot').innerHTML='<b style="color:#ffab91">'+(msg||'')+'</b><br>Skor: '+Math.floor(G.sc)+' • Level '+G.lv+'<br>Koin didapat: '+G.cg+' 🪙<br>🏆 Skor Tertinggi: '+S.hi;hud(0);show('over');bad()}
-function pz(){if(G.m=='play'){G.m='pause';hornOff();show('pause')}else if(G.m=='pause'){G.m='play';show(null)}}
+function pz(){if(G.m=='play'){G.m='pause';hornOff();sv();show('pause')}else if(G.m=='pause'){G.m='play';show(null)}}
 /* update */
-const segT=i=>{const t=TR[S.sel],r=G.r.st,par=(r[i].x-r[i-1].x-SP)/(Math.min(t.v,120)*.5/3.6);return(par*1.5+20)/Math.sqrt(DF[S.df])};
+const segT=i=>{const t=TR[S.sel],r=G.r.st,par=(r[i].x-r[i-1].x-SP)/(Math.min(t.v,120)*.6/3.6);return(par*1.5+20)/Math.sqrt(DF[S.df])};
 function phys(dt,t,mv,N){
  if(G.dw>0){G.v=0;G.dw-=dt;if(G.dw<=0){G.dw=0;if(G.fin)return lvlDone();toast('Berangkat! 🚆');G.ts=0;G.tl=segT(G.ni)}}
  else{
@@ -43,12 +43,12 @@ function phys(dt,t,mv,N){
  const kmh=G.v*3.6,L=limAt(G.pos);G.ov=kmh>L+3;
  if(G.ov)G.sc=Math.max(0,G.sc-dt*15*G.lv*DF[S.df]);
  if(kmh>L+25){if(!G.dg)toast('⚠ TERLALU CEPAT!');G.dg+=dt;if(G.dg>3)return gameOver('ANJLOK! Melaju jauh di atas batas kecepatan.')}else G.dg=Math.max(0,G.dg-dt*2);
- G.sc+=G.v*dt*.1*G.lv;
+ G.sc+=G.v*dt*.1*G.lv;G.cf=(G.cf||0)+G.v*dt*.04*t.m;if(G.cf>=1){const q=Math.floor(G.cf);G.cf-=q;S.coin+=q;G.cg+=q}
  const s=G.r.st[G.ni],len=trLen(t)/3.67;
  if(s&&G.dw<=0){
   if(G.v<.4&&G.pos>=s.x+len&&G.pos<=s.x+SP+5){
    const err=Math.abs(G.pos-(s.x+SP-5)),pts=err<4*(2-DF[S.df]/1.6)?300:err<12?200:100,pr=G.r.st[G.ni-1],
-   par=(s.x-pr.x-SP)/(Math.min(t.v,120)*.5/3.6),tb=Math.max(0,Math.round((par*1.2-G.ts)*3)),cc=Math.round(pts*t.m/5);
+   par=(s.x-pr.x-SP)/(Math.min(t.v,120)*.6/3.6),tb=Math.max(0,Math.round((par*1.2-G.ts)*3)),cc=Math.round(pts*t.m*.6);
    G.sc+=(pts+tb)*G.lv;S.coin+=cc;G.cg+=cc;s.done=1;G.ni++;G.v=0;G.dw=3;G.fin=G.ni>=G.r.st.length;
    toast((pts==300?'SEMPURNA! ':pts==200?'BAGUS! ':'OKE! ')+'+'+(pts+tb)*G.lv);ding();sv()}
   else if(G.pos>s.x+SP+5){G.sc=Math.max(0,G.sc-200*G.lv);s.done=1;G.ni++;toast('KELEWATAN! -'+200*G.lv);bad();if(G.ni>=G.r.st.length)return lvlDone()}}
