@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Kereta Nusantara - Simulator Kereta Api Indonesia</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<canvas id="c"></canvas>
+<div id="hud">
+ <div class="hp" id="h1"><div>SKOR <b id="sc">0</b></div><div>LEVEL <b id="lv">1</b></div><div>🪙 <b id="cn">0</b></div></div>
+ <div id="sbw">KESELAMATAN<div id="sb"><i id="sf"></i></div></div>
+ <div class="hp" id="h2"><div id="sp">0</div><small>km/jam</small><div id="lim">60</div></div>
+ <div id="nx"></div>
+ <button class="b y sm" id="bp">⏸ PAUSE</button>
+</div>
+<div id="ctl"><button class="b ctl" id="brk">REM</button><button class="b y ctl" id="hrn">📯</button><button class="b g ctl" id="gas">GAS</button></div>
+<div id="toast"></div>
+
+<div class="scr on" id="menu">
+ <div class="flag"></div><h1>KERETA NUSANTARA</h1><div class="sub">SIMULATOR KERETA API INDONESIA</div>
+ <div class="pill" id="mi"></div>
+ <button class="b g" id="bm">▶ MULAI</button>
+ <button class="b y" id="bt">🛒 TOKO</button>
+ <button class="b bl" id="bs">⚙ PENGATURAN</button>
+ <div class="tip">Tahan <b>GAS</b> untuk melaju dan <b>REM</b> untuk berhenti tepat di tiang <b>STOP</b>. Patuhi batas kecepatan! Komputer: ↑/W gas, ↓/S/Spasi rem, H klakson, P pause.</div>
+</div>
+<div class="scr" id="shop"><h2>🛒 TOKO KERETA</h2><div class="pill">🪙 <span id="sc2"></span></div><div id="grid"></div><button class="b bl" id="sb1">⬅ KEMBALI</button></div>
+<div class="scr" id="set"><h2>⚙ PENGATURAN</h2>
+ <button class="b bl" id="s1"></button><button class="b bl" id="s2"></button><button class="b bl" id="s3"></button>
+ <button class="b" id="s4">🗑 HAPUS DATA</button><button class="b g" id="s5">⬅ KEMBALI</button></div>
+<div class="scr" id="pause"><h2>⏸ PERMAINAN DIJEDA</h2><button class="b g" id="br">▶ LANJUTKAN</button><button class="b" id="bq">🏠 MENU UTAMA</button></div>
+<div class="scr" id="over"><h2 style="color:#ff5252;font-size:clamp(36px,8vw,70px)">GAME OVER</h2><div class="sub" id="ot"></div><button class="b g" id="ba">🔁 MAIN LAGI</button><button class="b" id="bq2">🏠 MENU UTAMA</button></div>
+<div class="scr" id="lvl"><h2 style="color:#ffd23f">🎉 LEVEL SELESAI!</h2><div class="sub" id="lt"></div><button class="b g" id="bn">▶ LEVEL BERIKUTNYA</button></div>
+
+<script src="audio.js"></script>
+<script src="game.js"></script></body></html>
