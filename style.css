@@ -46,3 +46,15 @@ h2{margin:0;font-size:clamp(26px,5vw,44px);text-shadow:0 3px 0 rgba(0,0,0,.4)}
 #toast.sh{animation:ts 2s ease-out}
 @keyframes ts{0%{opacity:0;transform:translate(-50%,20px) scale(.7)}12%{opacity:1;transform:translate(-50%,0) scale(1.1)}25%{transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-30px)}}
 @media(max-height:420px){h1{font-size:34px}.b{padding:9px 24px;font-size:16px;min-width:170px}.scr{gap:7px}.ctl{height:62px}.tip{display:none}}
+
+/* tuas gas & rem ala kereta asli, speedometer */
+#tl{font-size:17px;min-width:70px}
+.lvw{display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:auto;font-weight:800;font-size:13px;text-shadow:0 2px 2px #000}
+.lvl{--n:8;position:relative;width:62px;height:min(34vh,190px);border-radius:14px;background:repeating-linear-gradient(to bottom,transparent 0 calc(100%/var(--n) - 2px),rgba(255,255,255,.4) calc(100%/var(--n) - 2px) calc(100%/var(--n))),rgba(10,20,50,.72);border:2px solid rgba(255,255,255,.35);touch-action:none;cursor:ns-resize}
+.kn{position:absolute;left:-7px;right:-7px;bottom:0;height:26px;margin-bottom:-13px;border-radius:13px;background:linear-gradient(#ffe082,#ff8f00);box-shadow:0 3px 8px rgba(0,0,0,.6);transition:bottom .08s}
+.lvl.brk .kn{background:linear-gradient(#ff8a80,#c62828)}
+#mid{display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+#mid button{pointer-events:auto;min-width:0}
+#gauge{width:clamp(120px,20vw,170px);height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+#mb{display:flex;gap:8px}
+@media(max-height:420px){.lvl{height:36vh}#gauge{width:110px}#mb .b{padding:6px 10px;font-size:13px}}
