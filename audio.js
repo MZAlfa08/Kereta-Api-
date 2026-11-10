@@ -9,10 +9,10 @@ function au(){if(AC){AC.resume();return}
  RV=AC.createConvolver();RV.buffer=ib;const rg=AC.createGain();rg.gain.value=.4;RV.connect(rg);rg.connect(M);
  const ns=(ty,f,q)=>{const s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain();s.buffer=NZ;s.loop=true;fl.type=ty;fl.frequency.value=f;fl.Q.value=q||1;g.gain.value=0;s.connect(fl);fl.connect(g);g.connect(M);s.start();return{f:fl,n:g}},
  os=(ty,f,lp)=>{const o=AC.createOscillator(),fl=AC.createBiquadFilter(),g=AC.createGain();o.type=ty;o.frequency.value=f;fl.type='lowpass';fl.frequency.value=lp;g.gain.value=0;o.connect(fl);fl.connect(g);g.connect(M);o.start();return{o,n:g}};
- E={rb:ns('lowpass',120),wd:ns('bandpass',900,.6),sq:ns('bandpass',3300,14),ds:os('sawtooth',40,300),wh:os('triangle',300,2500),rn:ns('highpass',2200,.5)}}
+ E={rb:ns('lowpass',120),wd:ns('bandpass',900,.6),sq:ns('bandpass',3300,14),ds:os('sawtooth',40,300),wh:os('triangle',300,2500),rn:ns('highpass',2200,.5),fr:ns('bandpass',1800,.7)}}
 /* suara mesin & roda berjalan (dipanggil tiap frame) */
 function eng(on,sp,N,b,k,es){es=es==null?1:es;if(!AC||!E.rb)return;const t=AC.currentTime,o=on&&S.snd,s=(e,v)=>e.n.gain.setTargetAtTime(o?v:0,t,.15),el=k=='krl'||k=='mrt'||k=='bullet';
- s(E.rn,S.wx==1?.09:0);s(E.rb,.06+.55*sp);E.rb.f.frequency.setTargetAtTime(80+sp*240,t,.2);
+ s(E.rn,S.wx==1?.09:0);s(E.fr,es>1.3?.07+.06*Math.random():0);s(E.rb,.06+.55*sp);E.rb.f.frequency.setTargetAtTime(80+sp*240,t,.2);
  s(E.wd,.01+.22*sp*sp);E.wd.f.frequency.setTargetAtTime(500+sp*1500,t,.2);
  s(E.sq,b>0&&sp>.06?.05*Math.min(1,b)*Math.min(1,sp*4):0);
  s(E.ds,k=='loco'?(.1+.16*N)*es:0);E.ds.o.frequency.setTargetAtTime(36+N*13,t,.4);
