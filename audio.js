@@ -9,14 +9,14 @@ function au(){if(AC){AC.resume();return}
  RV=AC.createConvolver();RV.buffer=ib;const rg=AC.createGain();rg.gain.value=.4;RV.connect(rg);rg.connect(M);
  const ns=(ty,f,q)=>{const s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain();s.buffer=NZ;s.loop=true;fl.type=ty;fl.frequency.value=f;fl.Q.value=q||1;g.gain.value=0;s.connect(fl);fl.connect(g);g.connect(M);s.start();return{f:fl,n:g}},
  os=(ty,f,lp)=>{const o=AC.createOscillator(),fl=AC.createBiquadFilter(),g=AC.createGain();o.type=ty;o.frequency.value=f;fl.type='lowpass';fl.frequency.value=lp;g.gain.value=0;o.connect(fl);fl.connect(g);g.connect(M);o.start();return{o,n:g}};
- E={rb:ns('lowpass',120),wd:ns('bandpass',900,.6),sq:ns('bandpass',3300,14),ds:os('sawtooth',40,300),wh:os('triangle',300,2500)}}
+ E={rb:ns('lowpass',120),wd:ns('bandpass',900,.6),sq:ns('bandpass',3300,14),ds:os('sawtooth',40,300),wh:os('triangle',300,2500),rn:ns('highpass',2200,.5)}}
 /* suara mesin & roda berjalan (dipanggil tiap frame) */
-function eng(on,sp,N,b,k){if(!AC||!E.rb)return;const t=AC.currentTime,o=on&&S.snd,s=(e,v)=>e.n.gain.setTargetAtTime(o?v:0,t,.15),el=k=='krl'||k=='mrt'||k=='bullet';
- s(E.rb,.06+.55*sp);E.rb.f.frequency.setTargetAtTime(80+sp*240,t,.2);
+function eng(on,sp,N,b,k,es){es=es==null?1:es;if(!AC||!E.rb)return;const t=AC.currentTime,o=on&&S.snd,s=(e,v)=>e.n.gain.setTargetAtTime(o?v:0,t,.15),el=k=='krl'||k=='mrt'||k=='bullet';
+ s(E.rn,S.wx==1?.09:0);s(E.rb,.06+.55*sp);E.rb.f.frequency.setTargetAtTime(80+sp*240,t,.2);
  s(E.wd,.01+.22*sp*sp);E.wd.f.frequency.setTargetAtTime(500+sp*1500,t,.2);
  s(E.sq,b>0&&sp>.06?.05*Math.min(1,b)*Math.min(1,sp*4):0);
- s(E.ds,k=='loco'?.1+.16*N:0);E.ds.o.frequency.setTargetAtTime(36+N*13,t,.4);
- s(E.wh,el?.012+.04*Math.min(1,sp*2.2)*(.4+.6*Math.max(N,sp)):0);E.wh.o.frequency.setTargetAtTime(160+sp*1200,t,.15)}
+ s(E.ds,k=='loco'?(.1+.16*N)*es:0);E.ds.o.frequency.setTargetAtTime(36+N*13,t,.4);
+ s(E.wh,el?.012+.04*Math.min(1,sp*2.2)*(.4+.6*Math.max(N,sp))*es:0);E.wh.o.frequency.setTargetAtTime(160+sp*1200,t,.15)}
 /* "tak-tak" roda melewati sambungan rel (2 bogie) */
 function clack(sp){if(!AC||!S.snd)return;[0,.11].forEach(d=>{const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain(),t=AC.currentTime+d;
  s.buffer=NZ;s.playbackRate.value=.6+Math.random()*.3;f.type='bandpass';f.frequency.value=900+sp*600;f.Q.value=1.4;
@@ -37,3 +37,4 @@ function hornOff(){HD=0;if(!HR||!AC)return;const{g,os}=HR,t=AC.currentTime;g.gai
 function tone(f,d,ty,v,f2,dl){if(!S.snd||!AC)return;const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+(dl||0);o.type=ty;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.linearRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(M);o.start(t);o.stop(t+d)}
 const ding=()=>{tone(988,.5,'sine',.18);tone(1319,.7,'sine',.18,0,.14)},bad=()=>tone(160,.6,'sawtooth',.14,60),tk=()=>tone(260,.05,'square',.05);
 const bell=()=>{tone(1650,.2,'triangle',.07);tone(1760,.2,'triangle',.05)};
+const crank=()=>{for(let i=0;i<9;i++)tone(60+i*5,.13,'sawtooth',.13,0,i*.22);tone(90,.5,'sawtooth',.12,170,2)},engStop=()=>tone(140,.7,'sawtooth',.1,40),boom=()=>{tone(70,1,'sawtooth',.2,30);tone(400,.5,'square',.05,100)};
