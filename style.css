@@ -62,3 +62,8 @@ h2{margin:0;font-size:clamp(26px,5vw,44px);text-shadow:0 3px 0 rgba(0,0,0,.4)}
 /* speedometer dipindah ke kiri atas agar tidak menutupi kereta */
 #gauge{position:absolute;left:10px;top:calc(62px + env(safe-area-inset-top));width:clamp(108px,15vw,150px);height:auto}
 @media(max-height:420px){#gauge{width:92px}}
+
+/* tombol mesin & indikator turbo kobong */
+#kobong{position:absolute;top:calc(104px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);font-weight:900;font-size:18px;color:#ffb300;text-shadow:0 0 12px #ff3d00,0 2px 0 #000;display:none;white-space:nowrap}
+#kobong.on{display:block;animation:bl .6s infinite}
+#mid{flex-wrap:wrap;justify-content:center}
