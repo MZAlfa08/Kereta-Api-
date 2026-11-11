@@ -372,9 +372,13 @@ function hillH(p){let f=1;for(let i=0;i<HZ.length;i++){const z=HZ[i],q=p<z[0]?z[
 const hillSlope=p=>(hillH(p+2)-hillH(p-2))/(4*3.67);
 function beginShear(){if(!OFFC||OFFC.width!=cv.width||OFFC.height!=cv.height){OFFC=document.createElement('canvas');OFFC.width=cv.width;OFFC.height=cv.height;OFX=OFFC.getContext('2d')}
  OFX.setTransform(1,0,0,1,0,0);OFX.clearRect(0,Math.max(0,Math.floor((H*.72-240*u)*DPRv)),OFFC.width,OFFC.height);OFX.setTransform(DPRv,0,0,DPRv,0,0);OFX.imageSmoothingEnabled=true;OFX.imageSmoothingQuality='high';x=OFX}
-function endShear(cam,P){x=XM;const d=DPRv,cw=cv.width,ch=cv.height,sw=Math.max(4,Math.round(12*d));
- x.setTransform(d,0,0,d,0,0);x.fillStyle='#2a2017';x.fillRect(0,H-46*u,W,46*u+2);x.setTransform(1,0,0,1,0,0);
- const y0=Math.max(0,Math.floor((H*.72-240*u)*d)),hh=ch-y0;for(let sx=0;sx<cw;sx+=sw){const w=Math.min(sw,cw-sx),dy=Math.round(-hillH(((sx+w/2)/d+cam)/P)*u*d);x.drawImage(OFFC,sx,y0,w,hh,sx,y0+dy,w,hh)}
+function endShear(cam,P){x=XM;const d=DPRv,cw=cv.width,ch=cv.height;
+ x.setTransform(d,0,0,d,0,0);x.fillStyle='#2a2017';x.fillRect(0,H-46*u,W,46*u+2);
+ const y0=Math.max(0,Math.floor((H*.72-240*u)*d)),hh=ch-y0,N=Math.max(12,Math.ceil(W/22));
+ /* kontur = rangkaian segmen miring yang saling menyambung (tanpa anak tangga, tanpa pembulatan) */
+ const off=px=>-hillH((px/d+cam)/P)*u*d;let sx0=0,o0=off(0);
+ for(let i=1;i<=N;i++){const sx1=i==N?cw:Math.round(i*cw/N),w=sx1-sx0;if(w<=0)continue;const o1=off(sx1),m=(o1-o0)/w;
+  x.setTransform(1,m,0,1,0,o0-m*sx0);x.drawImage(OFFC,sx0,y0,w,hh,sx0,y0,w,hh);sx0=sx1;o0=o1}
  x.setTransform(d,0,0,d,0,0)}
 function draw(){
  const t=TR[S.sel],gy=H*.72,P=3.67*u,cam=G.pos*P-W*.62,hx=W*.62,td=S.tod,el=t.k=='krl'||t.k=='mrt'||t.k=='bullet';
