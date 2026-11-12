@@ -73,3 +73,5 @@ h2{margin:0;font-size:clamp(26px,5vw,44px);text-shadow:0 3px 0 rgba(0,0,0,.4)}
 #topr .b{min-width:0;padding:7px 11px;font-size:13px;border-radius:14px;box-shadow:0 4px 0 rgba(0,0,0,.35)}
 #topr .b:active{transform:translateY(2px)}
 #gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;width:min(1020px,100%)}
+
+#tabs{display:flex;gap:10px}
