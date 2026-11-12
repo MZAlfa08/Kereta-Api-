@@ -1,4 +1,4 @@
-const $=id=>document.getElementById(id),cv=$('c'),XM=cv.getContext('2d',{alpha:false});let x=XM,OFFC=null,OFX=null;
+const $=id=>document.getElementById(id),cv=$('c'),XM=cv.getContext('2d',{alpha:false});let x=XM,OFFC=null,OFX=null,LIMX=null;
 const SP=320,hs=n=>{const v=Math.sin(n*127.1+311.7)*43758.5453;return v-Math.floor(v)};
 const NM=['Jakarta Kota','Manggarai','Gambir','Jatinegara','Bekasi','Cikarang','Karawang','Cikampek','Purwakarta','Padalarang','Bandung','Cirebon','Semarang Tawang','Yogyakarta','Solo Balapan','Madiun','Surabaya Gubeng'];
 const TR=[
@@ -17,7 +17,7 @@ S.cons=S.cons||{};S.own=S.own.filter(i=>i<TR.length);if(!S.own.includes(0))S.own
 const sv=()=>{try{localStorage.setItem('kn1',JSON.stringify(S))}catch(e){}};
 const DF=[.6,1,1.6],DN=['MUDAH','NORMAL','SULIT'],TN=['☀ SIANG','🌇 SORE','🌙 MALAM'];
 let W,H,u,G={m:'menu',pos:0,v:10,r:{st:[],sg:[],cx:[]},pf:[],lp:0,lv:1,sc:0,sf:100,cg:0},tm=0,K={},th=0,bk=0,em=0,DPRv=1,ck="",REC=null,MIR=0,PPL=false,WPH=null,GK="",dtS=.016,SPR={};
-function rs(){const d=Math.max(1,Math.min(Math.max(devicePixelRatio||1,1.5),2.5,Math.sqrt(8e6/(innerWidth*innerHeight))));W=innerWidth;H=innerHeight;DPRv=d;cv.width=W*d;cv.height=H*d;x.setTransform(d,0,0,d,0,0);x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";u=Math.max(.5,Math.min(H/600,W/760));OFFC=null}
+function rs(){const d=Math.max(1,Math.min(Math.max(devicePixelRatio||1,1.5),2.5,Math.sqrt(8e6/(innerWidth*innerHeight))));W=innerWidth;H=innerHeight;DPRv=d;cv.width=W*d;cv.height=H*d;x.setTransform(d,0,0,d,0,0);x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";u=Math.max(.5,Math.min(H/600,W/760));OFFC=null;LIMX=null}
 addEventListener('resize',rs);rs();
 function toast(m){const e=$('toast');e.textContent=m;e.classList.remove('sh');void e.offsetWidth;e.classList.add('sh')}
 /* screens */
@@ -431,7 +431,11 @@ function endShear(cam,P,Ec){Ec=Ec||0;x=XM;const d=DPRv,cw=cv.width,ch=cv.height;
  for(let i=1;i<=N;i++){const sx1=i==N?cw:Math.round(i*cw/N),w=sx1-sx0;if(w<=0)continue;const o1=off(sx1),m=(o1-o0)/w;
   x.setTransform(1,m,0,1,0,o0-m*sx0);x.drawImage(OFFC,sx0,y0,w,hh,sx0,y0,w,hh);sx0=sx1;o0=o1}
  x.setTransform(d,0,0,d,0,0)}
-function draw(){
+/* kamera menyesuaikan panjang kereta: ekor kereta berhenti tepat di sisi kanan tuas REM (tidak lewat) */
+function camScale(){const hx=W*.62,tl=trLen(TR[S.sel])*u;if(LIMX==null){const e=document.getElementById('lb');if(e){const r=e.getBoundingClientRect();if(r.width>0)LIMX=r.right+10}}
+ const lim=LIMX==null?80:LIMX;return Math.max(.3,Math.min(1,(hx-lim)/tl))}
+function draw(){const u0=u;if(ck!=W+'|'+H+'|'+S.tod)buildCaches();u=u0*camScale();try{draw0()}finally{u=u0}}
+function draw0(){
  const t=TR[S.sel],gy=H*.72,P=3.67*u,cam=G.pos*P-W*.62,hx=W*.62,td=S.tod,el=t.k=='krl'||t.k=='mrt'||t.k=='bullet';
  hillZones();if(ck!=W+'|'+H+'|'+S.tod)buildCaches();x.drawImage(BG,0,0,W,gy+2);let g;
  if(td==2){x.fillStyle='#fff';for(let i=0;i<60;i++){x.globalAlpha=.3+.7*Math.abs(Math.sin(tm*2+i));x.fillRect(hs(i)*W,hs(i+50)*gy*.8,1.6,1.6)}x.globalAlpha=1}
