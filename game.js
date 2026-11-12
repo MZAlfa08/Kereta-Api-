@@ -93,7 +93,7 @@ function upd(dt){
  const sy=t.k=='steam',dz=t.k=='loco';
  if((sy||dz)&&(G.m=='menu'||(pl&&run))&&tm-G.lp>(sy?.09:.13)&&(sy?(G.v>0||G.m=='menu'):(N>0||G.m=='menu'))){G.lp=tm;G.pf.push(sy?{x:G.pos-2.3,a:0}:{x:G.pos-10.4,a:0,cl:'60,60,60',by:47})}
  G.pf.forEach(p=>p.a+=dt);G.pf=G.pf.filter(p=>p.a<2);
- if(G.m=='menu'||G.m=='play'){ai(dt);traf2(dt);traffic(dt)}
+ if(G.m=='menu'||G.m=='play'){ai(dt);traf2(dt)}
  if(G.m=='menu'){G.pos+=25*dt;G.v=25}else if(pl&&!phys(dt,t,mv,N))return;
  if(G.m=='menu'||pl){G.cd=(G.cd||0)+G.v*dt;if(G.cd>=12){G.cd-=12;clack(G.v/mv)}if(sy&&(run||G.m=='menu')){G.cs=(G.cs||0)+G.v*dt;if(G.cs>=4){G.cs-=4;chuff(G.v/mv)}}}
  const esv=G.m=='menu'?1:G.es==2?(G.kb>0?1.7:1):G.es==1?Math.min(1,Math.max(0,(2.2-G.et)/2.2)):0;
@@ -360,20 +360,22 @@ function crRoad(gy,P,cam){for(const c of G.r.cx){const px=c.x*P-cam;if(px<-250||
 function crFront(gy,P,cam){const T=cxT();for(const c of G.r.cx){const px=c.x*P-cam;if(px<-250||px>W+250)continue;
  c.veh.forEach(v=>{if(v.t>T.tt)drawV(c,v,px,T)});const y=gy+34*u;barrier(px-hw(y,gy)-4*u,y,1,c,hw(y,gy)*1.05)}}
 function zoneF(xm){let f=0;for(const s of G.r.st){const d=Math.abs(xm-(s.x+SP/2)),z=d<650?1:d>850?0:(850-d)/200;if(z>f)f=z}return f}
-function ai(dt){const a=G.ai=G.ai||[];a.forEach(q=>q.x+=q.v*dt*(1-.55*zoneF(q.x)));G.ai=a.filter(q=>q.x-G.pos<1700&&q.x-G.pos>-300);G.at=(G.at||2)-dt;
+function ai(dt){const a=G.ai=G.ai||[];a.forEach(q=>q.x+=q.d*q.v*dt*(1-.55*zoneF(q.x)));
+ G.ai=a.filter(q=>q.x-G.pos<1800&&q.x-G.pos>-1800);G.at=(G.at||2)-dt;
  if(G.m!='play'){G.ai=[];return}
- if(G.at<=0&&G.ai.length<2&&!G.ai.some(q=>q.x-G.pos<1100)){const i=Math.random()*TR.length|0,L=trLen(TR[i])/3.67,sp=Math.max(18,Math.min(36,TR[S.sel].v/3.6*.5))*(.8+Math.random()*.4);G.ai.push({x:G.pos+800+L+Math.random()*300,v:sp,d:1,i,w:0,c:0});G.at=14+Math.random()*16}}
-/* kereta komputer satu jalur dengan pemain: mendekat -> peringatan, terlalu dekat -> menabrak (denda & kecepatan disamakan) */
-function traffic(dt){if(G.m!='play')return;let nr=null;for(const q of G.ai||[]){const g=q.x-trLen(TR[q.i])/3.67-G.pos;if(g>-60&&(!nr||g<nr.g))nr={q,g}}
- if(!nr)return;const q=nr.q;
- if(nr.g<300&&G.v>q.v+2&&!q.w){q.w=1;toast('⚠ Ada kereta di depan! Kurangi kecepatan')}
- if(nr.g<14){if(G.v>q.v)G.v=q.v*.95;if(nr.g<6)G.pos-=6-nr.g;G.sc=Math.max(0,G.sc-dt*80*G.lv);if(!q.c){q.c=1;toast('💥 MENABRAK kereta di depan! -150');G.sc=Math.max(0,G.sc-150*G.lv);bad()}}else if(nr.g>40)q.c=0}
+ /* kereta komputer di jalur 2 (sisi yang sama): 'o' berpapasan, 'a' searah di depan (kita menyalip), 'b' menyalip kita dari belakang */
+ if(G.at<=0&&G.ai.length<3){const i=Math.random()*TR.length|0,L=trLen(TR[i])/3.67,r=Math.random(),pv=G.v,kd=r<.5?'o':(r<.8||pv<8)?'a':'b';let x0,v,d=1;
+  if(kd=='o'){d=-1;x0=G.pos+900+Math.random()*300;v=28+Math.random()*22}
+  else if(kd=='a'){x0=G.pos+800+L+Math.random()*300;v=Math.max(16,pv*.45+Math.random()*10)}
+  else{x0=G.pos-380;v=Math.min(92,pv+14+Math.random()*14)}
+  if(!G.ai.some(q=>Math.abs(q.x-x0)<500)){G.ai.push({x:x0,v,d,i});G.at=9+Math.random()*9}else G.at=1}}
 function traf2(dt){const a=G.tf=G.tf||[];a.forEach(v=>v.x+=v.v*dt);G.tf=a.filter(v=>v.x>G.pos-260&&v.x<G.pos+520);G.ts2=(G.ts2||0)-dt;
  if(G.ts2<=0&&G.tf.length<16){const l=Math.random()<.5?1:-1;G.tf.push({x:G.pos+140+Math.random()*300,v:l*(8+Math.random()*12),l,ty:['mtr','mtr','car','car','ang','trk','bus'][Math.random()*7|0],col:PAL[Math.random()*7|0]});G.ts2=Math.max(.25,1.2-G.v/80)*(.6+Math.random()*.8)}}
-function farTrack(gy,P,cam){const y2=gy-30*u,y3=gy-48*u,ra=(y,xa,xb,s)=>{x.fillStyle='#6b5d4a';x.fillRect(xa,y,xb-xa,4.5*u*s);x.fillStyle='#4e342e';for(let X=xa-((cam+xa)%(10*u));X<xb;X+=10*u)x.fillRect(X,y+1*u*s,5*u,2.6*u*s);x.fillStyle='#d5dde1';x.fillRect(xa,y,xb-xa,1.4*u)};
+function farTrack(gy,P,cam){const y2=gy-24*u,y3=gy-48*u,ra=(y,xa,xb,s)=>{x.fillStyle='#6b5d4a';x.fillRect(xa,y,xb-xa,4.5*u*s);x.fillStyle='#4e342e';for(let X=xa-((cam+xa)%(10*u));X<xb;X+=10*u)x.fillRect(X,y+1*u*s,5*u,2.6*u*s);x.fillStyle='#d5dde1';x.fillRect(xa,y,xb-xa,1.4*u)};
+ x.fillStyle='rgba(60,50,38,.5)';x.fillRect(0,y2+3.5*u,W,3.2*u);ra(y2,0,W,1);
 
  const sp=60*P;for(let i=Math.floor((cam-40)/sp);i<=Math.floor((cam+W)/sp)+1;i++){const px=i*sp-cam;x.fillStyle='#5d4037';x.fillRect(px-1.3*u,gy-92*u,2.6*u,62*u);x.fillRect(px-9*u,gy-90*u,18*u,2*u);x.strokeStyle='rgba(20,20,20,.7)';x.lineWidth=.9*u;[-7,0,7].forEach(d=>{x.beginPath();x.moveTo(px+d*u,gy-90*u);x.quadraticCurveTo(px+sp/2+d*u,gy-80*u,px+sp+d*u,gy-90*u);x.stroke()})}}
-function aiTrains(gy,P,cam){const td=S.tod;(G.ai||[]).forEach(q=>{const t=TR[q.i],px=q.x*P-cam,tl=trLen(t)*u;if(px<-60||px-tl>W)return;x.save();WPH=q.x;drawTrain(x,t,px,gy,u,td==2);WPH=null;x.restore()})}
+function aiTrains(gy,P,cam){const td=S.tod,k=u*.92,y=gy-24*u;(G.ai||[]).forEach(q=>{const t=TR[q.i],px=q.x*P-cam,tl=trLen(t)*k;if(q.d>0?(px<-60||px-tl>W):(px+tl<-60||px>W+60))return;x.save();WPH=q.x;if(q.d<0){x.translate(px,0);x.scale(-1,1);drawTrain(x,t,0,y,k,td==2)}else drawTrain(x,t,px,y,k,td==2);WPH=null;x.restore()})}
 function village(gy,cam){const par=.3;for(let i=Math.floor((cam*par-40)/230);i<=Math.floor((cam*par+W)/230);i++){const r=hs(i+130);if(r<.3)continue;const X=i*230+r*80-cam*par,w2=(X+cam*par)*.007,y=gy-50*u-40*u*(.5+.3*Math.sin(w2*3)+.2*Math.sin(w2*7.1));
  x.fillStyle=S.tod==2?'#0f2a33':'#2d6a4f';
  if(r>.75){x.fillRect(X-4*u,y-14*u,8*u,14*u);x.beginPath();x.arc(X,y-14*u,7*u,Math.PI,0);x.fill();x.fillRect(X+10*u,y-30*u,3*u,30*u);x.beginPath();x.moveTo(X+8.5*u,y-30*u);x.lineTo(X+11.5*u,y-38*u);x.lineTo(X+14.5*u,y-30*u);x.fill()}
