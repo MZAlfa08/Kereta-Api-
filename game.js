@@ -152,23 +152,24 @@ const LV={
   g:(c,X,Y)=>{c.moveTo(X(50.4),Y(-40.6));c.lineTo(X(57.4),Y(-40.6));c.lineTo(X(57.4),Y(-29));c.lineTo(X(50.4),Y(-29))},
   sw:[[34,8.4],[43.2,4.4]],ra:49.4,gb:-29,wb:[60,-29],ey:-29,lamp:[57.7,-26.6],pl:[10.5,19.5,31,33.6,49.4],lv:[21,5,1.9],
   ex:(c,X,Y,k)=>{c.fillStyle='#9aa7ae';c.beginPath();c.roundRect(X(3),Y(-47.2),15*k,3.6*k,[2*k,2*k,.5*k,.5*k]);c.fill();c.fillStyle='#6f7d85';[6,10,14].forEach(a=>{c.beginPath();c.arc(X(a),Y(-45.4),1.2*k,0,7);c.fill()});c.fillStyle='#cfd8dc';c.beginPath();c.roundRect(X(53),Y(-46.6),5*k,2.6*k,.8*k);c.fill()}},
- /* CC 203 — MELENGKUNG: atap mengalir dalam satu lengkung besar sampai hidung membulat seperti peluru */
- ow:{p:LP((c,X,Y)=>{c.lineTo(X(0),Y(-34));c.quadraticCurveTo(X(0),Y(-44),X(8),Y(-44))},(c,X,Y)=>{c.lineTo(X(30),Y(-44));c.bezierCurveTo(X(48),Y(-44),X(60.6),Y(-40),X(60.6),Y(-27));c.bezierCurveTo(X(60.6),Y(-23),X(60.4),Y(-20),X(60),Y(-18))}),
-  g:(c,X,Y)=>{c.moveTo(X(44),Y(-40.6));c.bezierCurveTo(X(52),Y(-40.6),X(57.6),Y(-38),X(58.2),Y(-32));c.lineTo(X(58.4),Y(-28.8));c.lineTo(X(44),Y(-28.8))},
-  sw:[[31.5,8.2],[40.5,3.2]],ra:46,gb:-28.8,wb:[60.2,-26],ey:-18,lamp:[57.8,-22.4],pl:[9,17,26,31,44.4],lv:[11,6,1.7],
-  ex:(c,X,Y,k)=>{c.fillStyle='#aab6bd';c.beginPath();c.moveTo(X(9),Y(-44));c.quadraticCurveTo(X(21),Y(-49.6),X(33),Y(-44));c.fill();c.strokeStyle='rgba(0,0,0,.25)';c.lineWidth=.6*k;c.stroke()}},
- /* CC 204 — HIDUNG TAJAM: atap menurun lurus jadi paruh runcing yang menjorok ke depan */
- bw:{p:LP((c,X,Y)=>{c.lineTo(X(0),Y(-34));c.lineTo(X(5),Y(-44))},(c,X,Y)=>{c.lineTo(X(40),Y(-44));c.lineTo(X(56.5),Y(-31.5));c.lineTo(X(62),Y(-23.5));c.lineTo(X(59.2),Y(-16.5))}),
-  g:(c,X,Y)=>{c.moveTo(X(42.5),Y(-40.6));c.lineTo(X(52.6),Y(-32.8));c.lineTo(X(55.4),Y(-27.6));c.lineTo(X(42.5),Y(-27.6))},
-  sw:[[30,8],[38.8,3.4]],ra:44,gb:-27.6,wb:[59.2,-27.6],ey:-23.5,lamp:[58.6,-22.6],pl:[8,16,25,29.4,42.2],lv:[18,5,2],
-  rp:[[44,-27.6],[59.2,-27.6],[62,-23.5],[59.2,-16.5],[60,-10],[60,-8],[44,-8]],
+ /* CC 203 — KOTAK MIRING: badan persegi, kaca depan & belakang miring lurus (tanpa lengkung) */
+ ow:{p:LP((c,X,Y)=>{c.lineTo(X(0),Y(-31));c.lineTo(X(5),Y(-44))},(c,X,Y)=>{c.lineTo(X(42),Y(-44));c.lineTo(X(58.4),Y(-30));c.lineTo(X(60),Y(-28.4));c.lineTo(X(60),Y(-22))}),
+  g:(c,X,Y)=>{c.moveTo(X(44.4),Y(-40.6));c.lineTo(X(52.2),Y(-33.9));c.lineTo(X(55.4),Y(-29.6));c.lineTo(X(44.4),Y(-29.6))},
+  sw:[[31.4,8],[40.4,3]],ra:45,gb:-29.6,wb:[55.4,-29.6],ey:-22,lamp:[57.8,-25.4],pl:[8,16,25,30.6,43.8],lv:[10,6,1.8],
+  rp:[[45,-29.6],[58.4,-29.6],[60,-28.4],[60,-8],[45,-8]],
+  ex:(c,X,Y,k)=>{c.fillStyle='#9aa7ae';c.beginPath();c.roundRect(X(8),Y(-46.8),18*k,3*k,[.8*k,.8*k,0,0]);c.fill();c.fillStyle='#6f7d85';[11,16,21].forEach(a=>c.fillRect(X(a),Y(-46.2),2.4*k,1.8*k));c.fillStyle='#455a64';c.fillRect(X(30),Y(-47.4),2.4*k,3.4*k)}},
+ /* CC 204 — HIDUNG KOTAK MENONJOL: kabin berkaca miring lurus, di depannya hidung berbentuk kotak yang lebih rendah */
+ bw:{p:LP((c,X,Y)=>{c.lineTo(X(0),Y(-42));c.lineTo(X(2),Y(-44))},(c,X,Y)=>{c.lineTo(X(47),Y(-44));c.lineTo(X(51.4),Y(-31.6));c.lineTo(X(59),Y(-31.6));c.quadraticCurveTo(X(60),Y(-31.6),X(60),Y(-30.4));c.lineTo(X(60),Y(-24))}),
+  g:(c,X,Y)=>{c.moveTo(X(43.6),Y(-40.6));c.lineTo(X(47),Y(-40.6));c.lineTo(X(49.6),Y(-33.2));c.lineTo(X(43.6),Y(-33.2))},
+  sw:[[32,8.2],[41,2.4]],ra:45.4,gb:-33.2,wb:[50.4,-32],ey:-24,lamp:[57.6,-26.4],pl:[9,17,26,31.4,43.4],lv:[18,5,2],
+  rp:[[45.4,-31.6],[59,-31.6],[60,-30.4],[60,-8],[45.4,-8]],
   ex:(c,X,Y,k)=>{c.fillStyle='#8a979e';c.beginPath();c.roundRect(X(6),Y(-46.4),22*k,2.6*k,[1.4*k,1.4*k,0,0]);c.fill();c.fillStyle='rgba(0,0,0,.28)';for(let j=0;j<10;j++)c.fillRect(X(7+j*2.1),Y(-46),.7*k,1.8*k)}},
- /* CC 206 — HIDUNG BERTINGKAT: kabin tinggi tegak, hidung pendek membulat lebih rendah di depannya */
- rw:{p:LP((c,X,Y)=>{c.lineTo(X(0),Y(-40));c.quadraticCurveTo(X(0),Y(-44),X(4),Y(-44))},(c,X,Y)=>{c.lineTo(X(46),Y(-44));c.quadraticCurveTo(X(50),Y(-44),X(50.6),Y(-40));c.lineTo(X(51.2),Y(-30.6));c.lineTo(X(57.4),Y(-30.6));c.quadraticCurveTo(X(60.2),Y(-30.6),X(60),Y(-27.6));c.lineTo(X(60),Y(-24))}),
-  g:(c,X,Y)=>{c.moveTo(X(43.6),Y(-40.6));c.lineTo(X(48.6),Y(-40.6));c.quadraticCurveTo(X(49.6),Y(-40.6),X(49.8),Y(-39));c.lineTo(X(50),Y(-32));c.lineTo(X(43.6),Y(-32))},
-  sw:[[30.6,8.2],[39.8,3.2]],ra:47,gb:-32,wb:[50,-31],ey:-24,lamp:[57.8,-26.4],pl:[8,16,24,29.8,43.2],lv:[11,6,2],
-  rp:[[47,-30.6],[57.4,-30.6],[60,-27.6],[60,-8],[47,-8]],
-  ex:(c,X,Y,k)=>{c.fillStyle='#455a64';[9,14.5].forEach(a=>{c.beginPath();c.roundRect(X(a),Y(-48.6),2.6*k,4.8*k,[1*k,1*k,0,0]);c.fill()});c.fillStyle='#78909c';[9,14.5].forEach(a=>c.fillRect(X(a-.3),Y(-48.9),3.2*k,.8*k));c.fillStyle='#cfd8dc';c.beginPath();c.roundRect(X(40),Y(-46.4),4*k,2.4*k,.8*k);c.fill()}}};
+ /* CC 206 — DATAR, KABIN GANDA: atap rata sepanjang badan, kabin di kedua ujung (depan & belakang) */
+ rw:{p:LP((c,X,Y)=>{c.lineTo(X(0),Y(-42.4));c.quadraticCurveTo(X(0),Y(-44),X(1.8),Y(-44))},(c,X,Y)=>{c.lineTo(X(58.2),Y(-44));c.quadraticCurveTo(X(60),Y(-44),X(60),Y(-42.2));c.lineTo(X(60),Y(-24))}),
+  g:(c,X,Y)=>{c.moveTo(X(52.4),Y(-40.6));c.lineTo(X(58.6),Y(-40.6));c.lineTo(X(58.6),Y(-29));c.lineTo(X(52.4),Y(-29))},
+  rg:(c,X,Y)=>{c.moveTo(X(1.4),Y(-40.6));c.lineTo(X(7.6),Y(-40.6));c.lineTo(X(7.6),Y(-29));c.lineTo(X(1.4),Y(-29))},
+  sw:[[44.2,7.4],[39.2,3.4]],sw2:[[8.4,7.4],[17.4,3.4]],ra:50.6,gb:-29,wb:[60,-29],ey:-29,lamp:[57.7,-26.6],pl:[21.6,38.4,52],lv:[30.6,3,2.4],lx:22.8,nx:30,
+  ex:(c,X,Y,k)=>{c.fillStyle='#9aa7ae';c.beginPath();c.roundRect(X(23),Y(-46.6),13*k,2.8*k,[.8*k,.8*k,0,0]);c.fill();c.fillStyle='#6f7d85';[25.6,29.6,33].forEach(a=>c.fillRect(X(a),Y(-46.2),2.2*k,1.8*k));c.fillStyle='#cfd8dc';c.beginPath();c.roundRect(X(53.6),Y(-46.6),4.4*k,2.6*k,.8*k);c.fill();c.beginPath();c.roundRect(X(2),Y(-46.6),4.4*k,2.6*k,.8*k);c.fill()}}};
 function locoPolish(c,X,Y,k,vr,xr,v){const n=vr.pl.length,ca=vr.pl[n-2],cb=vr.pl[n-1];
  c.strokeStyle='rgba(255,255,255,.7)';c.lineWidth=.55*k;c.beginPath();c.moveTo(X(ca+1),Y(-28.6));c.lineTo(X(cb-.8),Y(-28.6));c.moveTo(X(ca+1),Y(-29.4));c.lineTo(X(ca+1),Y(-27.4));c.moveTo(X(cb-.8),Y(-29.4));c.lineTo(X(cb-.8),Y(-27.4));c.stroke();
  c.fillStyle='#cfd8dc';c.fillRect(X(ca+1.6),Y(-26),.9*k,3.4*k);
@@ -187,18 +188,21 @@ function loco(c,xl,xr,gy,k,t,ng){const v=t.lv,vr=LV[v.pat]||LV.cg,X=a=>xl+a*k,Y=
  else if(v.pat=='ow'){Pg([[0,-21.7],[60,-21.7],[60,-15.7],[0,-15.7]],v.st);Pg([[0,-15.7],[60,-15.7],[60,-13.7],[0,-13.7]],v.st2);Pg([[0,-33],[30,-33],[26,-21.7],[0,-21.7]],v.st);Pg([[30,-33],[32.2,-33],[28.2,-21.7],[26,-21.7]],v.st2)}
  else{Pg([[0,-21.7],[60,-21.7],[60,-15.7],[0,-15.7]],v.st);Pg([[0,-15.7],[60,-15.7],[60,-13.7],[0,-13.7]],v.st2);Pg([[0,-29],[44,-29],[44,-27.2],[0,-27.2]],v.st)}
  Pg(vr.rp||[[vr.ra,vr.gb],[vr.wb[0],vr.wb[1]],[60,vr.ey],[60,-8],[vr.ra,-8]],v.r);c.fillStyle='rgba(0,0,0,.16)';c.fillRect(X(vr.ra),Y(vr.gb),.7*k,(-8-vr.gb)*k);
- c.fillStyle='rgba(255,255,255,.65)';c.fillRect(X(vr.ra+.7),Y(-19),xr-X(vr.ra+.7),1.2*k);c.fillRect(X(vr.ra+.7),Y(-15.5),xr-X(vr.ra+.7),1.2*k);
+ c.fillStyle='rgba(255,255,255,.65)';c.fillRect(X(vr.ra+.7),Y(-19),xr-X(vr.ra+.7),1.2*k);c.fillRect(X(vr.ra+.7),Y(-15.5),xr-X(vr.ra+.7),1.2*k);if(vr.rg){Pg([[0,-29],[9.4,-29],[9.4,-8],[0,-8]],v.r);c.fillStyle='rgba(255,255,255,.65)';c.fillRect(X(0),Y(-19),9.4*k,1.2*k);c.fillRect(X(0),Y(-15.5),9.4*k,1.2*k)}
  c.fillStyle='#232a2e';c.fillRect(xl,Y(-12),xr-xl,4*k);c.fillRect(X(12),Y(-13.5),30*k,2*k);c.fillStyle='rgba(255,255,255,.22)';c.fillRect(xl+4*k,Y(-42.6),xr-xl-12*k,.9*k);
  c.fillStyle='rgba(0,0,0,.2)';vr.pl.forEach(a=>c.fillRect(X(a),Y(-42),.7*k,30*k));{const n=vr.pl.length;c.fillStyle='rgba(0,0,0,.1)';c.fillRect(X(vr.pl[n-2]+.7),Y(-42),(vr.pl[n-1]-vr.pl[n-2]-.7)*k,30*k)}
- c.fillStyle='#1c262b';c.fillRect(X(1.2),Y(-40.5),8.6*k,10*k);c.fillStyle='rgba(255,255,255,.14)';for(let j=1;j<6;j++)c.fillRect(X(1.2),Y(-40.5+j*1.7),8.6*k,.5*k);
+ if(!vr.rg){c.fillStyle='#1c262b';c.fillRect(X(1.2),Y(-40.5),8.6*k,10*k);c.fillStyle='rgba(255,255,255,.14)';for(let j=1;j<6;j++)c.fillRect(X(1.2),Y(-40.5+j*1.7),8.6*k,.5*k)}
  c.fillStyle='rgba(0,0,0,.28)';for(let j=0;j<vr.lv[1];j++)c.fillRect(X(vr.lv[0]+j*vr.lv[2]),Y(-39.5),1*k,9*k);
  c.restore();locoPath(c,xl,gy,k,xr,vr);c.strokeStyle='rgba(0,0,0,.4)';c.lineWidth=.9*k;c.stroke();
  vr.ex(c,X,Y,k);
  vr.sw.forEach((q,i)=>win(c,X(q[0]),Y(-40.5),q[1]*k,10.5*k,ng,(i?1.6:2.2)*k));
  c.beginPath();vr.g(c,X,Y);c.closePath();
  {const gl=c.createLinearGradient(0,Y(-40.6),0,Y(vr.gb));if(ng){gl.addColorStop(0,'#fff3b0');gl.addColorStop(1,'#ffb74d')}else{gl.addColorStop(0,'#78a6c9');gl.addColorStop(.55,'#2f536f');gl.addColorStop(1,'#10202e')}c.fillStyle=gl;c.fill();c.strokeStyle='rgba(10,16,22,.9)';c.lineWidth=.8*k;c.stroke()}
- c.fillStyle='#fff';c.beginPath();c.roundRect(X(12.2),Y(-39.5),7.4*k,5.2*k,1*k);c.fill();c.fillStyle='#1565c0';c.font='bold '+3.4*k+'px sans-serif';c.textAlign='center';c.fillText('KAI',X(15.9),Y(-35.6));c.fillStyle='#ff6f00';c.fillRect(X(12.8),Y(-34.4),6.2*k,.9*k);
- c.fillStyle='#fff';c.font='bold '+3.4*k+'px sans-serif';c.fillText(v.no,X(22),Y(-17.2));
+ if(vr.rg){vr.sw2.forEach((q,i)=>win(c,X(q[0]),Y(-40.5),q[1]*k,10.5*k,ng,(i?1.6:2.2)*k));c.beginPath();vr.rg(c,X,Y);c.closePath();
+  {const gl=c.createLinearGradient(0,Y(-40.6),0,Y(vr.gb));if(ng){gl.addColorStop(0,'#fff3b0');gl.addColorStop(1,'#ffb74d')}else{gl.addColorStop(0,'#78a6c9');gl.addColorStop(.55,'#2f536f');gl.addColorStop(1,'#10202e')}c.fillStyle=gl;c.fill();c.strokeStyle='rgba(10,16,22,.9)';c.lineWidth=.8*k;c.stroke()}
+  c.fillStyle='#fff59d';c.beginPath();c.roundRect(X(60-vr.lamp[0]-2.2),Y(vr.lamp[1]),2.2*k,2.6*k,.8*k);c.fill();c.strokeStyle='rgba(0,0,0,.45)';c.lineWidth=.5*k;c.stroke()}
+ {const lx=vr.lx||12.2;c.fillStyle='#fff';c.beginPath();c.roundRect(X(lx),Y(-39.5),7.4*k,5.2*k,1*k);c.fill();c.fillStyle='#1565c0';c.font='bold '+3.4*k+'px sans-serif';c.textAlign='center';c.fillText('KAI',X(lx+3.7),Y(-35.6));c.fillStyle='#ff6f00';c.fillRect(X(lx+.6),Y(-34.4),6.2*k,.9*k)}
+ c.fillStyle='#fff';c.font='bold '+3.4*k+'px sans-serif';c.fillText(v.no,X(vr.nx||22),Y(-17.2));
  c.fillStyle='#fff59d';c.beginPath();c.roundRect(X(vr.lamp[0]),Y(vr.lamp[1]),2.2*k,2.6*k,.8*k);c.fill();c.strokeStyle='rgba(0,0,0,.45)';c.lineWidth=.5*k;c.stroke();
  c.fillStyle='#ffd600';for(let i=0;i<3;i++)c.fillRect(xr-11*k+i*3.5*k,Y(-11),2*k,3*k);
  locoPolish(c,X,Y,k,vr,xr,v);
