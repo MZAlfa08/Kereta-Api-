@@ -122,8 +122,8 @@ function phys(dt,t,mv,N){const kb=G.kb>0,mve=mv*(kb?1.25:1);
   if(G.v<.4&&G.pos>=s.x+len&&G.pos<=s.x+SP+5){
    const err=Math.abs(G.pos-(s.x+SP-5)),pts=err<4*(2-DF[S.df]/1.6)?300:err<12?200:100,pr=G.r.st[G.ni-1],
    par=(s.x-pr.x-SP)/(Math.min(t.v,200*SPD)*.6/3.6),tb=Math.max(0,Math.round((par*1.2-G.ts)*3)),cc=900;
-   G.sc+=(pts+tb)*G.lv;if(G.ln==s.ln)G.sc+=100*G.lv;else G.sc=Math.max(0,G.sc-300*G.lv);S.coin+=cc;G.cg+=cc;s.done=1;G.ni++;G.v=0;G.dw=G.dw0=dwellT();arriveCue(s);
-   toast((G.ln==s.ln?'JALUR '+(s.ln+1)+' ✔ +100 • ':'⚠ SALAH JALUR! -300 • ')+(pts==300?'SEMPURNA! ':pts==200?'BAGUS! ':'OKE! ')+'+'+(pts+tb)*G.lv+' • +900 🪙');ding();sv()}
+   G.sc+=(pts+tb)*G.lv;S.coin+=cc;G.cg+=cc;s.done=1;G.ni++;G.v=0;G.dw=G.dw0=dwellT();arriveCue(s);
+   toast('JALUR '+(s.ln+1)+' • '+(pts==300?'SEMPURNA! ':pts==200?'BAGUS! ':'OKE! ')+'+'+(pts+tb)*G.lv+' • +900 🪙');ding();sv()}
   else if(G.pos>s.x+SP+5){G.sc=Math.max(0,G.sc-200*G.lv);s.done=1;G.ni++;toast('KELEWATAN! -'+200*G.lv);bad()}}
  return 1}
 function startEng(){if(G.m!='play'||G.es)return;G.es=1;G.et=2.2;crank();toast('Menyalakan mesin…');for(let i=0;i<4;i++)G.pf.push({x:G.pos-(TR[S.sel].k=='steam'?2.3:10.4)+i*.4,a:-i*.15,cl:'70,70,70',by:TR[S.sel].k=='steam'?50:47})}
@@ -690,7 +690,6 @@ function draw0(){
  if(G.m=='play'||G.m=='pause'){sm+=(G.v*3.6-sm)*.2;$('sc').textContent=Math.floor(G.sc);$('cn').textContent=S.coin;
   const l=$('lim');l.textContent=limAt(G.pos);l.classList.toggle('ov',!!G.ov);const tl=Math.floor(G.ts||0);$('tl').textContent='⏱ '+Math.floor(tl/60)+':'+String(tl%60).padStart(2,'0');
   const s=G.r.st[G.ni];{const cw=nextCx(),ss=s?'🚉 '+s.nm+' (JALUR '+((s.ln|0)+1)+') — '+Math.max(0,Math.round(s.x+SP-5-G.pos))+' m':'🚉 Selesai!';$('nx').textContent=cw?'🚧 Perlintasan '+Math.round(cw.x-G.pos)+' m'+(cw.hn?' ✔':' — tahan KLAKSON!'):ss}
-  {const e=$('wsl'),s2=G.r.st[G.ni],nd=s2&&!s2.done&&G.pos<s2.wx;e.textContent='🔀 WESEL → JALUR '+((G.wl|0)+1)+' • AKTIF: JALUR '+((G.ln|0)+1)+(nd?' • wesel '+Math.max(0,Math.round(s2.wx-G.pos))+' m':'');e.classList.toggle('warn',!!nd&&G.wl!=s2.ln)}
   $('tt').textContent='GAS N'+th+(G.es==2?'':G.es==1?' (starter…)':' (mesin mati)');$('eg').disabled=G.es!=0;$('gb').disabled=!canSwap();$('gb').style.display=(t.k=='loco'||t.k=='steam')?'':'none';$('ek').disabled=G.es!=2;$('lt2').style.opacity=G.es==2?1:.4;const ko=$('kobong');ko.classList.toggle('on',G.kb>0);if(G.kb>0)ko.textContent='🔥 KOBONG '+Math.ceil(G.kb)+' dtk';$('tb').textContent=em?'DARURAT':'REM B'+bk;$('kt').style.bottom=th/8*100+'%';$('kb').style.bottom=(em?1:bk/5)*100+'%';gauge(t)}}
 /* shop & settings */
 const bar=(l,f)=>`<div class="st"><span>${l}</span><i><u style="width:${Math.round(Math.min(1,f)*100)}%"></u></i></div>`;
@@ -719,11 +718,11 @@ function setTh(v){v=Math.max(0,Math.min(8,v));if(G.m=='play'&&G.es!=2&&v>0){if(t
 function setBk(v){v=Math.max(0,Math.min(5,v));if(v!=bk)tk();bk=v;if(v>0)th=0}
 function lever(id,mx,fn){const e=$(id);let d=0;const f=ev=>{const r=e.getBoundingClientRect();fn(Math.round(Math.max(0,Math.min(1,1-(ev.clientY-r.top)/r.height))*mx))};
  e.addEventListener('pointerdown',ev=>{ev.preventDefault();au();d=1;e.setPointerCapture(ev.pointerId);f(ev)});e.addEventListener('pointermove',ev=>{if(d)f(ev)});['pointerup','pointercancel'].forEach(n=>e.addEventListener(n,()=>d=0))}
-on('eg',startEng);on('wsb',toggleWl);on('gb',openSwap);on('gx',()=>{G.m='play';show(null)});on('ek',stopEng);lever('lt2',8,setTh);lever('lb',5,setBk);
+on('eg',startEng);on('gb',openSwap);on('gx',()=>{G.m='play';show(null)});on('ek',stopEng);lever('lt2',8,setTh);lever('lb',5,setBk);
 const hb=$('hrn'),eb=$('emg');hb.addEventListener('pointerdown',e=>{e.preventDefault();au();hornOn(TR[S.sel].k)});['pointerup','pointerleave','pointercancel'].forEach(n=>{hb.addEventListener(n,hornOff);eb.addEventListener(n,()=>em=0)});
 eb.addEventListener('pointerdown',e=>{e.preventDefault();au();em=1;th=0});
 addEventListener('keydown',e=>{au();K[e.code]=1;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(e.repeat)return;
- if(G.m=='play'){if(e.code=='ArrowUp'||e.code=='KeyW')setTh(th+1);if(e.code=='ArrowDown'||e.code=='KeyS')setTh(th-1);if(e.code=='ArrowRight'||e.code=='KeyD')setBk(bk+1);if(e.code=='ArrowLeft'||e.code=='KeyA')setBk(bk-1);if(e.code=='Space'){em=1;th=0}if(e.code=='KeyH')hornOn(TR[S.sel].k);if(e.code=='KeyJ')toggleWl();if(e.code=='KeyE'){G.es?stopEng():startEng()}}
+ if(G.m=='play'){if(e.code=='ArrowUp'||e.code=='KeyW')setTh(th+1);if(e.code=='ArrowDown'||e.code=='KeyS')setTh(th-1);if(e.code=='ArrowRight'||e.code=='KeyD')setBk(bk+1);if(e.code=='ArrowLeft'||e.code=='KeyA')setBk(bk-1);if(e.code=='Space'){em=1;th=0}if(e.code=='KeyH')hornOn(TR[S.sel].k);if(e.code=='KeyE'){G.es?stopEng():startEng()}}
  if(e.code=='KeyP'||e.code=='Escape')pz()});
 addEventListener('keyup',e=>{K[e.code]=0;if(e.code=='Space')em=0;if(e.code=='KeyH')hornOff()});
 addEventListener('blur',()=>{K={};em=0;hornOff();if(G.m=='play')pz()});
@@ -1020,7 +1019,7 @@ function stProps(s,px,gy,P){const w=SP*P,sc=u*.95,by=gy+19.6*u;stGates(px,by,w,s
 /* ---------- SUARA & PENGUMUMAN STASIUN ---------- */
 function stnAudio(){const near=(G.m=='play'||G.m=='menu')?zoneF(G.pos):0;crowd(near,G.dw>0?1:0);
  if(G.m!='play')return;const s=G.r.st[G.ni];if(!s||s.done)return;
- if(!s.a0&&G.pos<s.wx&&s.wx-G.pos<2200&&s.ln!=G.wl){s.a0=1;chime();toast('🔀 SIAPKAN WESEL: JALUR '+(s.ln+1)+' (tekan J)');if(S.pa)say('Perhatian. Kereta akan masuk jalur '+(s.ln?'dua':'satu')+' di stasiun '+s.nm+'. Siapkan wesel.')}
+ if(!s.a0&&G.pos<s.wx&&s.wx-G.pos<2200){s.a0=1;if(s.ln!=G.ln)toast('🔀 Wesel otomatis → JALUR '+(s.ln+1))}
  const d=s.x+SP-5-G.pos;if(d<0)return;const lead=Math.max(1000,G.v*10),tn=TR[S.sel].n;
  if(!s.a1&&d<lead){s.a1=1;chime();if(S.pa)say('Perhatian, perhatian. '+tn+' akan segera masuk di stasiun '+s.nm+', jalur '+(s.ln?'dua':'satu')+'. Mohon penumpang menunggu di belakang garis aman peron.')}
  if(!s.a2&&d<lead*.6){s.a2=1;bellSt();autoHorn(TR[S.sel].k,1500)}}
@@ -1040,18 +1039,15 @@ toMenu();requestAnimationFrame(loop);
 
 /* ---------- 2 JALUR PER STASIUN + WESEL (PINDAH JALUR) ----------
    Jalur 1 = rel dekat peron (lintas utama), Jalur 2 = rel kedua di belakangnya.
-   Tiap stasiun menentukan jalur tujuan (s.ln). Arahkan wesel (tombol 🔀 / tekan J) sebelum wesel masuk;
+   Tiap stasiun menentukan jalur tujuan (s.ln). Perpindahan jalur OTOMATIS di wesel masuk (450 m sebelum stasiun);
    setelah lewat wesel keluar, kereta otomatis kembali ke Jalur 1. */
 const swClick=()=>{tone(520,.05,'square',.05);tone(300,.09,'square',.05,0,.06)};
 function laneF(){if(G.lx==null)return G.ln|0;const q=Math.min(1,Math.max(0,(G.pos-G.lx)/WLEN)),s=q*q*(3-2*q);return(G.lb|0)+((G.ln|0)-(G.lb|0))*s}
 function swLane(n,x0){G.lb=laneF();G.ln=n;G.lx=x0;clack(1);setTimeout(()=>clack(1),160);toast('🔀 Pindah ke JALUR '+(n+1))}
 function weselStep(){const p0=G.wp==null?G.pos:G.wp;G.wp=G.pos;
  for(const s of G.r.st){if(s.wx<-1e8)continue;
-  if(p0<s.wx&&G.pos>=s.wx&&G.wl!=G.ln)swLane(G.wl,s.wx);
+  if(p0<s.wx&&G.pos>=s.wx&&G.ln!=s.ln)swLane(s.ln,s.wx);
   if(p0<s.ex&&G.pos>=s.ex&&G.ln!=0){G.wl=0;swLane(0,s.ex)}}}
-function toggleWl(){if(G.m!='play')return;const s=G.r.st[G.ni];
- if(s&&!s.done&&G.pos>=s.wx&&G.pos<s.ex){toast('⛔ Wesel sudah terlewat');return}
- G.wl=G.wl?0:1;swClick();toast('🔀 Wesel diarahkan ke JALUR '+(G.wl+1)+(s&&!s.done&&G.wl!=s.ln?' — stasiun meminta JALUR '+(s.ln+1):''))}
 function weselDraw(gy,P,cam){const y2=gy-LANEY*u,
  ra=(xa,xb)=>{xa=Math.max(xa,-30);xb=Math.min(xb,W+30);if(xb<=xa)return;x.fillStyle='rgba(60,50,38,.5)';x.fillRect(xa,y2+3.5*u,xb-xa,3.2*u);x.fillStyle='#6b5d4a';x.fillRect(xa,y2,xb-xa,4.5*u);x.fillStyle='#4e342e';for(let X=xa-((cam+xa)%(10*u));X<xb;X+=10*u)x.fillRect(X,y2+1*u,5*u,2.6*u);x.fillStyle='#d5dde1';x.fillRect(xa,y2,xb-xa,1.4*u)},
  dg=(xa,ya,xb,yb)=>{x.save();x.lineCap='butt';x.strokeStyle='#6b5d4a';x.lineWidth=5*u;x.beginPath();x.moveTo(xa,ya+1.5*u);x.lineTo(xb,yb+1.5*u);x.stroke();
@@ -1059,6 +1055,6 @@ function weselDraw(gy,P,cam){const y2=gy-LANEY*u,
   x.strokeStyle='#d5dde1';x.lineWidth=1.5*u;x.beginPath();x.moveTo(xa,ya);x.lineTo(xb,yb);x.stroke();x.restore()};
  for(const s of G.r.st){if(s.wx<-1e8)continue;const X0=s.wx*P-cam,X1=X0+WLEN*P,X2=s.ex*P-cam,X3=X2+WLEN*P;if(X3<-60||X0>W+60)continue;
   ra(X1,X2);dg(X0,gy+1.2*u,X1,y2+.7*u);dg(X2,y2+.7*u,X3,gy+1.2*u);
-  const lx=X0-9*u;if(lx>-40&&lx<W+40){const c=G.wl?'255,179,0':'67,160,71';x.fillStyle='#455a64';x.fillRect(lx-.8*u,gy+3*u,1.6*u,8*u);x.fillStyle='#212121';x.fillRect(lx-3*u,gy-1.5*u,6*u,5*u);
+  const lx=X0-9*u;if(lx>-40&&lx<W+40){const c=s.ln?'255,179,0':'67,160,71';x.fillStyle='#455a64';x.fillRect(lx-.8*u,gy+3*u,1.6*u,8*u);x.fillStyle='#212121';x.fillRect(lx-3*u,gy-1.5*u,6*u,5*u);
    x.fillStyle='rgb('+c+')';x.beginPath();x.arc(lx,gy+1*u,1.8*u,0,7);x.fill();if(TD())puff(lx,gy+1*u,12*u,.5,c);
    x.fillStyle='#fff';x.font='bold '+3.6*u+'px sans-serif';x.textAlign='center';x.fillText('WESEL',lx,gy-3*u)}}}
