@@ -96,7 +96,7 @@ function xing(dt,len){const T=cxT();
 /* update */
 const segT=i=>{const t=TR[S.sel],r=G.r.st,par=(r[i].x-r[i-1].x-SP)/(Math.min(t.v,200*SPD)*.6/3.6);return(par*1.5+20)/Math.sqrt(DF[S.df])};
 function phys(dt,t,mv,N){const kb=G.kb>0,mve=mv*(kb?1.25:1);
- if(G.dw>0){G.v=0;G.dw-=dt;if(G.dw<=0){G.dw=0;toast('Berangkat! 🚆');G.ts=0;departCue();setTimeout(goHorn,900)}}
+ if(G.dw>0){G.v=0;G.dw-=dt;{const s0=G.r.st[G.ni-1];if(s0&&!s0.dp&&G.dw0>=8&&G.dw<=4.6&&G.dw>0){s0.dp=1;ppkaCue(s0)}}if(G.dw<=0){G.dw=0;toast('Berangkat! 🚆');G.ts=0;departCue();setTimeout(goHorn,900)}}
  else{
   let a=N>0?t.a*(kb?2:1)*(N/8-G.v/mve):-(.05+.25*t.a*G.v/mv);if(N>0&&a<0)a*=.3;a-=GRAV*hillSlope(G.pos-30);
   a-=em?t.b*1.7:t.b*bk/5;
@@ -112,7 +112,7 @@ function phys(dt,t,mv,N){const kb=G.kb>0,mve=mv*(kb?1.25:1);
   if(G.v<.4&&G.pos>=s.x+len&&G.pos<=s.x+SP+5){
    const err=Math.abs(G.pos-(s.x+SP-5)),pts=err<4*(2-DF[S.df]/1.6)?300:err<12?200:100,pr=G.r.st[G.ni-1],
    par=(s.x-pr.x-SP)/(Math.min(t.v,200*SPD)*.6/3.6),tb=Math.max(0,Math.round((par*1.2-G.ts)*3)),cc=900;
-   G.sc+=(pts+tb)*G.lv;S.coin+=cc;G.cg+=cc;s.done=1;G.ni++;G.v=0;G.dw=3;arriveCue(s);
+   G.sc+=(pts+tb)*G.lv;S.coin+=cc;G.cg+=cc;s.done=1;G.ni++;G.v=0;G.dw=G.dw0=dwellT();arriveCue(s);
    toast((pts==300?'SEMPURNA! ':pts==200?'BAGUS! ':'OKE! ')+'+'+(pts+tb)*G.lv+' • +900 🪙');ding();sv()}
   else if(G.pos>s.x+SP+5){G.sc=Math.max(0,G.sc-200*G.lv);s.done=1;G.ni++;toast('KELEWATAN! -'+200*G.lv);bad()}}
  return 1}
@@ -927,7 +927,22 @@ function stPlat(s,px,gy,P,cam){const w=SP*P,y0=gy+4*u,x0=Math.max(px,-20),x1=Mat
 function stCanopy(px,gy,w,cn){const x0=px-6*u,ww=w+12*u,g=x.createLinearGradient(0,gy-94*u,0,gy-84*u);g.addColorStop(0,'#eceff1');g.addColorStop(1,'#b0bec5');x.fillStyle=g;x.beginPath();x.moveTo(x0-4*u,gy-84*u);x.lineTo(x0+4*u,gy-94*u);x.lineTo(x0+ww-4*u,gy-94*u);x.lineTo(x0+ww+4*u,gy-84*u);x.closePath();x.fill();
  x.fillStyle='rgba(0,0,0,.12)';const a0=Math.max(x0,-20),a1=Math.min(x0+ww,W+20),st=9*u;for(let X=x0+Math.ceil((a0-x0)/st)*st;X<a1;X+=st)x.fillRect(X,gy-94*u,1.2*u,10*u);
  const f2=x.createLinearGradient(0,gy-84*u,0,gy-77*u);f2.addColorStop(0,sh(cn,.15));f2.addColorStop(1,sh(cn,-.15));x.fillStyle=f2;x.fillRect(x0,gy-84*u,ww,7*u);x.fillStyle='rgba(255,255,255,.55)';x.fillRect(x0,gy-84*u,ww,.9*u);x.fillStyle='rgba(0,0,0,.28)';x.fillRect(x0,gy-77*u,ww,2.2*u)}
-function stExtra(s,px,gy,P,w,cx,pl,st){
+/* jam peron gantung (menunjukkan waktu sebenarnya) */
+function stClock(X,gy){if(X<-30||X>W+30)return;const cy=gy-57*u,d=new Date(),m=d.getMinutes()+d.getSeconds()/60,h=(d.getHours()%12)+m/60,ln=(a,l)=>{x.moveTo(X,cy);x.lineTo(X+Math.sin(a)*l,cy-Math.cos(a)*l)};
+ x.fillStyle='#455a64';x.fillRect(X-.6*u,gy-77*u,1.2*u,13*u);x.fillStyle='#263238';x.beginPath();x.arc(X,cy,7.6*u,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(X,cy,6.4*u,0,7);x.fill();
+ x.strokeStyle='#90a4ae';x.lineWidth=.6*u;for(let i=0;i<12;i++){const a=i/12*6.283;x.beginPath();x.moveTo(X+Math.sin(a)*5.2*u,cy-Math.cos(a)*5.2*u);x.lineTo(X+Math.sin(a)*6*u,cy-Math.cos(a)*6*u);x.stroke()}
+ x.strokeStyle='#111';x.lineWidth=1*u;x.lineCap='round';x.beginPath();ln(h/12*6.283,3.4*u);ln(m/60*6.283,5*u);x.stroke()}
+/* merpati di atap kanopi: terbang saat kereta tiba */
+function stPigeons(s,px,gy,w){const cur=s===G.r.st[G.ni-1]&&s.arr,fl0=cur?tm-s.arr:0;
+ for(let i=0;i<7;i++){const X0=px+w*(.07+hs(s.x*.31+i*5.1)*.86);if(X0<-40||X0>W+40)continue;const ph=hs(s.x*.7+i*3.3)*6.28,fl=Math.max(0,fl0-.3-i*.12),al=Math.max(0,1-fl/3);if(al<=0)continue;
+  const dir=i%2?1:-1,X=X0+dir*fl*fl*26*u,Y=gy-94*u-fl*34*u-(fl>0?Math.abs(Math.sin(fl*14+ph))*3*u:0),peck=fl<=0&&Math.sin(tm*2.4+ph)>.82;
+  x.save();x.globalAlpha=al;x.translate(X,Y);x.scale(dir*u*.8,u*.8);
+  x.fillStyle='#8f9aa3';x.beginPath();x.ellipse(0,-3.2,4.6,2.8,-.1,0,7);x.fill();x.fillStyle='#6d7a84';x.beginPath();x.moveTo(-3.6,-3);x.lineTo(-8,-1.6);x.lineTo(-3.6,-1.2);x.fill();
+  x.fillStyle='#78909c';x.beginPath();x.arc(4.4,peck?-3.2:-6.2,1.9,0,7);x.fill();x.fillStyle='#ffb74d';x.fillRect(6,peck?-3.2:-6.4,1.8,.8);x.fillStyle='#4a148c';x.fillRect(2.8,-5,2,1);
+  if(fl>0){x.strokeStyle='#b0bec5';x.lineWidth=1.6;x.beginPath();x.moveTo(-1,-4);x.lineTo(-4,-9+Math.sin(fl*30)*3);x.moveTo(1,-4);x.lineTo(-1,-10+Math.sin(fl*30)*3);x.stroke()}
+  else{x.fillStyle='#37474f';x.fillRect(-1.4,-.7,.9,1.1);x.fillRect(1,-.7,.9,1.1)}
+  x.restore()}}
+function stExtra(s,px,gy,P,w,cx,pl,st){stPigeons(s,px,gy,w);[.22,.78].forEach(q=>stClock(px+w*q,gy));
  /* penyangga kanopi */
  x.strokeStyle='#546e7a';x.lineWidth=1.8*u;[.06,.3,.5,.7,.94].forEach(q=>{const X=px+w*q;if(X<-40||X>W+40)return;x.beginPath();x.moveTo(X+2*u,gy-64*u);x.lineTo(X+15*u,gy-77*u);x.moveTo(X+2*u,gy-64*u);x.lineTo(X-11*u,gy-77*u);x.stroke()});
  /* papan informasi digital (LED) */
@@ -956,7 +971,16 @@ function booth(X,by,s){if(X<-90||X>W+90)return;x.save();x.translate(X,by);x.scal
  x.fillStyle='#5d4037';x.fillRect(11,-27,11,27);x.fillStyle='#d7ccc8';x.fillRect(12.5,-24.5,8,8);x.fillStyle='#ffd54f';x.beginPath();x.arc(13,-12,.9,0,7);x.fill();x.restore()}
 function signal(X,by,s,st){if(X<-60||X>W+60)return;const go=!st.done&&G.pos<st.x+SP-5,h=66*s;x.fillStyle='#455a64';x.fillRect(X-1.2*s,by-h,2.4*s,h);x.fillStyle='#fafafa';x.fillRect(X-1.2*s,by-h+26*s,2.4*s,5*s);x.fillStyle='#212121';x.beginPath();x.roundRect(X-4.4*s,by-h-2*s,8.8*s,22*s,2*s);x.fill();
  [['#e53935',!go],['#43a047',go]].forEach((q,i)=>{const cy=by-h+3.6*s+i*9*s;x.fillStyle=q[1]?q[0]:'#2f2f2f';x.beginPath();x.arc(X,cy,3*s,0,7);x.fill();if(q[1]){x.save();x.globalCompositeOperation='lighter';const gl=x.createRadialGradient(X,cy,0,X,cy,13*s);gl.addColorStop(0,q[0]+'aa');gl.addColorStop(1,q[0]+'00');x.fillStyle=gl;x.beginPath();x.arc(X,cy,13*s,0,7);x.fill();x.restore()}})}
-function stProps(s,px,gy,P){const w=SP*P,sc=u*.95,by=gy+19.6*u;
+/* gerbang tiket (tap kartu) */
+function stGates(px,by,w,sc){const X0=px+w*.052;if(X0<-70||X0>W+70)return;x.save();x.translate(X0,by);x.scale(sc,sc);
+ x.fillStyle='rgba(0,0,0,.22)';x.fillRect(-4,-1.4,48,2.6);
+ [0,14,28].forEach((q,i)=>{x.fillStyle='#455a64';x.fillRect(q,-14,6,14);x.fillStyle='#78909c';x.fillRect(q,-14,6,2.4);x.fillStyle=Math.sin(tm*2+i)>-.3?'#43a047':'#e53935';x.fillRect(q+1.6,-11.2,2.8,1.8);x.fillStyle='#eceff1';x.fillRect(q+1,-7.6,4,2.4);
+  if(i<2){x.fillStyle='rgba(255,255,255,.7)';x.fillRect(q+6,-9.6,8,1.1)}});
+ x.fillStyle='#1565c0';x.fillRect(-2,-24,48,7);x.fillStyle='#fff';x.font='bold 5px sans-serif';x.textAlign='center';x.fillText('TAP KARTU',22,-19);x.fillStyle='#455a64';x.fillRect(-1,-17,1.4,17);x.fillRect(43,-17,1.4,17);x.restore()}
+/* kucing peron */
+function stCat(X,by,s){if(X<-30||X>W+30)return;const t=tm*1.6;x.save();x.translate(X,by);x.scale(s,s);x.fillStyle='#ef6c00';x.beginPath();x.ellipse(0,-4,5.2,3.8,0,0,7);x.fill();x.beginPath();x.arc(4.6,-8.2,3,0,7);x.fill();x.beginPath();x.moveTo(3,-10.2);x.lineTo(3.4,-13);x.lineTo(5,-10.6);x.fill();x.beginPath();x.moveTo(5.4,-10.4);x.lineTo(7,-12.8);x.lineTo(7.2,-9.6);x.fill();
+ x.strokeStyle='#ef6c00';x.lineWidth=1.8;x.lineCap='round';x.beginPath();x.moveTo(-5,-3);x.quadraticCurveTo(-10,-4+Math.sin(t)*3,-9,-10+Math.sin(t)*2);x.stroke();x.fillStyle='#fff3e0';x.fillRect(2,-1.6,2.4,1.6);x.fillStyle='#212121';x.fillRect(5.2,-8.8,.9,1.1);x.restore()}
+function stProps(s,px,gy,P){const w=SP*P,sc=u*.95,by=gy+19.6*u;stGates(px,by,w,sc);stCat(px+w*(.5+hs(s.x*.9)*.06),gy+19.8*u,sc);
  [.205,.395,.62,.86].forEach(q=>pot(px+w*q,by,sc));bin(px+w*.34,by,sc);bin(px+w*.8,by,sc);booth(px+w*.3,by,sc);signal(px+w*.012,by,u,s)}
 
 /* ---------- SUARA & PENGUMUMAN STASIUN ---------- */
@@ -968,7 +992,11 @@ function stnAudio(){const near=(G.m=='play'||G.m=='menu')?zoneF(G.pos):0;crowd(n
 function arriveCue(s){s.arr=tm;airRel();
  setTimeout(()=>{doorBeep(3);hiss(.5,.1,1800)},900);
  if(S.pa)setTimeout(()=>say(TR[S.sel].n+' tiba di stasiun '+s.nm+'. Periksa kembali barang bawaan Anda.'),700)}
-function departCue(){whistle();doorBeep(5)}
+const dwellT=()=>S.pa&&S.snd&&window.speechSynthesis?11:3;
+/* aba-aba PPKA lewat radio ke masinis menjelang berangkat, lalu peluit & "berangkat" */
+function ppkaCue(s){const tn=TR[S.sel].n,nx=G.r.st[G.ni]&&G.r.st[G.ni].nm||'stasiun berikutnya',k=Math.random()*3|0;
+ sayPPKA(k==0?'Sinyal keluar aman. '+tn+', berangkat!':k==1?'PPKA '+s.nm+' ke masinis. Sinyal keluar aman. Silakan berangkat.':'Kereta api tujuan '+nx+' diberangkatkan. Hati-hati.')}
+function departCue(){whistle();doorBeep(5);if(S.pa)setTimeout(()=>sayPPKA('Berangkat, berangkat!'),650)}
 function goHorn(){autoHorn(TR[S.sel].k,700)}
 
 /* loop */
