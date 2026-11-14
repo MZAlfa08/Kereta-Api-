@@ -67,3 +67,13 @@ function sayStop(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e)
 function say(txt){if(!S.snd||!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined')return;
  try{speechSynthesis.cancel();const ut=new SpeechSynthesisUtterance(txt);ut.lang='id-ID';ut.rate=.92;ut.pitch=1.08;ut.volume=.9;
   const vs=speechSynthesis.getVoices(),v=vs.find(q=>/^id/i.test(q.lang));if(v)ut.voice=v;setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){}},chime.ms||1500)}catch(e){}}
+
+/* ---------- PETUGAS PPKA: suara radio memberangkatkan kereta ---------- */
+/* bunyi "kreek" tombol radio (HT) ditekan / dilepas */
+function radioKey(on){tone(on?1500:950,.05,'square',.035);hiss(on?.14:.09,.09,on?2600:2000)}
+/* suara petugas (nada rendah, lewat speechSynthesis) diapit bunyi radio; tanpa suara bicara hanya bunyi radio */
+function sayPPKA(txt){if(!S.snd)return;radioKey(1);
+ if(!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined'){setTimeout(()=>radioKey(0),700);return}
+ try{speechSynthesis.cancel();const ut=new SpeechSynthesisUtterance(txt);ut.lang='id-ID';ut.rate=.9;ut.pitch=.5;ut.volume=1;
+  const vs=speechSynthesis.getVoices(),id=vs.filter(q=>/^id/i.test(q.lang)),v=id.find(q=>/andika|male|pria|rizki|jaya|ardi/i.test(q.name))||id[0];if(v)ut.voice=v;
+  ut.onend=()=>radioKey(0);ut.onerror=()=>radioKey(0);setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){}},380)}catch(e){}}
