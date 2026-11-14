@@ -43,7 +43,7 @@ const TR=[
 {n:'KA Serayu Kuning',s:'Lokomotif CC 206 kuning-biru + gerbong eksekutif',p:4800,v:200,a:2.4,b:3.3,m:1.9,k:'loco',lv:{lg:'po',pat:'rw',u:'#f3f6f8',bd:'#9aa7ae',st:'#f2c315',st2:'#1c2b6e',r:'#f2c315',no:'CC 206 12 31',img:'cc206',cl:{red:'#f2c315',navy:'#1c2b6e',roof:'#4a4a2a',body:'#fbfaf0'},ty:-24},c1:'#fbfaf0',cb:'#fbfaf0',c2:'#f2c315',c3:'#1c2b6e',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
 {n:'KAI Logistik CC 206',s:'Lokomotif CC 206 biru logistik + gerbong barang',p:3200,v:200,a:2.4,b:3.3,m:2.5,k:'loco',lv:{lg:'po',pat:'rw',u:'#f3f6f8',bd:'#9aa7ae',st:'#1c4fa0',st2:'#e65100',r:'#1c4fa0',no:'CC 206 13 90',img:'cc206',cl:{red:'#1c4fa0',navy:'#e65100',roof:'#37474f',body:'#eef2f6'},ty:-24},c1:'#eef2f6',cb:'#eef2f6',c2:'#1c4fa0',c3:'#e65100',cars:['cc','ctn','ctn','ctn','tgk','tgk','tgk','bk','bk','brg']}
 ];
-const SPD=2,lq=v=>Math.round(v*SPD/5)*5;TR.forEach(t=>{t.v=Math.min(650,Math.round(t.v*SPD));t.a*=SPD;t.b*=SPD});
+const SPD=2.5,lq=v=>Math.round(v*SPD/5)*5;TR.forEach(t=>{t.v=Math.min(800,Math.round(t.v*SPD));t.a*=SPD;t.b*=SPD});
 let S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1};
 try{Object.assign(S,JSON.parse(localStorage.getItem('kn1')||'{}'))}catch(e){}
 if(S.pa==null)S.pa=1;if(!S.au2){S.au2=1;S.tod=3;S.wx=3}S.cons=S.cons||{};S.cw=S.cw||['eko',...Object.values(S.cons)];S.own=S.own.filter(i=>i<TR.length);if(!S.own.includes(0))S.own.push(0);if(!TR[S.sel]||!S.own.includes(S.sel))S.sel=0;
@@ -741,7 +741,7 @@ function shop(){$('sc2').textContent=S.coin;$('tb1').className='b sm '+(ST?'bl':
  const card=(t2,nm,sub,extra,bt0)=>{const d=document.createElement('div');d.className='cd';d.innerHTML='<canvas width="270" height="76"></canvas><b>'+nm+'</b><small>'+sub+'</small>'+extra+'<button class="b sm"></button>';
   const c=d.querySelector('canvas').getContext('2d');c.fillStyle='#8d7b68';c.fillRect(0,68,270,8);c.fillStyle='#cfd8dc';c.fillRect(0,66,270,2);drawTrain(c,t2,262,66,Math.min(1.1,245/trLen(t2)),0);g.appendChild(d);return d.querySelector('button')};
  if(ST==0)TR.forEach((t,i)=>{const lo=t.k=='loco'||t.k=='steam',t2=lo?Object.assign({},t,{pv:1,cars:t.k=='steam'?['uap','tdr']:['cc']}):t,
-   bt=card(t2,t.n,lo?(t.k=='steam'?'Lokomotif uap (dijual sendiri)':'Lokomotif '+t.lv.no.slice(0,6)+' (dijual sendiri)'):t.s,bar('Kecepatan',t.v/400)+bar('Akselerasi',t.a/3.6)+bar('Rem',t.b/4.6)+bar('Pendapatan',t.m/3)),o=S.own.includes(i);
+   bt=card(t2,t.n,lo?(t.k=='steam'?'Lokomotif uap (dijual sendiri)':'Lokomotif '+t.lv.no.slice(0,6)+' (dijual sendiri)'):t.s,bar('Kecepatan',t.v/500)+bar('Akselerasi',t.a/4.5)+bar('Rem',t.b/5.75)+bar('Pendapatan',t.m/3)),o=S.own.includes(i);
   bt.textContent=o?(S.sel==i?'✔ DIPAKAI':'PILIH'):(S.coin>=t.p?'BELI 🪙'+t.p:'🔒 🪙'+t.p);bt.className='b sm '+(o?(S.sel==i?'g':'bl'):(S.coin>=t.p?'y':''));bt.disabled=!o&&S.coin<t.p;
   bt.onclick=()=>{au();if(!o){S.coin-=t.p;S.own.push(i);ding()}S.sel=i;sv();shop()}});
  else{const lk=TR[S.sel],can=lk.k=='loco'||lk.k=='steam',lt=can?lk:TR[0];
