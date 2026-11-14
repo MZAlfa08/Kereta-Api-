@@ -1,5 +1,5 @@
 const $=id=>document.getElementById(id),cv=$('c'),XM=cv.getContext('2d',{alpha:false});let x=XM,OFFC=null,OFX=null,LIMX=null,QCAP=1.5,LNC=0,slowN=0;
-const HXF=.8,SP=440,LANEY=24,WLEN=90,
+const HXF=.8,SP=720,LANEY=24,WLEN=90,
 TSTY=[{h:['#8fb56c','#5f8c49','#3a5834'],b:['#2e7d32','#3f9a3f'],bd:'#0d47a1',lamp:'#ffe9a8'},
  {h:['#7fae8c','#4f8a63','#2f5a45'],b:['#2f6f4a','#4c9a6a'],bd:'#1b5e20',lamp:'#ffe9a8'},
  {h:['#a9a38f','#7d7765','#4c4638'],b:['#8b8570','#a39d88'],bd:'#e65100',lamp:'#e8f4ff'},
