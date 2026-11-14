@@ -221,7 +221,7 @@ function wheels(c,cx,gy,k,n,sp,dk){for(let i=0;i<n;i++){const wx=cx+(i-(n-1)/2)*
  const gg=c.createRadialGradient(wx-r*.2,wy-r*.2,0,wx,wy,r*.62);gg.addColorStop(0,dk?'#6a7378':'#b0bec5');gg.addColorStop(1,dk?'#23272a':'#546e7a');c.fillStyle=gg;c.beginPath();c.arc(wx,wy,r*.62,0,7);c.fill();
  c.fillStyle=dk?'#1a1d1f':'#37474f';c.beginPath();c.arc(wx,wy,r*.42,0,7);c.fill();
  c.globalAlpha=Math.max(0,1-G.v/22);c.strokeStyle='#cfd8dc';c.lineWidth=k*.7;c.beginPath();for(let s=0;s<3;s++){const b=a+s*Math.PI/3;c.moveTo(wx+Math.cos(b)*r*.55,wy+Math.sin(b)*r*.55);c.lineTo(wx-Math.cos(b)*r*.55,wy-Math.sin(b)*r*.55)}c.stroke();c.globalAlpha=1;
- c.fillStyle='#eceff1';c.beginPath();c.arc(wx,wy,r*.16,0,7);c.fill()}}
+ c.fillStyle='#eceff1';c.beginPath();c.arc(wx,wy,r*.16,0,7);c.fill();c.strokeStyle='rgba(255,255,255,.32)';c.lineWidth=.55*k;c.beginPath();c.arc(wx,wy,r*.93,-2.5,-1.2);c.stroke()}}
 function steamL(c,xl,xr,gy,k){
  const bg=c.createLinearGradient(0,gy-35*k,0,gy-9*k);bg.addColorStop(0,'#555');bg.addColorStop(.3,'#1d1d1d');bg.addColorStop(1,'#050505');
  c.fillStyle='#2a2a2a';c.fillRect(xl+3*k,gy-40*k,19*k,32*k);c.fillStyle='#b71c1c';c.beginPath();c.roundRect(xl,gy-46*k,25*k,7*k,2*k);c.fill();win(c,xl+8*k,gy-34*k,9*k,11*k,0,k);
@@ -486,9 +486,9 @@ function coach(c,ty,xl,xr,gy,k,t,ng){const L=xr-xl,h=36*k,y0=gy-8*k-h,cx=(xl+xr)
  bogie(c,xl+13*k,gy,k,2);bogie(c,xr-13*k,gy,k,2)}
 function car(c,ty,xl,xr,gy,k,t,ng){
  const L=xr-xl,h=36*k,y0=gy-8*k-h,c1=t.c1,cb=t.cb||c1,c2=t.c2,c3=t.c3,cx=(xl+xr)/2,bg=(a,b)=>{bogie(c,xl+a*k,gy,k,2);bogie(c,xr-b*k,gy,k,2)};
- if(ty=='uap')return steamL(c,xl,xr,gy,k);if(FR.includes(ty))return freight(c,ty,xl,xr,gy,k,t,ng);
+ if(ty=='uap')return glossDraw(c,xl,xr,gy,k,ng,q=>steamL(q,xl,xr,gy,k));if(FR.includes(ty))return freight(c,ty,xl,xr,gy,k,t,ng);
  if(ty=='tdr'){body(c,xl+2*k,gy-34*k,L-4*k,26*k,3*k,'#1a1a1a');c.fillStyle='#0b0b0b';c.beginPath();c.moveTo(xl+5*k,gy-34*k);c.quadraticCurveTo(cx,gy-52*k,xr-5*k,gy-34*k);c.fill();c.fillStyle='#5d4037';for(let i=0;i<14;i++)c.fillRect(xl+8*k+hs(i)*(L-18*k),gy-36*k-hs(i+5)*9*k,2*k,2*k);bogie(c,cx,gy,k,2);return}
- if(ty=='cc')return loco(c,xl,xr,gy,k,t,ng);
+ if(ty=='cc')return glossDraw(c,xl,xr,gy,k,ng,q=>loco(q,xl,xr,gy,k,t,ng));
  if(ty=='kay'){body(c,xl,y0+2*k,L,h-2*k,2*k,cb);c.strokeStyle='rgba(0,0,0,.2)';c.lineWidth=.7*k;c.beginPath();for(let i=1;i<L/(4*k);i++){c.moveTo(xl+i*4*k,y0+4*k);c.lineTo(xl+i*4*k,y0+h-4*k)}c.stroke();
   c.fillStyle=sh(cb,-.45);c.beginPath();c.roundRect(xl-1*k,y0-3*k,L+2*k,8*k,[8*k,8*k,0,0]);c.fill();
   for(let j=0;j<4;j++){c.fillStyle=ng?'#ffd180':'#2a1c10';c.beginPath();c.roundRect(xl+7*k+j*12*k,y0+10*k,8*k,14*k,[4*k,4*k,0,0]);c.fill()}
@@ -1163,3 +1163,25 @@ function viaPiers(bx0,bx1,gy){const L=bx1-bx0,n=Math.max(2,Math.round(L/(92*u)))
 function pylonPiers(sy,bx0,bx1,gy){const L=bx1-bx0,xs=sy==2?[bx0+L*.28,bx0+L*.72]:[bx0+10*u,bx1-10*u];
  xs.forEach(X=>{if(X<-40||X>W+40)return;const pg=x.createLinearGradient(X-11*u,0,X+11*u,0);pg.addColorStop(0,'#cfd3d6');pg.addColorStop(1,'#7d8387');x.fillStyle=pg;x.fillRect(X-11*u,gy+14*u,22*u,72*u);
   x.fillStyle='rgba(255,255,255,.55)';x.beginPath();x.ellipse(X,gy+74*u,22*u,4*u,0,0,7);x.fill()})}
+
+/* ---------- PERCANTIK LOKOMOTIF (bentuk tidak diubah) ----------
+   Lokomotif digambar dulu ke kanvas sementara, lalu diberi lapisan cahaya/bayangan dengan mode 'source-atop'
+   (hanya mengenai piksel lokomotif sendiri, jadi siluet persis sama), lalu ditempel ke kereta. */
+let GLC=null;
+function glossDraw(c,xl,xr,gy,k,ng,fn){const m=c.getTransform?c.getTransform():null;if(!m||typeof document=='undefined'){fn(c);return}
+ const sc=Math.max(Math.hypot(m.a,m.b),Math.hypot(m.c,m.d)),bx=xl-12*k,by=gy-66*k,bw=xr-xl+24*k,bh=72*k,pw=Math.ceil(bw*sc),ph=Math.ceil(bh*sc);
+ if(!(pw>2&&ph>2&&pw<4096&&ph<2048)){fn(c);return}
+ if(!GLC)GLC=document.createElement('canvas');if(GLC.width!=pw||GLC.height!=ph){GLC.width=pw;GLC.height=ph}
+ const q=GLC.getContext('2d');q.setTransform(1,0,0,1,0,0);q.globalCompositeOperation='source-over';q.globalAlpha=1;q.clearRect(0,0,pw,ph);q.setTransform(sc,0,0,sc,-bx*sc,-by*sc);
+ fn(q);gloss(q,xl,xr,gy,k,ng,bx,bw);q.setTransform(1,0,0,1,0,0);c.drawImage(GLC,0,0,pw,ph,bx,by,bw,bh)}
+function gloss(q,xl,xr,gy,k,ng,bx,bw){const L=xr-xl,tn=((xl*.173+k*3.1)%1+1)%1,y0=gy-48*k,hh=44*k;q.save();q.globalCompositeOperation='source-atop';
+ /* cahaya atas -> bayangan bawah (volume badan) */
+ let g=q.createLinearGradient(0,gy-46*k,0,gy-6*k);g.addColorStop(0,'rgba(255,255,255,'+(ng?.10:.28)+')');g.addColorStop(.2,'rgba(255,255,255,'+(ng?.04:.10)+')');g.addColorStop(.5,'rgba(255,255,255,0)');g.addColorStop(.8,'rgba(0,0,0,.10)');g.addColorStop(1,'rgba(0,0,0,.30)');q.fillStyle=g;q.fillRect(bx,y0,bw,hh);
+ /* penggelapan ujung (ambient occlusion) */
+ g=q.createLinearGradient(xl,0,xr,0);g.addColorStop(0,'rgba(0,0,0,.2)');g.addColorStop(.07,'rgba(0,0,0,0)');g.addColorStop(.93,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.2)');q.fillStyle=g;q.fillRect(bx,y0,bw,hh);
+ if(!ng){/* kilap memanjang + pantulan matahari */
+  g=q.createLinearGradient(xl,0,xr,0);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.18,'rgba(255,255,255,.24)');g.addColorStop(.82,'rgba(255,255,255,.24)');g.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=g;q.fillRect(xl,gy-37*k,L,.8*k);
+  g=q.createRadialGradient(xl+L*.7,gy-38*k,0,xl+L*.7,gy-38*k,22*k);g.addColorStop(0,'rgba(255,255,255,.18)');g.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=g;q.fillRect(xl,y0,L,hh)}
+ /* noda cuaca halus (bekas air hujan) */
+ for(let i=0;i<6;i++){const px=xl+(.1+hs(tn*50+i)*.8)*L,h2=(8+hs(tn*80+i+9)*14)*k;g=q.createLinearGradient(0,gy-30*k,0,gy-30*k+h2);g.addColorStop(0,'rgba(30,25,20,.07)');g.addColorStop(1,'rgba(30,25,20,0)');q.fillStyle=g;q.fillRect(px,gy-30*k,1.5*k,h2)}
+ q.restore()}
