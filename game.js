@@ -3,15 +3,15 @@ const HXF=.8,SP=440,hs=n=>{const v=Math.sin(n*127.1+311.7)*43758.5453;return v-M
 const NM=['Jakarta Kota','Manggarai','Gambir','Jatinegara','Bekasi','Cikarang','Karawang','Cikampek','Purwakarta','Padalarang','Bandung','Cirebon','Semarang Tawang','Yogyakarta','Solo Balapan','Madiun','Surabaya Gubeng'];
 const TR=[
 {n:'KA Lokal Bandung Raya',s:'Lokomotif CC 201 (GE U18C) + gerbong ekonomi',p:0,v:170,a:2.2,b:3,m:1,k:'loco',lv:{lg:'hc',pat:'cg',u:'#efe3c4',bd:'#1f4d2a',st:'#2e6b3a',st2:'#d4af37',r:'#c62828',no:'CC 201 89 16',ty:-20},c1:'#2e6b3a',cb:'#efe3c4',c2:'#d4af37',c3:'#1f4d2a',cars:['cc','eko','eko','eko','eko','eko','eko','eko','eko','bag']},
-{n:'KA Bima',s:'Lokomotif CC 203 + gerbong eksekutif',p:1500,v:180,a:2.3,b:3.1,m:1.4,k:'loco',lv:{lg:'oh',pat:'ow',u:'#ee6a33',bd:'#9aa7ae',st:'#f57c00',st2:'#1b4f9c',r:'#c62828',no:'CC 203 04 25',ty:-20},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#f57c00',c3:'#1b4f9c',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
+{n:'KA Bima',s:'Lokomotif CC 203 + gerbong eksekutif',p:1500,v:180,a:2.3,b:3.1,m:1.4,k:'loco',lv:{lg:'oh',pat:'ow',u:'#ee6a33',bd:'#9aa7ae',st:'#f57c00',st2:'#1b4f9c',r:'#c62828',no:'CC 203 95 06',img:'cc203',ty:-20},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#f57c00',c3:'#1b4f9c',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
 {n:'Kereta Uap Jaladara',s:'Lokomotif uap + gerbong kayu',p:2500,v:120,a:1.6,b:2.5,m:2,k:'steam',c1:'#212121',cb:'#2e7d32',c2:'#fdd835',cars:['uap','tdr','kay','kay','kay','kay','kay','kay','kay','kay']},
 {n:'KA Taksaka',s:'Lokomotif CC 204 + gerbong eksekutif',p:4000,v:190,a:2.4,b:3.3,m:1.8,k:'loco',lv:{lg:'bi',pat:'bw',u:'#f3f6f8',bd:'#1b4f9c',st:'#1b4f9c',st2:'#0d2f66',r:'#c62828',no:'CC 204 13 12',ty:-25},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#1b4f9c',c3:'#0d2f66',cars:['cc','eks','eks','eks','eks','res','eks','eks','eks','bag']},
 {n:'LRT Jabodebek',s:'Inka-Bombardier',p:6000,v:160,a:2.7,b:3.4,m:1.7,k:'mrt',nz:3,c1:'#fafafa',c2:'#29b6f6',c3:'#ff7043',cars:['ec','em','em','em','em','em','em','em','em','ec']},
-{n:'KA Argo Bromo Anggrek',s:'Lokomotif CC 206 + gerbong eksekutif',p:8000,v:220,a:2.6,b:3.5,m:2.2,k:'loco',lv:{lg:'po',pat:'rw',u:'#f3f6f8',bd:'#9aa7ae',st:'#e64a19',st2:'#9e9e9e',r:'#c62828',no:'CC 206 13 41',ty:-24},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#e64a19',c3:'#9e9e9e',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
+{n:'KA Argo Bromo Anggrek',s:'Lokomotif CC 206 + gerbong eksekutif',p:8000,v:220,a:2.6,b:3.5,m:2.2,k:'loco',lv:{lg:'po',pat:'rw',u:'#f3f6f8',bd:'#9aa7ae',st:'#e64a19',st2:'#9e9e9e',r:'#c62828',no:'CC 206 13 21',img:'cc206',ty:-24},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#e64a19',c3:'#9e9e9e',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
 {n:'Kereta Cepat Whoosh',s:'KCIC400AF',p:12000,v:400,a:3.6,b:4.6,m:3,k:'bullet',c1:'#fafafa',c2:'#d32f2f',c3:'#ffc107',cars:['bh','bm','bm','bm','bm','bm','bm','bm','bm','bh']},
-{n:'KA Barang Peti Kemas',s:'Lokomotif CC 206 + gerbong barang',p:3500,v:130,a:1.8,b:2.4,m:2.6,k:'loco',lv:{lg:'pb',pat:'rw',u:'#f3f6f8',bd:'#9aa7ae',st:'#e64a19',st2:'#9e9e9e',r:'#c62828',no:'CC 206 13 77',ty:-24},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#e64a19',c3:'#9e9e9e',cars:['cc','ctn','ctn','ctn','tgk','tgk','tgk','bk','bk','brg']},
+{n:'KA Barang Peti Kemas',s:'Lokomotif CC 206 + gerbong barang',p:3500,v:130,a:1.8,b:2.4,m:2.6,k:'loco',lv:{lg:'pb',pat:'rw',u:'#f3f6f8',bd:'#9aa7ae',st:'#e64a19',st2:'#9e9e9e',r:'#c62828',no:'CC 206 13 77',img:'cc206',cl:{red:'#1c2f6b',navy:'#7aa6d8',roof:'#4a5560'},ty:-24},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#e64a19',c3:'#9e9e9e',cars:['cc','ctn','ctn','ctn','tgk','tgk','tgk','bk','bk','brg']},
 {n:'KA Merah Perkasa',s:'Lokomotif CC 300 + gerbong ekonomi',p:5500,v:185,a:2.4,b:3.2,m:1.6,k:'loco',lv:{lg:'mr',nl:1,pat:'bw',u:'#e53935',bd:'#b71c1c',st:'#e53935',st2:'#b71c1c',r:'#e53935',no:'CC 300 12 05',ty:-22},c1:'#e53935',cb:'#efe3c4',c2:'#b71c1c',c3:'#7f1414',cars:['cc','eko','eko','eko','eko','eko','eko','eko','eko','bag']},
-{n:'KA Hijau Khatulistiwa',s:'Lokomotif CC 206 hijau + gerbong eksekutif',p:7000,v:200,a:2.5,b:3.4,m:2,k:'loco',lv:{lg:'hk',pat:'rw',u:'#2f6a35',bd:'#1f3d24',st:'#2f6a35',st2:'#f2c315',r:'#2f6a35',no:'CC 206 09 03',ty:-24},c1:'#2f6a35',cb:'#efe3c4',c2:'#f2c315',c3:'#1f3d24',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
+{n:'KA Hijau Khatulistiwa',s:'Lokomotif CC 206 hijau + gerbong eksekutif',p:7000,v:200,a:2.5,b:3.4,m:2,k:'loco',lv:{lg:'hk',pat:'rw',u:'#2f6a35',bd:'#1f3d24',st:'#2f6a35',st2:'#f2c315',r:'#2f6a35',no:'CC 206 09 03',img:'cc206',cl:{red:'#2f6a35',navy:'#f2c315',roof:'#1f3d24',body:'#eef2ea'},ty:-24},c1:'#2f6a35',cb:'#efe3c4',c2:'#f2c315',c3:'#1f3d24',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
 {n:'KA Vintage Kuning-Biru',s:'Lokomotif CC 201 livery vintage + gerbong ekonomi',p:4500,v:175,a:2.3,b:3.1,m:1.5,k:'loco',lv:{lg:'vy',nl:1,pat:'cg',u:'#f0cf2d',bd:'#dcdfe2',st:'#0d6b8d',st2:'#f4e17c',r:'#d6204a',no:'CC 201 55 02',ty:-20},c1:'#0d6b8d',cb:'#f0cf2d',c2:'#f4e17c',c3:'#0b4a62',cars:['cc','eko','eko','eko','eko','eko','eko','eko','eko','bag']},
 {n:'KA Vintage WNB',s:'Livery vintage putih-biru + gerbong ekonomi',p:5000,v:180,a:2.3,b:3.1,m:1.5,k:'loco',lv:{lg:'vw',nl:1,pat:'cg',u:'#f1f3f5',bd:'#dcdfe2',st:'#1b4f9c',st2:'#d4b24c',r:'#d6204a',no:'CC 201 61 04',ty:-20},c1:'#1b4f9c',cb:'#f1f3f5',c2:'#d4b24c',c3:'#0d2f66',cars:['cc','eko','eko','eko','eko','eko','eko','eko','eko','bag']},
 {n:'KA Vintage RNB',s:'Livery vintage merah-biru + gerbong ekonomi',p:5000,v:180,a:2.3,b:3.1,m:1.5,k:'loco',lv:{lg:'vr',nl:1,pat:'cg',u:'#b3322b',bd:'#dcdfe2',st:'#1f3d7a',st2:'#efe3c4',r:'#d6204a',no:'CC 201 72 09',ty:-20},c1:'#1f3d7a',cb:'#b3322b',c2:'#efe3c4',c3:'#0f2350',cars:['cc','eko','eko','eko','eko','eko','eko','eko','eko','bag']}];
@@ -30,11 +30,17 @@ function show(id){document.querySelectorAll('.scr').forEach(e=>e.classList.toggl
 function hud(on){$('hud').classList.toggle('on',on);$('ctl').classList.toggle('on',on)}
 function toMenu(){hornOff();sayStop();S.hi=Math.max(S.hi,Math.floor(G.sc||0));sv();G={m:'menu',pos:0,v:10,r:{st:[],sg:[],cx:[]},pf:[],lp:0,lv:1,sc:0,sf:100,cg:0};hud(0);$('mi').textContent='🪙 '+S.coin+'  •  🏆 Skor Tertinggi '+S.hi;show('menu')}
 /* level */
-function more(r,n){const t=TR[S.sel],f=.8+t.v/SPD/400,sc=Math.max(1,t.v/200),L=[90,120,160,200,250,300,350].map(lq);
- for(let k=0;k<n;k++){const i=r.st.length,p=r.st[i-1],mx=Math.min(1+Math.floor(i/3),6),pk=()=>L[Math.floor(Math.random()*(mx+1))],b=p.x+(2800+hs(i*9)*800+Math.min(i,20)*60)*f,a=p.x+SP+40;
+const STD=8000; /* jarak antar stasiun (meter) */
+function more(r,n){const t=TR[S.sel],sc=Math.max(1,t.v/200),L=[90,120,160,200,250,300,350].map(lq);
+ for(let k=0;k<n;k++){const i=r.st.length,p=r.st[i-1],mx=Math.min(1+Math.floor(i/3),6),pk=()=>L[Math.floor(Math.random()*(mx+1))],b=p.x+STD,a=p.x+SP+40;
   r.st.push({x:b,nm:NM[i%NM.length],done:0,sty:Math.random()*5|0,pal:Math.random()*5|0});
-  r.sg.push({x:a,l:pk()},{x:a+(b-a)*.35,l:pk()},{x:b-1000*sc,l:lq(120)},{x:b-550,l:lq(100)},{x:b-300,l:lq(90)});
-  const x1=Math.min(a+(b-a)*.5,b-1000*sc-300);if(x1>a+500&&Math.random()<.8)r.cx.push({x:x1,ck:Math.random()<.55,a:0,veh:[],sp:0,hn:0,hh:0,w:0,pass:0});strucs(r,a,b)}}
+  /* rambu batas kecepatan: diurutkan menurut posisi (limAt memakai yang terakhir di array) */
+  const sg=[{x:a,l:pk()},{x:a+(b-a)*.35,l:pk()},{x:b-1000*sc,l:lq(120)},{x:b-550,l:lq(100)},{x:b-300,l:lq(90)}];
+  for(const fr of[.15,.5,.65,.8]){const xx=a+(b-a)*fr;if(xx<b-1000*sc-250)sg.push({x:xx,l:pk()})}
+  sg.sort((q1,q2)=>q1.x-q2.x);r.sg.push(...sg);
+  /* perlintasan kereta api: sampai 3 per segmen */
+  for(const fr of[.2,.45,.7]){const x1=a+(b-a)*fr+(Math.random()-.5)*500;if(x1>a+500&&x1<b-1000*sc-300&&Math.random()<.8)r.cx.push({x:x1,ck:Math.random()<.55,a:0,veh:[],sp:0,hn:0,hh:0,w:0,pass:0})}
+  strucs(r,a,b)}}
 function gen(){const r={st:[{x:0,nm:NM[0],done:1,sty:0,pal:0}],sg:[],cx:[]};more(r,3);return r}
 function newLevel(){G.r=gen();G.pos=SP;G.v=0;G.ni=1;G.dw=0;G.ts=0;th=bk=em=0;G.dg=0;G.es=0;G.et=0;G.kb=0;G.sq=[];G.lt=0;G.lh=0;G.m='play';G.pf=[];show(null);hud(1);toast('Tekan MULAI MESIN (E) → '+G.r.st[1].nm)}
 function startGame(){G={m:'play',pos:0,v:0,lv:1,sc:0,cg:0,pf:[],lp:0};newLevel()}
@@ -117,7 +123,7 @@ const CONS={eko:['eko','eko','eko','eko','eko','eko','eko','eko','bag'],eks:['ek
  CD={eko:'Kursi tegak ekonomi',eks:'Kelas eksekutif',mix:'Eksekutif + ekonomi',kay:'Gerbong kayu klasik',ctn:'Kontainer KAI Log',tgk:'Tangki BBM merah',btb:'Hopper batu bara',brg:'Campur 4 jenis barang',bis:'Kelas bisnis hijau-putih',pan:'Jendela atap kaca lebar',tdu:'Kabin tidur malam hari',sul:'Rangkaian mewah: panoramic, tidur & restorasi',pkt:'Gerbong paket tertutup',smn:'Hopper semen curah',kyu:'Platform kayu gelondongan'};
 function carsOf(t){if(t.pv)return t.cars;const i=TR.indexOf(t),c=S.cons&&S.cons[i];if(!c||!CONS[c]||!(t.k=='loco'||t.k=='steam'))return t.cars;return t.k=='steam'?['uap','tdr',...CONS[c].slice(1)]:['cc',...CONS[c]]}
 /* pelebaran badan lokomotif & gerbong (1 = ukuran asli); lokomotif uap tidak dilebarkan */
-const STRF=1.7,fo=ty=>ty=='uap'||ty=='tdr'?1:ty=='cc'?1.9:STRF;let STX=0,STF=1;
+const STRF=1.7,fo=ty=>ty=='uap'||ty=='tdr'?1:ty=='cc'?1.9:STRF;let STX=0,STF=1,BDK=0; /* BDK=1: bogie gelap (CC 203 / CC 206 sesuai gambar) */
 const trLen=t=>carsOf(t).reduce((s,c)=>s+LEN[c]*fo(c)+3,0);
 function atSt(){return G.r.st.some(s=>G.pos>=s.x+5&&G.pos<=s.x+SP+20)}
 function canSwap(){const t=TR[S.sel];return G.m=='play'&&(t.k=='loco'||t.k=='steam')&&G.v<.5&&atSt()}
@@ -137,12 +143,12 @@ function win(c,x0,y,w,h,ng,r){r=r||1.5*u;const g=c.createLinearGradient(0,y,0,y+
  if(PPL&&w>h*.62){c.fillStyle=ng?'rgba(60,35,10,.65)':'rgba(8,14,20,.55)';[.3,.68].forEach((q,i)=>{if(hs(x0*.173+i)>.35){const px=x0+w*q,pr=h*.15;c.beginPath();c.arc(px,y+h*.5,pr,0,7);c.fill();c.beginPath();c.roundRect(px-pr*1.5,y+h*.5+pr*.7,pr*3,h*.5,pr);c.fill()}})}
  if(!ng){c.fillStyle='rgba(255,255,255,.22)';c.beginPath();c.moveTo(x0,y+h);c.lineTo(x0+w*.45,y);c.lineTo(x0+w*.72,y);c.lineTo(x0+w*.27,y+h);c.fill()}
  c.restore()}
-function bogie(c,cx,gy,k,n){c.save();c.translate(cx,0);c.scale(1/STF,1);c.translate(-cx,0);bogie0(c,cx,gy,k,n);c.restore()}
-function bogie0(c,cx,gy,k,n){c.fillStyle='#263238';c.beginPath();c.roundRect(cx-(n*4.5+1)*k,gy-10*k,(n*9+2)*k,5*k,2*k);c.fill();c.fillStyle='#455a64';c.fillRect(cx-n*4.5*k,gy-10*k,n*9*k,1.2*k);c.strokeStyle='#90a4ae';c.lineWidth=.7*k;[-1,1].forEach(d=>{c.beginPath();c.moveTo(cx+d*n*3*k,gy-13*k);c.lineTo(cx+d*n*3*k,gy-10*k);c.stroke()});if(REC){{const rx=STX+(cx-STX)*STF;REC.push([MIR?MIR-rx:rx,n])}return}wheels(c,cx,gy,k,n)}
-function wheels(c,cx,gy,k,n){for(let i=0;i<n;i++){const wx=cx+(i-(n-1)/2)*9*k,r=4.6*k,a=(WPH==null?G.pos:WPH)*.9,wy=gy-r;
- c.fillStyle='#0d0d0d';c.beginPath();c.arc(wx,wy,r,0,7);c.fill();c.strokeStyle='#5a666d';c.lineWidth=.9*k;c.beginPath();c.arc(wx,wy,r*.9,0,7);c.stroke();
- const gg=c.createRadialGradient(wx-r*.2,wy-r*.2,0,wx,wy,r*.62);gg.addColorStop(0,'#b0bec5');gg.addColorStop(1,'#546e7a');c.fillStyle=gg;c.beginPath();c.arc(wx,wy,r*.62,0,7);c.fill();
- c.fillStyle='#37474f';c.beginPath();c.arc(wx,wy,r*.42,0,7);c.fill();
+function bogie(c,cx,gy,k,n,sp){c.save();c.translate(cx,0);c.scale(1/STF,1);c.translate(-cx,0);bogie0(c,cx,gy,k,n,sp);c.restore()}
+function bogie0(c,cx,gy,k,n,sp){const q=n*(sp||9);c.fillStyle=BDK?'#0f1113':'#263238';c.beginPath();c.roundRect(cx-(q/2+1)*k,gy-10*k,(q+2)*k,5*k,2*k);c.fill();c.fillStyle=BDK?'#2b2f33':'#455a64';c.fillRect(cx-q/2*k,gy-10*k,q*k,1.2*k);c.strokeStyle=BDK?'#4a5258':'#90a4ae';c.lineWidth=.7*k;[-1,1].forEach(d=>{c.beginPath();c.moveTo(cx+d*q/3*k,gy-13*k);c.lineTo(cx+d*q/3*k,gy-10*k);c.stroke()});if(REC){{const rx=STX+(cx-STX)*STF;REC.push([MIR?MIR-rx:rx,n,sp,BDK])}return}wheels(c,cx,gy,k,n,sp,BDK)}
+function wheels(c,cx,gy,k,n,sp,dk){for(let i=0;i<n;i++){const wx=cx+(i-(n-1)/2)*(sp||9)*k,r=4.6*k,a=(WPH==null?G.pos:WPH)*.9,wy=gy-r;
+ c.fillStyle='#0d0d0d';c.beginPath();c.arc(wx,wy,r,0,7);c.fill();c.strokeStyle=dk?'#30363a':'#5a666d';c.lineWidth=.9*k;c.beginPath();c.arc(wx,wy,r*.9,0,7);c.stroke();
+ const gg=c.createRadialGradient(wx-r*.2,wy-r*.2,0,wx,wy,r*.62);gg.addColorStop(0,dk?'#6a7378':'#b0bec5');gg.addColorStop(1,dk?'#23272a':'#546e7a');c.fillStyle=gg;c.beginPath();c.arc(wx,wy,r*.62,0,7);c.fill();
+ c.fillStyle=dk?'#1a1d1f':'#37474f';c.beginPath();c.arc(wx,wy,r*.42,0,7);c.fill();
  c.globalAlpha=Math.max(0,1-G.v/22);c.strokeStyle='#cfd8dc';c.lineWidth=k*.7;c.beginPath();for(let s=0;s<3;s++){const b=a+s*Math.PI/3;c.moveTo(wx+Math.cos(b)*r*.55,wy+Math.sin(b)*r*.55);c.lineTo(wx-Math.cos(b)*r*.55,wy-Math.sin(b)*r*.55)}c.stroke();c.globalAlpha=1;
  c.fillStyle='#eceff1';c.beginPath();c.arc(wx,wy,r*.16,0,7);c.fill()}}
 function steamL(c,xl,xr,gy,k){
@@ -212,7 +218,78 @@ function locoPolish(c,X,Y,k,vr,xr,v){const n=vr.pl.length,ca=vr.pl[n-2],cb=vr.pl
  c.fillStyle='#1b1b1b';c.fillRect(xr-.4*k,Y(-13.8),2.4*k,2.4*k);c.fillStyle='#37474f';c.fillRect(xr+1*k,Y(-14.4),.8*k,3.6*k);c.fillStyle='#455a64';c.beginPath();c.moveTo(X(57),Y(-10));c.lineTo(X(60.4),Y(-10));c.lineTo(X(60),Y(-8.2));c.lineTo(X(58),Y(-8.2));c.closePath();c.fill();
  c.fillStyle='#78909c';c.fillRect(X(ca-2.4),Y(-46.2),2.2*k,2.2*k);c.fillRect(X(ca-1.6),Y(-47.2),.7*k,1.1*k)}
 function locoPath(c,xl,gy,k,xr,vr){const X=a=>xl+a*k,Y=a=>gy+a*k;c.beginPath();vr.p(c,X,Y)}
-function loco(c,xl,xr,gy,k,t,ng){const v=t.lv,vr=LV[v.pat]||LV.cg,X=a=>xl+a*k,Y=a=>gy+a*k,Pg=(pts,col)=>{c.fillStyle=col;c.beginPath();pts.forEach((p,i)=>i?c.lineTo(X(p[0]),Y(p[1])):c.moveTo(X(p[0]),Y(p[1])));c.closePath();c.fill()};
+/* ===== CC 203 & CC 206: digambar mengikuti gambar referensi (koordinat piksel gambar -> ruang gambar lokomotif) ===== */
+/* logo sayap KAI (panah merah + garis krem + garis biru), bentuk diambil dari gambar referensi, dipetakan ke (ox,oy) dengan skala s */
+function kaiWing(P,ox,oy,s){const F=pts=>pts.map(q=>[ox+(q[0]-362)*s,oy+(q[1]-288.5)*s]);
+ P(F([[362,288.5],[378.8,285],[400,282.8],[415.6,282.3],[415.6,286.3],[400,286.3],[381.3,287.3]]),'#27457f');
+ P(F([[378.8,282.3],[400,280.4],[416.5,280.4],[416.5,282.2],[400,282.4]]),'#f1dccb');
+ P(F([[378.1,281.9],[393.1,275],[406.9,270.6],[422.5,268.1],[420.6,272.5],[418.1,278.8],[412.5,279.4],[398.8,280.3]]),'#b8352b');
+ P(F([[412.6,277.4],[419.8,270.6],[418.4,274.4],[416.4,277]]),'#fbeee6')}
+const LIMG={
+ /* CC 203: kabin di kanan, kap mesin panjang, pita merah, logo sayap KAI, bogie 3 as */
+ cc203:{x0:148,sx:60/545,y0:252,yb:330,yr:372,bg:[11.8,44],sp:14,cl:{red:'#c01212',blue:'#1b1a78',roof:'#596765',frame:'#3d4540',body:'#ecedee'},
+  d:({c,X,Y,P,R,L,W,lv,cl,v,ng,k,M})=>{
+   P([[148,254],[160,252],[572,252],[580,249],[640,249],[652,251],[670,263],[684,277],[692,293],[693,320],[148,320]],[sh(cl.body,.5),sh(cl.body,-.08)]);
+   P([[148,252],[572,252],[572,258],[148,258]],cl.roof);P([[572,249],[640,249],[652,251],[656,258],[572,258]],'#8a8d86');
+   c.fillStyle='rgba(0,0,0,.13)';[212,262,300,332,366,408,447,468,520,552].forEach(a=>R(a,259,.8,33,'rgba(0,0,0,.14)'));
+   P([[148,300],[190,292],[557,292],[557,318],[148,318]],[sh(cl.red,.18),cl.red]);P([[148,306],[184,318],[148,318]],cl.blue);
+   R(152,297,62,17,'#2b1f25');for(let i=0;i<20;i++)R(154+i*3,298,1,15,'rgba(255,255,255,.12)');R(232,296,17,15,'#1c1718');
+   R(271,271,21,18,'#cfd1d1');R(273,273,17,14,'#14110f');
+   /* logo sayap */
+   kaiWing(P,362,288.5,1);
+   lv(448,266,17,24,'#e6e7e7','rgba(0,0,0,.35)');lv(530,266,20,24,'#e6e7e7','rgba(0,0,0,.35)');lv(448,293,15,23,'#a01010','rgba(0,0,0,.4)');lv(530,293,18,23,'#a01010','rgba(0,0,0,.4)');
+   R(483,255,26,23,'#d5d6d6');R(485,257,22,19,'#3a3733');for(let i=0;i<6;i++)R(485,259+i*3.2,22,.7,'rgba(255,255,255,.18)');
+   /* kabin */
+   R(561,252,2,66,'rgba(0,0,0,.18)');W([[595,259],[618,259],[618,276],[595,276]]);W([[620,259],[640,259],[640,276],[620,276]]);W([[643,259],[656,259],[664,276],[643,276]]);
+   L([[640,250],[652,251],[670,263],[684,277],[692,293]],'rgba(0,0,0,.25)',.5);
+   R(611,293,40,9,'#f3f3f3');R(611,293,40,.8,'#222');R(611,301.2,40,.8,'#222');c.fillStyle='#111';c.textAlign='center';c.font='bold '+2.5*k+'px sans-serif';c.fillText(v.no,X(631),Y(300.4),40*M.sx*k*.92);
+   c.fillStyle='#555';c.font=1.7*k+'px sans-serif';c.fillText('DIPO INDUK BD',X(631),Y(309.5),38*M.sx*k*.9);
+   /* rangka bawah, tangga, tangki, pilot */
+   R(148,318,545,12,cl.frame);R(148,318,545,1.4,'rgba(255,255,255,.25)');R(148,326,545,4,'rgba(0,0,0,.35)');
+   R(365,337,86,24,'#6f7a80');R(365,337,86,3,'rgba(255,255,255,.25)');
+   [[146,330,18,32],[455,322,14,40],[532,322,16,34]].forEach(q=>{R(q[0],q[1],q[2],q[3],'#2d3330');for(let y=q[1]+5;y<q[1]+q[3]-2;y+=6)R(q[0]+1,y,q[2]-2,.9,'rgba(255,255,255,.2)')});
+   P([[683,332],[697,330],[698,372],[684,372]],'#b3201f');L([[686,342],[697,337]],'#eee',1);L([[686,352],[697,347]],'#eee',1);R(692,336,10,8,'#1a1a1a');
+   P([[138,332],[149,332],[149,372],[140,372]],'#b3201f');R(130,336,10,8,'#1a1a1a');
+   /* pegangan */
+   L([[133,320],[133,288]],'#8f9598',.7);L([[150,300],[150,282],[154,276],[160,282],[160,300]],'#cfd3d4',.55);
+   L([[515,317],[515,290],[519,283],[523,290],[523,317]],'#cfd3d4',.55);L([[550,317],[550,290],[554,283],[558,290],[558,317]],'#cfd3d4',.55)}},
+ /* CC 206: kabin di kedua ujung, atap hijau-teal, pita merah-oranye, pita biru tua, logo sayap di kedua kabin */
+ cc206:{x0:135,sx:60/542,y0:793,yb:880,yr:913,bg:[12.2,47.6],sp:14,cl:{red:'#d7300f',navy:'#1c2b6e',roof:'#3f6563',frame:'#0c1116',body:'#eeefec'},
+  d:({c,X,Y,P,R,L,W,lv,cl,v,ng,k,M})=>{
+   P([[139,794],[192,794],[195,797],[340,797],[343,794],[530,794],[535,797],[617,797],[620,793],[672,793],[676,796],[677,815],[686,823],[689,834],[687,862],[124,862],[122,834],[125,823],[139,815]],[sh(cl.body,.5),sh(cl.body,-.1)]);
+   P([[192,797],[617,797],[617,806],[192,806]],cl.roof);R(340,794,190,3,cl.roof);R(192,797,425,1.2,'rgba(255,255,255,.3)');R(139,793,53,4,'#d7dadb');R(620,793,57,4,'#d7dadb');
+   [340,372,405,440,468,505,535,590].forEach(a=>R(a,807,.8,27,'rgba(0,0,0,.12)'));
+   P([[192,834],[620,834],[620,862],[192,862]],[sh(cl.red,.18),cl.red]);P([[193,851],[300,851],[338,862],[193,862]],cl.navy);P([[283,842],[300,843],[328,852],[318,852],[290,847]],'#f3f3ef');
+   /* pintu mesin terbuka + jendela */
+   R(215,817,29,41,'#1c1a19');R(247,817,30,41,'#1c1a19');R(201,820,6,26,'#262423');R(282,825,14,24,'#232425');R(282,817,9,8,'#0c0c0c');R(308,813,21,17,'#e9eaea');R(311,816,15,11,'#090909');
+   lv(470,808,17,24,'#e8e8e4','rgba(0,0,0,.3)');lv(512,808,18,24,'#e8e8e4','rgba(0,0,0,.3)');lv(470,835,17,26,'#e3d3cb','rgba(120,30,10,.55)');lv(512,835,18,26,'#e3d3cb','rgba(120,30,10,.55)');
+   R(545,798,34,26,'#d8d8d4');R(548,801,28,20,'#2a2815');for(let i=0;i<6;i++)R(548,803+i*3,28,.7,'rgba(255,255,255,.16)');
+   /* kabin kiri & kanan */
+   [[143,122],[628,689]].forEach((q,i)=>{const a=q[0];R(a,805,41,17,'#e9eaea');W([[a+2,807],[a+20,807],[a+20,820],[a+2,820]]);W([[a+22,807],[a+39,807],[a+39,820],[a+22,820]]);
+    const px=i?632:148,dx=i?489:0;R(px,826,i?32:33,7,'#f5f5f5');R(px,826,i?32:33,.8,'#222');R(px,832.2,i?32:33,.8,'#222');c.fillStyle='#111';c.textAlign='center';c.font='bold '+2.4*k+'px sans-serif';c.fillText(v.no,X(px+16),Y(831.6),30*M.sx*k*.92);
+    kaiWing(P,137+dx,852.5,.84);
+    c.fillStyle='#555';c.font=1.6*k+'px sans-serif';c.fillText('DIPO INDUK BD',X(160+dx),Y(859),34*M.sx*k*.9)});
+   R(122,823,7,12,'#c9c9c4');R(682,823,7,12,'#c9c9c4');R(128,788,7,6,'#444');R(676,788,7,6,'#444');
+   /* pegangan putih */
+   L([[202,862],[202,836],[206,832],[210,836],[210,862]],'#f4f4f2',.7);L([[230,862],[230,836],[232,833],[255,833],[257,836],[257,862]],'#f4f4f2',.7);L([[257,838],[275,838]],'#f4f4f2',.65);
+   L([[552,862],[552,838],[555,835],[577,835],[580,838],[580,862]],'#f4f4f2',.7);L([[598,862],[598,838],[602,835],[605,838],[605,862]],'#f4f4f2',.7);
+   /* rangka hitam, tangki, pilot */
+   R(124,862,565,18,cl.frame);R(124,862,565,1.2,'rgba(255,255,255,.18)');R(124,880,70,26,'#10151a');R(600,880,85,26,'#10151a');R(365,884,80,21,'#2d2f36');R(365,884,80,2,'rgba(255,255,255,.18)');
+   P([[119,875],[134,872],[135,912],[121,912]],'#b3201f');R(112,880,10,8,'#1a1a1a');P([[683,872],[696,875],[696,910],[684,912]],'#b3201f');R(692,880,12,8,'#1a1a1a')}}};
+function locoImg(c,xl,gy,k,t,ng){const v=t.lv,M=LIMG[v.img],cl=Object.assign({},M.cl,v.cl||{}),
+ X=a=>xl+(a-M.x0)*M.sx*k,Y=a=>gy+k*(a<=M.yb?-44+(a-M.y0)*36/(M.yb-M.y0):-8+(a-M.yb)*8/(M.yr-M.yb)),
+ P=(pts,col)=>{if(Array.isArray(col)){let a=1e9,b=-1e9;pts.forEach(q=>{a=Math.min(a,q[1]);b=Math.max(b,q[1])});const g=c.createLinearGradient(0,Y(a),0,Y(b));g.addColorStop(0,col[0]);g.addColorStop(1,col[1]);c.fillStyle=g}else c.fillStyle=col;
+  c.beginPath();pts.forEach((q,i)=>i?c.lineTo(X(q[0]),Y(q[1])):c.moveTo(X(q[0]),Y(q[1])));c.closePath();c.fill()},
+ R=(a,b,w,h,col)=>P([[a,b],[a+w,b],[a+w,b+h],[a,b+h]],col),
+ L=(pts,col,w)=>{c.strokeStyle=col;c.lineWidth=w*k;c.lineCap='round';c.lineJoin='round';c.beginPath();pts.forEach((q,i)=>i?c.lineTo(X(q[0]),Y(q[1])):c.moveTo(X(q[0]),Y(q[1])));c.stroke()},
+ W=pts=>{if(ng){P(pts,['#fff3b0','#ffb74d'])}else{P(pts,['#1d2b36','#020405']);c.save();c.beginPath();pts.forEach((q,i)=>i?c.lineTo(X(q[0]),Y(q[1])):c.moveTo(X(q[0]),Y(q[1])));c.closePath();c.clip();
+   const x0=Math.min(...pts.map(q=>q[0])),x1=Math.max(...pts.map(q=>q[0])),y0=Math.min(...pts.map(q=>q[1])),y1=Math.max(...pts.map(q=>q[1]));
+   c.fillStyle='rgba(255,255,255,.2)';c.beginPath();c.moveTo(X(x0),Y(y1));c.lineTo(X(x0+(x1-x0)*.5),Y(y0));c.lineTo(X(x0+(x1-x0)*.72),Y(y0));c.lineTo(X(x0+(x1-x0)*.22),Y(y1));c.fill();c.restore()}},
+ lv=(a,b,w,h,col,ln)=>{R(a,b,w,h,col);for(let y=b+2;y<b+h-1;y+=3)R(a+1,y,w-2,1,ln)};
+ c.save();M.d({c,X,Y,P,R,L,W,lv,cl,v,ng,k,M});c.restore();
+ BDK=1;M.bg.forEach(a=>bogie(c,xl+a*k,gy,k,3,M.sp));BDK=0}
+
+function loco(c,xl,xr,gy,k,t,ng){if(t.lv.img)return locoImg(c,xl,gy,k,t,ng);const v=t.lv,vr=LV[v.pat]||LV.cg,X=a=>xl+a*k,Y=a=>gy+a*k,Pg=(pts,col)=>{c.fillStyle=col;c.beginPath();pts.forEach((p,i)=>i?c.lineTo(X(p[0]),Y(p[1])):c.moveTo(X(p[0]),Y(p[1])));c.closePath();c.fill()};
  locoPath(c,xl,gy,k,xr,vr);fg(c,Y(-44),36*k,v.u);
  c.save();locoPath(c,xl,gy,k,xr,vr);c.clip();
  c.fillStyle=v.bd;c.fillRect(xl,Y(-44),xr-xl,3.2*k);
@@ -334,7 +411,7 @@ function drawTrain(c,t,hx,gy,k,ng){
  if(c!==x||t.k=='steam'){drawTrain0(c,t,hx,gy,k,ng);return}
  const key=TR.indexOf(t)+(S.cons&&S.cons[TR.indexOf(t)]||'')+'|'+k.toFixed(3)+'|'+ng+'|'+DPRv,tl=trLen(t)*k,pad=40*k,w=tl+pad+8*k,h=70*k;let s=SPR[key];
  if(!s){if(Object.keys(SPR).length>9)SPR={};const[cv2,q]=mkc(w,h,DPRv*1.5);REC=[];MIR=0;drawTrain0(q,t,w-pad,h-4*k,k,ng);s=SPR[key]={cv:cv2,wl:REC};REC=null;MIR=0}
- c.drawImage(s.cv,hx-(w-pad),gy-(h-4*k),w,h);s.wl.forEach(p=>wheels(c,hx+p[0]-(w-pad),gy,k,p[1]))}
+ c.drawImage(s.cv,hx-(w-pad),gy-(h-4*k),w,h);s.wl.forEach(p=>wheels(c,hx+p[0]-(w-pad),gy,k,p[1],p[2],p[3]))}
 const RRf=CanvasRenderingContext2D.prototype.roundRect;
 function drawTrain0(...a){CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h){this.rect(x,y,w,h)};try{drawTrain1(...a)}finally{CanvasRenderingContext2D.prototype.roundRect=RRf}}
 function drawTrain1(c,t,hx,gy,k,ng){
@@ -571,7 +648,7 @@ function strucs(r,a,b){r.sc=r.sc||[];const tk=[];
  r.sg.forEach(s=>{if(s.x>=a-80&&s.x<=b+80)tk.push([s.x-60,s.x+60])});
  r.cx.forEach(c=>{if(c.x>=a&&c.x<=b)tk.push([c.x-200,c.x+200])});
  tk.push([a-100,a+350],[b-1100,b+100]);
- const n=1+(Math.random()<.65?1:0)+(Math.random()<.3?1:0);
+ const n=3+(Math.random()*3|0);
  for(let i=0;i<n;i++)for(let k=0;k<14;k++){
   const ty=Math.random()<.5?'tun':'brg',w=ty=='tun'?380+Math.random()*220:240+Math.random()*200,
         x0=a+350+Math.random()*Math.max(1,b-a-1450-w);
