@@ -75,6 +75,3 @@ h2{margin:0;font-size:clamp(26px,5vw,44px);text-shadow:0 3px 0 rgba(0,0,0,.4)}
 #gg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;width:min(1020px,100%)}
 
 #tabs{display:flex;gap:10px}
-
-#wsl{position:absolute;top:calc(104px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:rgba(10,20,50,.62);border:2px solid rgba(255,255,255,.2);border-radius:14px;padding:4px 14px;font-weight:800;font-size:13px;white-space:nowrap}
-#wsl.warn{background:rgba(198,40,40,.88);animation:bl .6s infinite}
