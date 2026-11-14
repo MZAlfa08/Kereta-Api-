@@ -13,7 +13,7 @@ function au(){if(AC){AC.resume();return}
  E={rb:ns('lowpass',120),wd:ns('bandpass',900,.6),sq:ns('bandpass',3300,14),ds:os('sawtooth',40,300),wh:os('triangle',300,2500),rn:ns('highpass',2200,.5),fr:ns('bandpass',1800,.7),tn:ns('lowpass',220,.7),br:ns('bandpass',420,1.8),cr:ns('bandpass',700,.7)}}
 /* suara mesin & roda berjalan (dipanggil tiap frame) */
 function eng(on,sp,N,b,k,es){es=es==null?1:es;if(!AC||!E.rb)return;const t=AC.currentTime,o=on&&S.snd,s=(e,v)=>e.n.gain.setTargetAtTime(o?v:0,t,.15),el=k=='krl'||k=='mrt'||k=='bullet';
- s(E.rn,S.wx==1?.09:0);s(E.fr,es>1.3?.07+.06*Math.random():0);s(E.rb,.06+.55*sp);E.rb.f.frequency.setTargetAtTime(80+sp*240,t,.2);
+ s(E.rn,WXV()==1?.09:0);s(E.fr,es>1.3?.07+.06*Math.random():0);s(E.rb,.06+.55*sp);E.rb.f.frequency.setTargetAtTime(80+sp*240,t,.2);
  s(E.wd,(.01+.22*sp*sp)*(1+TUN*.9));E.wd.f.frequency.setTargetAtTime(500+sp*1500,t,.2);
  /* terowongan: gemuruh dalam & menggema; jembatan: gemuruh baja berongga */
  s(E.tn,TUN*(.12+.5*sp));E.tn.f.frequency.setTargetAtTime(150+sp*260,t,.2);s(E.br,BRG*(.03+.22*sp));E.br.f.frequency.setTargetAtTime(300+sp*420,t,.2);
