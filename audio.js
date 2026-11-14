@@ -28,15 +28,20 @@ function clack(sp){if(!AC||!S.snd)return;[0,.11].forEach(d=>{const s=AC.createBu
 function chuff(sp){if(!AC||!S.snd)return;const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain(),t=AC.currentTime;
  s.buffer=NZ;f.type='lowpass';f.frequency.value=420;g.gain.setValueAtTime(.001,t);g.gain.linearRampToValueAtTime(.5,t+.015);g.gain.exponentialRampToValueAtTime(.001,t+.16);
  s.connect(f);f.connect(g);g.connect(M);s.start(t,Math.random(),.2)}
-/* klakson angin (air horn) akor 3 nada + sedikit getaran + gema, tahan untuk membunyikan */
-const HN={krl:[466,587,698],mrt:[523,659,784],loco:[196,247,294],steam:[262,330,392],bullet:[622,784,932]};
-function hornOn(k){HD=1;if(!AC||HR||!S.snd)return;const t=AC.currentTime,g=AC.createGain(),lp=AC.createBiquadFilter(),rv=AC.createGain(),os=[];
- lp.type='lowpass';lp.frequency.value=2400;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.085,t+.06);g.connect(lp);lp.connect(M);rv.gain.value=.7;lp.connect(rv);rv.connect(RV);
- (HN[k]||HN.loco).forEach(f=>[0,1].forEach(j=>{const o=AC.createOscillator(),lf=AC.createOscillator(),lg=AC.createGain();
-  o.type=j?'square':'sawtooth';o.frequency.value=f*(j?1.004:.997);lf.frequency.value=5.5;lg.gain.value=f*.004;lf.connect(lg);lg.connect(o.frequency);o.connect(g);o.start();lf.start();os.push(o,lf)}));
- const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=1400;nf.Q.value=.8;ng.gain.value=.5;s.connect(nf);nf.connect(ng);ng.connect(g);s.start();os.push(s);
+/* klakson angin lokomotif diesel (tipe Nathan/Wabco): beberapa corong dengan nada berbeda, letupan udara di awal,
+   nada naik cepat lalu stabil, resonansi corong, gema; saat dilepas sedikit turun nadanya */
+const HN={krl:[440,554,659],mrt:[523,659,784],loco:[233,294,349,440],steam:[262,330,392],bullet:[622,784,932]};
+function hornOn(k){HD=1;if(!AC||HR||!S.snd)return;const t=AC.currentTime,st=k=='steam',ns=HN[k]||HN.loco,g=AC.createGain(),bl=AC.createBiquadFilter(),lp=AC.createBiquadFilter(),rv=AC.createGain(),os=[];
+ lp.type='lowpass';lp.frequency.value=st?2600:3400;lp.Q.value=.6;bl.type='peaking';bl.frequency.value=st?1100:900;bl.Q.value=1.1;bl.gain.value=st?4:9;
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.11,t+(st?.14:.07));g.gain.linearRampToValueAtTime(.095,t+.35);
+ g.connect(bl);bl.connect(lp);lp.connect(M);rv.gain.value=.55;lp.connect(rv);rv.connect(RV);
+ ns.forEach(f=>[0,1].forEach(j=>{const o=AC.createOscillator(),og=AC.createGain(),fr=f*(j?1.0035:.9965);o.type=st?'triangle':'sawtooth';
+  o.frequency.setValueAtTime(fr*.94,t);o.frequency.exponentialRampToValueAtTime(fr,t+.09);og.gain.value=2.25/ns.length;o.connect(og);og.connect(g);o.start(t);os.push(o)}));
+ const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=2200;nf.Q.value=.7;
+ ng.gain.setValueAtTime(st?.9:1.6,t);ng.gain.exponentialRampToValueAtTime(st?.5:.12,t+.25);s.connect(nf);nf.connect(ng);ng.connect(g);s.start();os.push(s);
  HR={g,os}}
-function hornOff(){HD=0;if(!HR||!AC)return;const{g,os}=HR,t=AC.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.35);os.forEach(o=>{try{o.stop(t+.4)}catch(e){}});HR=null}
+function hornOff(){HD=0;if(!HR||!AC)return;const{g,os}=HR,t=AC.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.28);
+ os.forEach(o=>{try{if(o.frequency){o.frequency.cancelScheduledValues(t);o.frequency.setValueAtTime(o.frequency.value,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,o.frequency.value*.96),t+.28)}o.stop(t+.32)}catch(e){}});HR=null}
 function tone(f,d,ty,v,f2,dl){if(!S.snd||!AC)return;const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+(dl||0);o.type=ty;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.linearRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(M);o.start(t);o.stop(t+d)}
 const ding=()=>{tone(988,.5,'sine',.18);tone(1319,.7,'sine',.18,0,.14)},bad=()=>tone(160,.6,'sawtooth',.14,60),tk=()=>tone(260,.05,'square',.05);
 const bell=()=>{tone(1650,.2,'triangle',.07);tone(1760,.2,'triangle',.05)};
@@ -55,7 +60,8 @@ function chime(){[[784,0],[659,.4],[523,.8]].forEach(q=>{tone(q[0],.9,'sine',.17
 /* lonceng stasiun: pukulan logam berulang "teng-teng-teng" */
 function bellSt(){if(!AC||!S.snd)return;for(let i=0;i<9;i++){const d=i*.32;[[1,.1],[2.76,.05],[5.4,.03],[8.9,.015]].forEach(p=>tone(1040*p[0],.55,'sine',p[1],0,d))}}
 /* klakson otomatis (tidak dihitung sebagai klakson pemain di perlintasan) */
-function autoHorn(k,ms){if(!AC||!S.snd)return;const hd=HD;hornOn(k);HD=hd;setTimeout(()=>{if(!HD)hornOff()},ms)}
+function autoHorn(k,ms){if(!AC||!S.snd)return;const sq=ms>1000?[[0,380],[560,380],[1120,Math.max(400,ms-1120)]]:[[0,ms]]; /* pola: tut-tut-tuuuut */
+ sq.forEach(p=>{setTimeout(()=>{const h=HD;hornOn(k);HD=h},p[0]);setTimeout(()=>{if(!HD)hornOff()},p[0]+p[1])})}
 /* rem angin dilepas saat kereta berhenti: "pssshhh" + hentakan rendah */
 function airRel(){hiss(1.8,.2,2400);hiss(1.2,.08,900);tone(70,.25,'sine',.14,40)}
 /* pintu: bunyi peringatan pintu terbuka/tertutup */
