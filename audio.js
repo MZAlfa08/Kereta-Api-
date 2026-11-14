@@ -60,8 +60,15 @@ function autoHorn(k,ms){if(!AC||!S.snd)return;const hd=HD;hornOn(k);HD=hd;setTim
 function airRel(){hiss(1.8,.2,2400);hiss(1.2,.08,900);tone(70,.25,'sine',.14,40)}
 /* pintu: bunyi peringatan pintu terbuka/tertutup */
 function doorBeep(n){for(let i=0;i<n;i++){tone(1850,.13,'square',.035,0,i*.23);tone(1850,.13,'triangle',.05,0,i*.23)}}
-/* peluit petugas (PPKA) tanda berangkat */
-function whistle(){if(!AC||!S.snd)return;tone(2850,.35,'sine',.09,3100);tone(2950,.8,'sine',.09,3250,.45);hiss(.35,.025,3200);setTimeout(()=>hiss(.8,.025,3200),450)}
+/* peluit petugas (PPKA): tiupan PANJANG (semboyan 40) ±2,6 detik: tarikan napas, nada naik, getar kelereng peluit, gema, lalu mereda */
+const WHD=2.6;
+function whistle(){if(!AC||!S.snd)return;hiss(.14,.03,2800);const t=AC.currentTime,d=WHD,g=AC.createGain(),tg=AC.createGain(),lf=AC.createOscillator(),lg=AC.createGain(),vb=AC.createOscillator(),vg=AC.createGain(),rv=AC.createGain();
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05,t+.05);g.gain.linearRampToValueAtTime(.17,t+.16);g.gain.linearRampToValueAtTime(.19,t+d*.6);g.gain.linearRampToValueAtTime(.12,t+d-.3);g.gain.linearRampToValueAtTime(0,t+d);
+ tg.gain.value=.72;lf.frequency.value=27;lg.gain.value=.28;lf.connect(lg);lg.connect(tg.gain);vb.frequency.value=5.2;vg.gain.value=22;vb.connect(vg);
+ [[2650,1],[5300,.18],[2662,.5]].forEach(p=>{const o=AC.createOscillator(),pg=AC.createGain();o.type='sine';o.frequency.setValueAtTime(p[0]*.93,t);o.frequency.linearRampToValueAtTime(p[0],t+.14);o.frequency.setValueAtTime(p[0],t+d-.35);o.frequency.linearRampToValueAtTime(p[0]*.97,t+d);
+  vg.connect(o.frequency);pg.gain.value=p[1];o.connect(pg);pg.connect(tg);o.start(t);o.stop(t+d+.1)});
+ const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=3300;nf.Q.value=2.2;ng.gain.value=.55;s.connect(nf);nf.connect(ng);ng.connect(tg);s.start(t,Math.random(),d+.1);
+ tg.connect(g);g.connect(M);rv.gain.value=.6;g.connect(rv);rv.connect(RV);lf.start(t);vb.start(t);lf.stop(t+d+.1);vb.stop(t+d+.1)}
 /* pengumuman suara (Bahasa Indonesia) lewat speechSynthesis bawaan browser */
 function sayStop(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
 function say(txt){if(!S.snd||!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined')return;
@@ -72,8 +79,10 @@ function say(txt){if(!S.snd||!window.speechSynthesis||typeof SpeechSynthesisUtte
 /* bunyi "kreek" tombol radio (HT) ditekan / dilepas */
 function radioKey(on){tone(on?1500:950,.05,'square',.035);hiss(on?.14:.09,.09,on?2600:2000)}
 /* suara petugas (nada rendah, lewat speechSynthesis) diapit bunyi radio; tanpa suara bicara hanya bunyi radio */
-function sayPPKA(txt){if(!S.snd)return;radioKey(1);
- if(!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined'){setTimeout(()=>radioKey(0),700);return}
+function sayPPKA(txt,cb){let dn=0;const fin=()=>{if(dn)return;dn=1;radioKey(0);cb&&cb()};
+ if(!S.snd){if(cb)setTimeout(()=>{if(!dn){dn=1;cb()}},500);return}
+ radioKey(1);
+ if(!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined'){setTimeout(fin,900);return}
  try{speechSynthesis.cancel();const ut=new SpeechSynthesisUtterance(txt);ut.lang='id-ID';ut.rate=.9;ut.pitch=.5;ut.volume=1;
   const vs=speechSynthesis.getVoices(),id=vs.filter(q=>/^id/i.test(q.lang)),v=id.find(q=>/andika|male|pria|rizki|jaya|ardi/i.test(q.name))||id[0];if(v)ut.voice=v;
-  ut.onend=()=>radioKey(0);ut.onerror=()=>radioKey(0);setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){}},380)}catch(e){}}
+  ut.onend=fin;ut.onerror=fin;setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){fin()}},380);setTimeout(fin,9000)}catch(e){fin()}}
