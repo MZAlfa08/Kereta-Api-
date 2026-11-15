@@ -57,6 +57,19 @@ const TR=[
     else if(lv.img=='cc206')lv.cl={red:P.c1,navy:P.c2,roof:k=='vin'?'#5a3a22':'#37474f',body:P.cb}}
    else t.cs=k=='vin'?{b0:'#4f7a5a',b1:'#2f5d3a',b2:'#14291c',cab:'#4a2f1d',roof:'#7b1f1f'}:k=='rnb'?{b0:'#ef5350',b1:'#c62828',b2:'#6e1313',cab:'#0d2f66',roof:'#0d2f66'}:{b0:'#ffffff',b1:'#cfd8dc',b2:'#7a8890',cab:'#0b2a66',roof:'#2f6fd0'};
    TR.push(t)})})})();
+/* ===== KA KARGO MEMAKAI LOKOMOTIF CC 205; KARGO CC 206 DIJADIKAN KERETA PENUMPANG ===== */
+(function(){const F=n=>TR.find(t=>t.n==n),E8=['cc','eko','eko','eko','eko','eko','eko','eko','eko','bag'];
+ [['KA Barang Semen','Lokomotif CC 205 oranye-hitam + gerbong semen',{orange:'#e65100',blue:'#263238'},'CC 205 13 05'],
+  ['KA Barang Kayu','Lokomotif CC 205 hijau + gerbong kayu',{orange:'#2f6a35',blue:'#1f3d24'},'CC 205 13 07'],
+  ['KA Paket Kilat','Lokomotif CC 205 merah-biru + gerbong paket',{orange:'#c62828',blue:'#1b2a5e'},'CC 205 13 09']].forEach(([n,s,cl,no])=>{const t=F(n);if(!t)return;t.s=s;t.lv.img='cc205';t.lv.cl=cl;t.lv.no=no});
+ /* kargo CC 206 -> kereta penumpang */
+ let t=F('KA Barang Peti Kemas');if(t){t.n='KA Supas';t.s='Lokomotif CC 206 biru + gerbong ekonomi';t.m=1.4;t.cars=E8.slice();t.c1='#1c2f6b';t.cb='#f3f6f8';t.c2='#7aa6d8';t.c3='#1c2f6b';t.lv.no='CC 206 13 77'}
+ t=F('KAI Logistik CC 206');if(t){t.n='KA Logawa';t.s='Lokomotif CC 206 biru-oranye + gerbong bisnis';t.m=1.6;t.cars=['cc','bis','bis','bis','bis','res','bis','bis','bis','bag'];t.c1='#1c4fa0';t.cb='#eef2f6';t.c2='#e65100';t.c3='#37474f';t.lv.no='CC 206 13 90'}
+ /* kereta penumpang baru dengan lokomotif CC 205 (livery sesuai gambar referensi) */
+ const b=F('KA Gajayana');if(b){[['KA Kahuripan','Lokomotif CC 205 oranye-biru + gerbong ekonomi',4000,1.5,{},'#f25c2a','#2a3890',E8],
+  ['KA Jayabaya','Lokomotif CC 205 merah-biru tua + gerbong bisnis',4600,1.7,{orange:'#d32f2f',blue:'#1a237e'},'#d32f2f','#1a237e',['cc','bis','bis','bis','bis','res','bis','bis','bis','bag']]].forEach(([n,s,p,m,cl,c1,c2,cars])=>{
+   const t=JSON.parse(JSON.stringify(b));t.n=n;t.s=s;t.p=p;t.m=m;t.lv.img='cc205';t.lv.cl=cl;t.lv.no='CC 205 13 '+(n.length%2?'03':'11');t.c1=c1;t.cb='#f3f6f8';t.c2=c2;t.c3='#ffffff';t.cars=cars;TR.push(t)})}
+})();
 const SPD=2.5,lq=v=>Math.round(v*SPD/5)*5;TR.forEach(t=>{t.v=Math.min(800,Math.round(t.v*SPD));t.a*=SPD;t.b*=SPD});
 let S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1};
 try{Object.assign(S,JSON.parse(localStorage.getItem('kn1')||'{}'))}catch(e){}
@@ -328,6 +341,44 @@ function kaiWing(P,ox,oy,s){const F=pts=>pts.map(q=>[ox+(q[0]-362)*s,oy+(q[1]-28
  P(F([[378.1,281.9],[393.1,275],[406.9,270.6],[422.5,268.1],[420.6,272.5],[418.1,278.8],[412.5,279.4],[398.8,280.3]]),'#b8352b');
  P(F([[412.6,277.4],[419.8,270.6],[418.4,274.4],[416.4,277]]),'#fbeee6')}
 const LIMG={
+ /* CC 205: kap mesin panjang oranye di kiri, badan biru bersekat pintu, kabin oranye di kanan dengan kap atap abu-abu, pita putih, bogie 3 as (ditiru dari gambar referensi) */
+ cc205:{x0:270,sx:60/1186,y0:613,yb:782,yr:858,bg:[11.2,48.7],sp:11,cl:{orange:'#f25c2a',blue:'#2a3890',roof:'#a8a9ad',frame:'#424244'},
+  d:({c,X,Y,P,R,L,W,lv,cl,v,ng,k,M})=>{
+   const circ=(cx,cy,r,col)=>{const p=[];for(let i=0;i<16;i++){const a=i/16*6.2832;p.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r])}P(p,col)};
+   /* badan: kap mesin oranye, tengah biru (batas diagonal), kabin + hidung oranye */
+   P([[290,636],[502,636],[502,641],[583,641],[544,752],[290,752]],[sh(cl.orange,.12),cl.orange]);
+   P([[583,641],[1262,641],[1244,752],[544,752]],[sh(cl.blue,.22),cl.blue]);
+   P([[1262,641],[1392,641],[1392,690],[1400,684],[1424,684],[1436,694],[1436,752],[1244,752]],[sh(cl.orange,.12),cl.orange]);
+   R(302,731,1083,12,'#fff');R(302,741,1083,2,'rgba(0,0,0,.12)');
+   /* atap: dua kotak ujung, atap panjang bersekat, kisi radiator, kotak atas kabin */
+   R(315,613,75,16,cl.roof);R(411,613,75,16,cl.roof);R(313,628,80,3,'#4a4a4c');R(409,628,80,3,'#4a4a4c');R(315,613,75,1.8,'rgba(255,255,255,.4)');R(411,613,75,1.8,'rgba(255,255,255,.4)');
+   P([[502,622],[510,613],[1088,613],[1096,622],[1096,641],[502,641]],[sh(cl.roof,.2),sh(cl.roof,-.08)]);
+   [541,666,728,787,853,915,986,1049].forEach(a=>R(a-1,614,2.2,27,'rgba(40,40,46,.75)'));R(510,613,578,2.4,'rgba(255,255,255,.4)');R(502,638,594,3,'rgba(0,0,0,.18)');
+   R(1111,613,97,16,cl.roof);R(1111,613,97,1.8,'rgba(255,255,255,.4)');R(1111,627,97,2,'rgba(0,0,0,.25)');
+   R(1098,632,127,25,'#474548');for(let a=1101;a<1224;a+=6)R(a,633,.9,23,'rgba(255,255,255,.14)');for(let b=636;b<656;b+=5)R(1099,b,125,.8,'rgba(255,255,255,.1)');
+   R(1230,616,36,26,'#9b9ca0');R(1230,616,36,2,'rgba(255,255,255,.35)');R(1234,624,28,2,'rgba(0,0,0,.3)');
+   P([[1264,614],[1432,619],[1432,628],[1404,656],[1272,656],[1264,640]],[sh(cl.roof,.18),sh(cl.roof,-.12)]);R(1268,616,160,2.2,'rgba(255,255,255,.4)');R(1274,651,126,5,'rgba(0,0,0,.22)');
+   /* kisi radiator & pintu */
+   lv(312,651,86,39,'#2c1410','rgba(190,110,80,.35)');lv(406,651,83,39,'#2c1410','rgba(190,110,80,.35)');lv(312,702,86,48,'#2c1410','rgba(190,110,80,.35)');
+   [497,514,542].forEach(a=>R(a,652,.9,90,'rgba(70,25,12,.7)'));R(497,652,45,.9,'rgba(70,25,12,.7)');
+   [600,635,666,698,728,757,786,820,852,883,918,954,1015,1186,1219].forEach(a=>R(a-1,657,2,74,'rgba(8,8,40,.65)'));R(578,656,666,1.4,'rgba(8,8,40,.55)');
+   R(1072,664,25,66,'#17205f');R(1072,664,25,1.4,'rgba(255,255,255,.25)');R(1080,690,6,14,'#3949ab');
+   /* kabin */
+   R(1284,656,102,50,'#2e2e30');
+   const gl=pts=>ng?W(pts):P(pts,['#d5deed','#2781bf']);gl([[1289,661],[1333,661],[1333,701],[1289,701]]);gl([[1339,661],[1383,661],[1383,701],[1339,701]]);
+   if(!ng){L([[1296,699],[1312,663]],'rgba(255,255,255,.45)',.6);L([[1346,699],[1362,663]],'rgba(255,255,255,.45)',.6)}
+   [708,714,720].forEach(b=>L([[1320,b],[1341,b-2]],'#fff',1));
+   R(1300,733,58,9,'#1b1b1d');c.fillStyle='#fff';c.textAlign='center';c.font='bold '+2*k+'px sans-serif';c.fillText(v.no||'CC 205',X(1329),Y(740.2),58*M.sx*k*.9);
+   L([[1392,690],[1392,750]],'rgba(0,0,0,.35)',.5);L([[1398,684],[1412,684],[1412,704]],'#262628',.6);
+   /* ujung kiri */
+   P([[273,708],[282,698],[292,698],[292,756],[273,756]],'#f2f2f4');L([[273,708],[282,698],[292,698],[292,756]],'#2a2a2c',.5);L([[280,655],[296,655],[296,686],[280,686]],'#2a2a2c',.6);
+   /* rangka bawah, pilot, tangga, tangki bahan bakar, tabung udara */
+   R(272,750,1181,32,cl.frame);R(272,750,1181,2,'rgba(255,255,255,.2)');R(272,775,1181,7,'rgba(0,0,0,.35)');
+   circ(262,803,13,'#3d3d40');circ(1466,803,13,'#3d3d40');
+   [[296,330],[1403,1437]].forEach(q=>{L([[q[0],760],[q[0],832]],'#cfcfd3',.6);L([[q[1],760],[q[1],832]],'#cfcfd3',.6);for(let y=772;y<830;y+=12)L([[q[0],y],[q[1],y]],'#cfcfd3',.45)});
+   R(768,778,157,62,['#6d6e72','#4c4d50']);R(768,778,157,3,'rgba(255,255,255,.25)');R(795,782,36,18,'#3a3b3e');R(803,787,14,9,'#8c8d91');
+   R(928,785,77,53,['#707175','#505155']);R(934,794,26,10,'#8c8d91');R(970,794,26,10,'#8c8d91');
+   circ(710,807,17,'#58595b');circ(748,807,17,'#58595b');circ(704,801,6,'rgba(255,255,255,.2)');circ(742,801,6,'rgba(255,255,255,.2)')}},
  /* CC 203: kabin di kanan, kap mesin panjang, pita merah, logo sayap KAI, bogie 3 as */
  cc203:{x0:148,sx:60/545,y0:252,yb:330,yr:372,bg:[11.8,44],sp:14,cl:{red:'#c01212',blue:'#1b1a78',roof:'#596765',frame:'#3d4540',body:'#ecedee'},
   d:({c,X,Y,P,R,L,W,lv,cl,v,ng,k,M})=>{
