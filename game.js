@@ -201,6 +201,23 @@ Object.assign(CONS,{
 Object.assign(CP,{ekp:1600,pre:2600,ekh:900,klh:1100,mer:3200,ins:2000,kyh:2800,kym:2800,pel:4200,cpo:1300,lpg:1400,ct2:1100,bx2:1200,pos:1200,rel:1500,pup:1300,cmb:2000});
 Object.assign(CN,{ekp:'Ekonomi Premium',pre:'Premium Eksekutif',ekh:'Ekonomi Hijau Klasik',klh:'Klasik Oranye-Krem',mer:'Luxury Merah',ins:'Kereta Inspeksi Kuning',kyh:'Wisata Kayu Hijau',kym:'Wisata Kayu Marun',pel:'Rangkaian Pelangi',cpo:'Barang: Tangki CPO',lpg:'Barang: Tangki LPG',ct2:'Barang: Peti Kemas Warna-warni',bx2:'Barang: Tertutup Hijau',pos:'Barang: Pos Indonesia',rel:'Barang: Rel Baja',pup:'Barang: Pupuk',cmb:'Barang: Campuran Lengkap'});
 Object.assign(CD,{ekp:'Kursi ekonomi premium biru-putih',pre:'Eksekutif premium krem-teal + restorasi',ekh:'Ekonomi hijau gaya klasik',klh:'Gerbong klasik oranye-krem',mer:'Eksekutif luxury merah + restorasi',ins:'Gerbong dinas inspeksi',kyh:'Gerbong kayu klasik hijau',kym:'Gerbong kayu klasik marun',pel:'Campuran panoramic, tidur, luxury, premium',cpo:'Tangki minyak sawit kuning',lpg:'Tangki gas LPG merah',ct2:'Kontainer aneka warna',bx2:'Gerbong barang tertutup hijau',pos:'Gerbong pos biru-oranye',rel:'Platform pengangkut rel baja',pup:'Hopper pupuk kuning',cmb:'Campuran 9 jenis gerbong barang'});
+/* ===== GERBONG PENUMPANG TAMBAHAN ===== */
+const KY={kyh:['#2e5e3a','#ffd54f'],kym:['#7b1f2a','#ffd54f'],kyb:['#2a4d7a','#ffd54f'],kyc:['#d8c59a','#8a6d2b']};
+Object.assign(PV,{
+ kls:['eks','#e8edf5','#1a237e','#3949ab','#ffd54f'],sgn:['eks','#f1f8e9','#33691e','#c0a020','#ffffff'],sun:['eko','#fff3e0','#ef6c00','#bf360c','#ffffff'],
+ ung:['eks','#f3e5f5','#6a1b9a','#fdd835','#ffffff'],bsd:['eko','#eceff1','#546e7a','#0288d1','#ffffff'],pnk:['eko','#fce4ec','#ec407a','#ad1457','#ffffff'],
+ blk:['eks','#37474f','#111111','#c9a227','#ffffff'],tqa:['eko','#e0f7fa','#00838f','#006064','#ffffff'],rtr:['eko','#f5ecd5','#b71c1c','#8d6e1f','#ffffff'],
+ rsb:['res','#f3f6f8','#1565c0','#0d47a1','#ffd54f'],tdb:['eko','#e8f5e9','#1b5e20','#ffd54f','#ffffff']});
+Object.assign(LEN,{kls:66,sgn:66,sun:66,ung:66,bsd:66,pnk:66,blk:66,tqa:66,rtr:66,rsb:66,tdb:66,kyb:58,kyc:58});
+const R8=(a,b)=>[a,a,a,a,a,a,a,a,b||'bag'];
+Object.assign(CONS,{kls:R8('kls'),sgn:R8('sgn'),sun:R8('sun'),ung:R8('ung'),bsd:R8('bsd'),pnk:R8('pnk'),blk:R8('blk'),tqa:R8('tqa'),rtr:R8('rtr'),tdb:R8('tdb'),
+ kyb:R8('kyb','kyb'),kyc:R8('kyc','kyc'),
+ ksr:['kls','kls','kls','rsb','kls','kls','kls','kls','bag'],
+ mx1:['kls','sgn','ung','rsb','blk','mer','pre','kls','bag'],
+ mx2:['sun','pnk','tqa','rtr','ekh','klh','bsd','ekp','bag']});
+Object.assign(CP,{kls:2400,sgn:2500,sun:1300,ung:3000,bsd:1700,pnk:1200,blk:3600,tqa:1200,rtr:1800,tdb:2800,kyb:2800,kyc:2800,ksr:2600,mx1:4500,mx2:2400});
+Object.assign(CN,{kls:'Eksekutif Biru Malam',sgn:'Eksekutif Hijau Emas',sun:'Ekonomi Oranye Sunrise',ung:'Royal Ungu',bsd:'Bisnis Abu-Biru',pnk:'Ekonomi Sakura Pink',blk:'Black Gold Eksekutif',tqa:'Ekonomi Toska',rtr:'Retro Krem-Merah',tdb:'Kereta Tidur Hijau',kyb:'Wisata Kayu Biru',kyc:'Wisata Kayu Krem',ksr:'Eksekutif Biru + Restorasi',mx1:'Rangkaian Eksekutif Campur',mx2:'Rangkaian Ekonomi Warna-warni'});
+Object.assign(CD,{kls:'Eksekutif biru malam aksen emas',sgn:'Eksekutif hijau dengan garis emas',sun:'Ekonomi oranye cerah',ung:'Eksekutif ungu kerajaan',bsd:'Bisnis abu-abu dengan garis biru',pnk:'Ekonomi pink lembut',blk:'Eksekutif hitam dengan emas',tqa:'Ekonomi toska segar',rtr:'Gerbong retro krem-merah',tdb:'Kereta tidur hijau tua',kyb:'Gerbong kayu klasik biru laut',kyc:'Gerbong kayu klasik krem',ksr:'Eksekutif biru dengan gerbong restorasi',mx1:'Campuran 7 jenis gerbong eksekutif',mx2:'Campuran 8 jenis gerbong ekonomi/bisnis'});
 /* setiap rangkaian dibuat 12 unit (lokomotif + 11 gerbong): jenis gerbong pertama diperbanyak */
 const NCARS=12,P12={};
 function pad12(a){const r=a.slice();if(r.length>=NCARS)return r;const sk=['cc','uap','tdr','bh','ec','bag'],i=r.findIndex(q=>!sk.includes(q));if(i<0)return r;const ty=r[i];while(r.length<NCARS)r.splice(i,0,ty);return r}
@@ -510,7 +527,7 @@ function car0(c,ty,xl,xr,gy,k,t,ng){
  if(ty=='bis')return coach(c,'eks',xl,xr,gy,k,Object.assign({},t,{cb:'#eef3f1',c1:'#2e7d32',c2:'#2e7d32',c3:'#1b5e20'}),ng);
  if(ty=='tdu')return coach(c,'eko',xl,xr,gy,k,Object.assign({},t,{cb:'#283593',c1:'#1a237e',c2:'#ffd54f',c3:'#fff'}),ng);
  if(PV[ty]){const q=PV[ty];return coach(c,q[0],xl,xr,gy,k,Object.assign({},t,{cb:q[1],c1:q[2],c2:q[3],c3:q[4]}),ng)}
- if(ty=='kyh'||ty=='kym')return car0(c,'kay',xl,xr,gy,k,Object.assign({},t,{cb:ty=='kyh'?'#2e5e3a':'#7b1f2a',c2:'#ffd54f'}),ng);
+ if(KY[ty])return car0(c,'kay',xl,xr,gy,k,Object.assign({},t,{cb:KY[ty][0],c2:KY[ty][1]}),ng);
  if(ty=='pan'){coach(c,'eks',xl,xr,gy,k,Object.assign({},t,{cb:'#f7f4ee',c1:'#6a1b9a',c2:'#6a1b9a',c3:'#fdd835'}),ng);
   /* jendela panoramik lebar + kaca atap */
   c.fillStyle='#18222b';c.beginPath();c.roundRect(xl+3.5*k,y0+4*k,L-7*k,18*k,3.5*k);c.fill();const nw=3,w3=(L-14*k)/nw;for(let j=0;j<nw;j++)win(c,xl+7*k+j*w3+.8*k,y0+4.8*k,w3-1.6*k,16.4*k,ng,3*k);
@@ -540,7 +557,7 @@ function detail(c,ty,xl,xr,gy,k,t,ng,fr){
  if(ty!='cc'){const g=c.createLinearGradient(xl,0,xr,0);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.5,'rgba(255,255,255,.22)');g.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=g;c.fillRect(xl+2*k,y0+3*k,L-4*k,2.2*k);
   c.fillStyle='rgba(0,0,0,.22)';c.fillRect(xl,y0+2*k,.8*k,h-3*k);c.fillRect(xr-.8*k,y0+2*k,.8*k,h-3*k);c.fillRect(xl+6*k,y0,L-12*k,1.4*k);
   c.fillStyle='#2b3338';c.fillRect(cx-16*k,gy-9*k,11*k,4*k);c.fillRect(cx+3*k,gy-9*k,14*k,4*k)}
- const nm=t.nz==2?'MRT JAKARTA':'LRT JABODEBEK',lb={ec:[nm,.68],em:[nm,.68],eks:['EKSEKUTIF',.64],res:['RESTORASI',.64],bm:['WHOOSH',.62],bis:['BISNIS',.64],pan:['PANORAMIC',.64],tdu:['KERETA TIDUR',.64],ekp:['EKONOMI PREMIUM',.64],pre:['PREMIUM',.64],ekh:['EKONOMI',.64],klh:['KLASIK',.64],mer:['LUXURY',.64],rsm:['RESTORASI',.64],ins:['INSPEKSI',.64]}[ty];
+ const nm=t.nz==2?'MRT JAKARTA':'LRT JABODEBEK',lb={ec:[nm,.68],em:[nm,.68],eks:['EKSEKUTIF',.64],res:['RESTORASI',.64],bm:['WHOOSH',.62],bis:['BISNIS',.64],pan:['PANORAMIC',.64],tdu:['KERETA TIDUR',.64],ekp:['EKONOMI PREMIUM',.64],pre:['PREMIUM',.64],ekh:['EKONOMI',.64],klh:['KLASIK',.64],mer:['LUXURY',.64],rsm:['RESTORASI',.64],ins:['INSPEKSI',.64],kls:['EKSEKUTIF',.64],sgn:['EKSEKUTIF',.64],sun:['EKONOMI',.64],ung:['ROYAL',.64],bsd:['BISNIS',.64],pnk:['EKONOMI',.64],blk:['BLACK GOLD',.64],tqa:['EKONOMI',.64],rtr:['RETRO',.64],rsb:['RESTORASI',.64],tdb:['KERETA TIDUR',.64]}[ty];
  c.fillStyle='#fff';c.textAlign='center';c.font='bold '+4.2*k+'px sans-serif';
  if(lb&&(ty!='ec'||fr))c.fillText(lb[0],cx,y0+h*lb[1]+4*k);if(ty=='eko'){c.font='bold '+4.6*k+'px sans-serif';c.fillText('EKONOMI',cx,y0+h*.58+11*k)}
  if(fr){const p={ec:[xr-3*k,gy-14*k],cc:[xr-1.5*k,gy-21*k],bh:[xr+27*k,gy-17*k]}[ty];if(p){const g=c.createRadialGradient(p[0],p[1],0,p[0],p[1],9*k);g.addColorStop(0,'rgba(255,245,170,.6)');g.addColorStop(1,'rgba(255,245,170,0)');c.fillStyle=g;c.beginPath();c.arc(p[0],p[1],9*k,0,7);c.fill()}}}
