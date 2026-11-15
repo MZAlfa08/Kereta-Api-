@@ -32,11 +32,12 @@ function chuff(sp){if(!AC||!S.snd)return;const s=AC.createBufferSource(),f=AC.cr
    nada naik cepat lalu stabil, resonansi corong, gema; saat dilepas sedikit turun nadanya */
 const HN={krl:[440,554,659],mrt:[523,659,784],loco:[233,294,349,440],steam:[262,330,392],bullet:[622,784,932]};
 function hornOn(k){HD=1;if(!AC||HR||!S.snd)return;const t=AC.currentTime,st=k=='steam',ns=HN[k]||HN.loco,g=AC.createGain(),bl=AC.createBiquadFilter(),lp=AC.createBiquadFilter(),rv=AC.createGain(),os=[];
- lp.type='lowpass';lp.frequency.value=st?2600:3400;lp.Q.value=.6;bl.type='peaking';bl.frequency.value=st?1100:900;bl.Q.value=1.1;bl.gain.value=st?4:9;
+ lp.type='lowpass';lp.Q.value=.7;lp.frequency.setValueAtTime(1300,t);lp.frequency.linearRampToValueAtTime(st?2600:3600,t+.22);bl.type='peaking';bl.frequency.value=st?1100:900;bl.Q.value=1.1;bl.gain.value=st?4:9;
  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.11,t+(st?.14:.07));g.gain.linearRampToValueAtTime(.095,t+.35);
- g.connect(bl);bl.connect(lp);lp.connect(M);rv.gain.value=.55;lp.connect(rv);rv.connect(RV);
+ g.connect(bl);bl.connect(lp);lp.connect(M);rv.gain.value=.7;lp.connect(rv);rv.connect(RV);{const lf=AC.createOscillator(),lg=AC.createGain();lf.frequency.value=8.3;lg.gain.value=.012;lf.connect(lg);lg.connect(g.gain);lf.start(t);os.push(lf)}
  ns.forEach(f=>[0,1].forEach(j=>{const o=AC.createOscillator(),og=AC.createGain(),fr=f*(j?1.0035:.9965);o.type=st?'triangle':'sawtooth';
-  o.frequency.setValueAtTime(fr*.94,t);o.frequency.exponentialRampToValueAtTime(fr,t+.09);og.gain.value=2.25/ns.length;o.connect(og);og.connect(g);o.start(t);os.push(o)}));
+  o.frequency.setValueAtTime(fr*.9,t);o.frequency.exponentialRampToValueAtTime(fr,t+.12);og.gain.value=2.1/ns.length;o.connect(og);og.connect(g);o.start(t);os.push(o);
+  if(!j){[[2,.22,'sine'],[.5,.2,'sine']].forEach(h=>{if(st&&h[0]<1)return;const o2=AC.createOscillator(),g2=AC.createGain();o2.type=h[2];o2.frequency.setValueAtTime(fr*h[0]*.9,t);o2.frequency.exponentialRampToValueAtTime(fr*h[0],t+.12);g2.gain.value=h[1]*2.1/ns.length;o2.connect(g2);g2.connect(g);o2.start(t);os.push(o2)})}}));
  const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=2200;nf.Q.value=.7;
  ng.gain.setValueAtTime(st?.9:1.6,t);ng.gain.exponentialRampToValueAtTime(st?.5:.12,t+.25);s.connect(nf);nf.connect(ng);ng.connect(g);s.start();os.push(s);
  HR={g,os}}
