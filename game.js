@@ -45,11 +45,12 @@ const TR=[
 ];
 /* ===== LIVERY BARU UNTUK SEMUA LOKOMOTIF: Vintage, RNB (merah-biru), WNB (putih-biru) ===== */
 (function(){const cp=o=>JSON.parse(JSON.stringify(o)),F=n=>TR.find(t=>t.n==n),
+ NMK={'CC 201':['KA Penataran','KA Arjuna Ekspres','KA Malioboro Ekspres'],'CC 203':['KA Bangunkarta','KA Brantas','KA Singasari'],'CC 206':['KA Argo Wilis','KA Argo Muria','KA Argo Sindoro'],'CC 204':['KA Turangga','KA Lodaya','KA Harina'],'Uap':['KA Mak Itam','KA Wisata Ambarawa','KA Sawahlunto Wisata']},
  PAL={vin:{nm:'Vintage',ds:'krem-marun klasik',cb:'#efe3c4',c1:'#7b1f1f',c2:'#d4af37',c3:'#5a3a22',p:5200},
   rnb:{nm:'RNB',ds:'merah-biru',cb:'#f3f6f8',c1:'#d32f2f',c2:'#0d2f66',c3:'#ffffff',p:4600},
   wnb:{nm:'WNB',ds:'putih-biru',cb:'#f7f8f8',c1:'#2f6fd0',c2:'#0b2a66',c3:'#ffffff',p:4600}};
  [['KA Lokal Bandung Raya','CC 201'],['KA Gajayana','CC 203'],['KA Argo Bromo Anggrek','CC 206'],['KA Taksaka','CC 204'],['Kereta Uap Jaladara','Uap']].forEach(([bn,md])=>{const b=F(bn);if(!b)return;
-  Object.keys(PAL).forEach(k=>{const P=PAL[k],t=cp(b),lv=t.lv;t.n='KA '+P.nm+' '+md;t.s='Lokomotif '+md+' livery '+P.nm+' ('+P.ds+')';t.p=P.p+(md=='Uap'?-1700:0);t.m=1.6;t.c1=P.c1;t.cb=P.cb;t.c2=P.c2;t.c3=P.c3;
+  Object.keys(PAL).forEach(k=>{const P=PAL[k],t=cp(b),lv=t.lv;t.n=NMK[md][Object.keys(PAL).indexOf(k)];t.s='Lokomotif '+md+' '+P.ds+' + gerbong';t.p=P.p+(md=='Uap'?-1700:0);t.m=1.6;t.c1=P.c1;t.cb=P.cb;t.c2=P.c2;t.c3=P.c3;
    if(lv){delete lv.lg;lv.u=P.cb;lv.st=P.c1;lv.st2=P.c2;lv.bd=k=='vin'?P.c3:P.c2;
     if(lv.img=='cc201')lv.cl=k=='vin'?{sty:'cream',body:P.cb,gr:P.c1,pl:1}:{sty:'wb',body:'#f7f8f8',s1:P.c1,s2:P.c2,lgo:'two'};
     else if(lv.img=='cc203')lv.cl={red:P.c1,blue:P.c2,roof:k=='vin'?'#5a3a22':'#37474f',body:P.cb};
