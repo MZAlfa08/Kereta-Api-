@@ -31,15 +31,30 @@ function chuff(sp){if(!AC||!S.snd)return;const s=AC.createBufferSource(),f=AC.cr
 /* klakson angin lokomotif diesel (tipe Nathan/Wabco): beberapa corong dengan nada berbeda, letupan udara di awal,
    nada naik cepat lalu stabil, resonansi corong, gema; saat dilepas sedikit turun nadanya */
 const HN={krl:[440,554,659],mrt:[523,659,784],loco:[233,294,349,440],steam:[262,330,392],bullet:[622,784,932]};
-function hornOn(k){HD=1;if(!AC||HR||!S.snd)return;const t=AC.currentTime,st=k=='steam',ns=HN[k]||HN.loco,g=AC.createGain(),bl=AC.createBiquadFilter(),lp=AC.createBiquadFilter(),rv=AC.createGain(),os=[];
- lp.type='lowpass';lp.Q.value=.7;lp.frequency.setValueAtTime(1300,t);lp.frequency.linearRampToValueAtTime(st?2600:3600,t+.22);bl.type='peaking';bl.frequency.value=st?1100:900;bl.Q.value=1.1;bl.gain.value=st?4:9;
- g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.11,t+(st?.14:.07));g.gain.linearRampToValueAtTime(.095,t+.35);
- g.connect(bl);bl.connect(lp);lp.connect(M);rv.gain.value=.7;lp.connect(rv);rv.connect(RV);{const lf=AC.createOscillator(),lg=AC.createGain();lf.frequency.value=8.3;lg.gain.value=.012;lf.connect(lg);lg.connect(g.gain);lf.start(t);os.push(lf)}
- ns.forEach(f=>[0,1].forEach(j=>{const o=AC.createOscillator(),og=AC.createGain(),fr=f*(j?1.0035:.9965);o.type=st?'triangle':'sawtooth';
-  o.frequency.setValueAtTime(fr*.9,t);o.frequency.exponentialRampToValueAtTime(fr,t+.12);og.gain.value=2.1/ns.length;o.connect(og);og.connect(g);o.start(t);os.push(o);
-  if(!j){[[2,.22,'sine'],[.5,.2,'sine']].forEach(h=>{if(st&&h[0]<1)return;const o2=AC.createOscillator(),g2=AC.createGain();o2.type=h[2];o2.frequency.setValueAtTime(fr*h[0]*.9,t);o2.frequency.exponentialRampToValueAtTime(fr*h[0],t+.12);g2.gain.value=h[1]*2.1/ns.length;o2.connect(g2);g2.connect(g);o2.start(t);os.push(o2)})}}));
+/* ===== KLAKSON TIAP KERETA BERBEDA =====
+   Setiap kereta punya "sidik jari" klakson sendiri: susunan nada corong (akor), bentuk gelombang, getar (tremolo),
+   letupan udara di awal, kecepatan naik nada, dan pola tut-tut otomatis. Lokomotif diesel dibuat dari 11 akor x 7 transposisi
+   sehingga tidak ada dua kereta yang sama; uap, kereta cepat, dan LRT punya suara khas sendiri. */
+const HCH=[[233,294,349,440],[220,277,330,415],[196,247,294,370],[262,311,392,466],[247,311,370,494],[208,261,311,392],[277,349,415,523],[185,233,277,349],[294,370,440,554],[175,220,262,330],[311,392,466,587]];
+function hornSpec(t,i){const k=t.k;
+ if(k=='steam')return{ns:[262,330,392],ty:'triangle',st:1,tr:7,at:.14,bk:.9,pt:1};
+ if(k=='bullet')return{ns:[622,784,932],ty:'sawtooth',tr:9.5,bk:1.2,lp:4200,at:.05,pt:2};
+ if(k=='mrt'||k=='krl')return{ns:[523,659,784],ty:'square',ga:.7,tr:6,bk:.8,lp:3000,at:.05,pt:0};
+ const f=Math.pow(2,(((i*3)%7)-3)/12),ch=HCH[i%HCH.length],ty=['sawtooth','sawtooth','square'][i%3];
+ return{ns:ch.map(v=>Math.round(v*f*10)/10),ty,ga:ty=='square'?.75:1,tr:6+(i%5)*1.2,bk:1+(i%4)*.3,lp:[3600,3000,4200,3300][i%4],dt:.002+(i%3)*.0016,at:.05+(i%3)*.03,bg:7+(i%4)*1.5,pt:i%3}}
+const HSP={};
+function hornFor(i){const t=TR[i];if(!t)return hornSpec({k:'loco'},0);return HSP[t.n]||(HSP[t.n]=hornSpec(t,i))}
+/* klakson acak (kereta lain / lalu lintas AI) agar suaranya beragam */
+function hornRand(){return hornFor(Math.random()*TR.length|0)}
+function hornOn(h){HD=1;if(!AC||HR||!S.snd)return;h=typeof h=='string'?hornSpec({k:h},0):(h||hornSpec({k:'loco'},0));const t=AC.currentTime,st=!!h.st,ns=h.ns,ty=h.ty||(st?'triangle':'sawtooth'),g=AC.createGain(),bl=AC.createBiquadFilter(),lp=AC.createBiquadFilter(),rv=AC.createGain(),os=[];
+ lp.type='lowpass';lp.Q.value=.7;lp.frequency.setValueAtTime(1300,t);lp.frequency.linearRampToValueAtTime(h.lp||(st?2600:3600),t+.22);bl.type='peaking';bl.frequency.value=st?1100:900;bl.Q.value=1.1;bl.gain.value=h.bg||(st?4:9);
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.11,t+(h.at||(st?.14:.07)));g.gain.linearRampToValueAtTime(.095,t+.35);
+ g.connect(bl);bl.connect(lp);lp.connect(M);rv.gain.value=.7;lp.connect(rv);rv.connect(RV);{const lf=AC.createOscillator(),lg=AC.createGain();lf.frequency.value=h.tr||8.3;lg.gain.value=.012;lf.connect(lg);lg.connect(g.gain);lf.start(t);os.push(lf)}
+ ns.forEach(f=>[0,1].forEach(j=>{const o=AC.createOscillator(),og=AC.createGain(),fr=f*(j?1+(h.dt||.0035):1-(h.dt||.0035));o.type=ty;
+  o.frequency.setValueAtTime(fr*.9,t);o.frequency.exponentialRampToValueAtTime(fr,t+.12);og.gain.value=2.1*(h.ga||1)/ns.length;o.connect(og);og.connect(g);o.start(t);os.push(o);
+  if(!j){[[2,.22,'sine'],[.5,.2,'sine']].forEach(h=>{if(st&&h[0]<1)return;const o2=AC.createOscillator(),g2=AC.createGain();o2.type=h[2];o2.frequency.setValueAtTime(fr*h[0]*.9,t);o2.frequency.exponentialRampToValueAtTime(fr*h[0],t+.12);g2.gain.value=h[1]*2.1*(h.ga||1)/ns.length;o2.connect(g2);g2.connect(g);o2.start(t);os.push(o2)})}}));
  const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=2200;nf.Q.value=.7;
- ng.gain.setValueAtTime(st?.9:1.6,t);ng.gain.exponentialRampToValueAtTime(st?.5:.12,t+.25);s.connect(nf);nf.connect(ng);ng.connect(g);s.start();os.push(s);
+ ng.gain.setValueAtTime(h.bk||(st?.9:1.6),t);ng.gain.exponentialRampToValueAtTime(st?.5:.12,t+.25);s.connect(nf);nf.connect(ng);ng.connect(g);s.start();os.push(s);
  HR={g,os}}
 function hornOff(){HD=0;if(!HR||!AC)return;const{g,os}=HR,t=AC.currentTime;g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+.28);
  os.forEach(o=>{try{if(o.frequency){o.frequency.cancelScheduledValues(t);o.frequency.setValueAtTime(o.frequency.value,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,o.frequency.value*.96),t+.28)}o.stop(t+.32)}catch(e){}});HR=null}
@@ -56,12 +71,13 @@ function hiss(d,v,f){if(!AC||!S.snd)return;const s=AC.createBufferSource(),fl=AC
 /* dengung keramaian peron: makin dekat stasiun makin ramai (dipanggil tiap frame, dibatasi) */
 function crowd(nr,wt){if(!AC||!E.cr)return;const t=AC.currentTime;if(t-(crowd.l||0)<.12)return;crowd.l=t;
  E.cr.n.gain.setTargetAtTime(S.snd?nr*(.03+.03*wt)*(.65+.35*Math.random()):0,t,.35);E.cr.f.frequency.setTargetAtTime(450+Math.random()*550,t,.25)}
-/* nada "ding-dong" khas pengumuman stasiun */
-function chime(){[[784,0],[659,.4],[523,.8]].forEach(q=>{tone(q[0],.9,'sine',.17,0,q[1]);tone(q[0]*2,.5,'sine',.05,0,q[1])})}
+/* nada "neng-nong neng-nong" khas pengumuman (dibunyikan SEBELUM pramugari bicara): nada tinggi lalu rendah, diulang 2x, timbre lonceng */
+function chime(){[[880,0],[659,.5],[880,1.1],[659,1.6]].forEach(q=>{const f=q[0],d=q[1];tone(f,.75,'sine',.2,0,d);tone(f*2,.45,'sine',.07,0,d);tone(f*3.01,.25,'sine',.025,0,d);tone(f*.5,.6,'sine',.06,0,d)})}
+chime.ms=2500;
 /* lonceng stasiun: pukulan logam berulang "teng-teng-teng" */
 function bellSt(){if(!AC||!S.snd)return;for(let i=0;i<9;i++){const d=i*.32;[[1,.1],[2.76,.05],[5.4,.03],[8.9,.015]].forEach(p=>tone(1040*p[0],.55,'sine',p[1],0,d))}}
 /* klakson otomatis (tidak dihitung sebagai klakson pemain di perlintasan) */
-function autoHorn(k,ms){if(!AC||!S.snd)return;const sq=ms>1000?[[0,380],[560,380],[1120,Math.max(400,ms-1120)]]:[[0,ms]]; /* pola: tut-tut-tuuuut */
+function autoHorn(k,ms){if(!AC||!S.snd)return;const pt=(k&&k.pt)||0,sq=ms>1000?(pt==1?[[0,900],[1100,Math.max(400,ms-1100)]]:pt==2?[[0,300],[460,300],[920,300],[1380,Math.max(400,ms-1380)]]:[[0,380],[560,380],[1120,Math.max(400,ms-1120)]]):[[0,ms]]; /* pola: tut-tut-tuuuut / tuuut-tuut / tut-tut-tut-tuuut */
  sq.forEach(p=>{setTimeout(()=>{const h=HD;hornOn(k);HD=h},p[0]);setTimeout(()=>{if(!HD)hornOff()},p[0]+p[1])})}
 /* rem angin dilepas saat kereta berhenti: "pssshhh" + hentakan rendah */
 function airRel(){hiss(1.8,.2,2400);hiss(1.2,.08,900);tone(70,.25,'sine',.14,40)}
@@ -76,11 +92,12 @@ function whistle(){if(!AC||!S.snd)return;hiss(.14,.03,2800);const t=AC.currentTi
   vg.connect(o.frequency);pg.gain.value=p[1];o.connect(pg);pg.connect(tg);o.start(t);o.stop(t+d+.1)});
  const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=3300;nf.Q.value=2.2;ng.gain.value=.55;s.connect(nf);nf.connect(ng);ng.connect(tg);s.start(t,Math.random(),d+.1);
  tg.connect(g);g.connect(M);rv.gain.value=.6;g.connect(rv);rv.connect(RV);lf.start(t);vb.start(t);lf.stop(t+d+.1);vb.stop(t+d+.1)}
-/* pengumuman suara (Bahasa Indonesia) lewat speechSynthesis bawaan browser */
-function sayStop(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
-function say(txt){if(!S.snd||!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined')return;
+/* pengumuman suara pramugari (Bahasa Indonesia): selalu didahului "neng-nong neng-nong", baru bicara lewat speechSynthesis bawaan browser */
+let SAYT=0;
+function sayStop(){clearTimeout(SAYT);try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
+function say(txt){if(!S.snd)return;clearTimeout(SAYT);chime();if(!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined')return;
  try{speechSynthesis.cancel();const ut=new SpeechSynthesisUtterance(txt);ut.lang='id-ID';ut.rate=.92;ut.pitch=1.08;ut.volume=.9;
-  const vs=speechSynthesis.getVoices(),v=vs.find(q=>/^id/i.test(q.lang));if(v)ut.voice=v;setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){}},chime.ms||1500)}catch(e){}}
+  const vs=speechSynthesis.getVoices(),v=vs.find(q=>/^id/i.test(q.lang));if(v)ut.voice=v;SAYT=setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){}},chime.ms)}catch(e){}}
 
 /* ---------- PETUGAS PPKA: suara radio memberangkatkan kereta ---------- */
 /* bunyi "kreek" tombol radio (HT) ditekan / dilepas */
