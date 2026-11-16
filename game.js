@@ -730,15 +730,29 @@ function sveh(X,Y,s,ty,col,dir){x.save();x.translate(X,Y);x.scale(dir*s,s);x.fil
  x.restore()}
 function hwyRoad(gy,cam){const y1=gy+80*u,hh=34*u;x.fillStyle='#3a4046';x.fillRect(0,y1,W,hh);x.fillStyle='#e0e0e0';x.fillRect(0,y1,W,1.5*u);x.fillRect(0,y1+hh-1.5*u,W,1.5*u);x.fillStyle='#ffd54f';for(let X=-(cam%(40*u));X<W;X+=40*u)x.fillRect(X,y1+hh/2-.7*u,18*u,1.4*u)}
 function hwyVeh(gy,P,cam){const y1=gy+80*u,hh=34*u;(G.tf||[]).forEach(v=>{const X=v.x*P-cam;if(X<-80||X>W+80)return;sveh(X,y1+hh*(v.l>0?.5:.92),u*.8,v.ty,v.col,v.l>0?1:-1)})}
+/* KOBONG: asap hitam tebal dulu (3 dtk), lalu api menyala dan SELALU menempel di titik cerobong lokomotif (api tidak ikut terseret ke gerbong) */
 function kobongX(hx,gy,t,e,kb,v,uu){const sm=Math.min(1,e/1.2),fi=e<3?0:Math.min(1,(e-3)/1.2)*Math.min(1,kb/1.2),
- cf={loco:{x0:-54,x1:-24,y:-46,s:[-38,-46]},steam:{x0:-56,x1:-20,y:-36,s:[-10,-48]}}[t.k]||{x0:-62,x1:-10,y:-44,s:[-30,-46]};
- for(let i=0;i<26;i++){const st=i%3==0,ph=(tm*.8+i/26)%1,src=st?cf.s[0]:cf.x0+(cf.x1-cf.x0)*hs(i),px=hx+src*uu-ph*(36+v*1.3)*uu,py=gy+(st?cf.s[1]:cf.y)*uu-ph*(75+hs(i+3)*30)*uu,r=(9+ph*28)*uu*(.55+.45*sm),a=Math.min(1,ph*14)*(1-ph)*.72*sm,tn=Math.round(30+ph*70),g=x.createRadialGradient(px,py,0,px,py,r);
-  g.addColorStop(0,'rgba('+tn+','+tn+','+(tn+4)+','+a+')');g.addColorStop(1,'rgba('+tn+','+tn+','+tn+',0)');x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,7);x.fill()}
- if(fi>0){x.save();x.globalCompositeOperation='lighter';
-  for(let i=0;i<34;i++){const st=i%4==0,ph=(tm*2.8+i*.29)%1,bx=hx+(st?cf.s[0]:cf.x0+(cf.x1-cf.x0)*hs(i+7))*uu+Math.sin(tm*9+i)*2*uu,by=gy+(st?cf.s[1]:cf.y)*uu,px=bx-ph*(14+v*.5)*uu,py=by-ph*(st?60:34)*fi*uu,r=(8*(1-ph)+3)*uu*(.6+.4*fi),g=x.createRadialGradient(px,py,0,px,py,r);
-   g.addColorStop(0,'rgba(255,245,170,'+.95*(1-ph)*fi+')');g.addColorStop(.45,'rgba(255,130,25,'+.7*(1-ph)*fi+')');g.addColorStop(1,'rgba(190,25,0,0)');x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,7);x.fill()}
-  for(let i=0;i<16;i++){const ph=(tm*1.6+i*.37)%1;x.fillStyle='rgba(255,'+(150+Math.floor(80*hs(i)))+',40,'+(1-ph)*fi+')';x.fillRect(hx+(cf.s[0]-hs(i+40)*18)*uu-ph*(40+v)*uu,gy+cf.s[1]*uu-ph*(70*hs(i+50)+20)*uu,2*uu,2*uu)}
-  const hg=x.createLinearGradient(0,gy+cf.y*uu-10*uu,0,gy-10*uu);hg.addColorStop(0,'rgba(255,140,40,'+.28*fi*(.8+.2*Math.sin(tm*14))+')');hg.addColorStop(1,'rgba(255,140,40,0)');x.fillStyle=hg;x.fillRect(hx+cf.x0*uu,gy+cf.y*uu-10*uu,(cf.x1-cf.x0)*uu,32*uu);x.restore()}}
+ an={loco:[-38,-51],steam:[-13,-56]}[t.k]||[-30,-46],ax=hx+an[0]*uu,ay=gy+an[1]*uu,ln=-Math.min(v*.05,7)*uu,T=tm;
+ /* asap hitam */
+ for(let i=0;i<18;i++){const r0=hs(i*3.7+1),ph=(T*(.34+r0*.16)+i/18)%1,px=ax+(r0-.5)*5*uu+Math.sin(T*1.7+i)*3*uu*ph-ph*Math.min(26+v*.9,70)*uu,py=ay-6*uu*fi-ph*(95+r0*45)*uu,r=(8+ph*34)*uu*(.6+.4*sm),a=Math.min(1,ph*9)*(1-ph*.85)*.92*sm,tn=Math.round(14+ph*70),g=x.createRadialGradient(px,py,0,px,py,r);
+  g.addColorStop(0,'rgba('+tn+','+tn+','+(tn+3)+','+a+')');g.addColorStop(.65,'rgba('+tn+','+tn+','+(tn+3)+','+a*.55+')');g.addColorStop(1,'rgba('+tn+','+tn+','+tn+',0)');x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,7);x.fill()}
+ if(fi<=0)return;
+ x.save();
+ /* cahaya hangat di sekitar api */
+ x.globalCompositeOperation='lighter';
+ let gl=x.createRadialGradient(ax,ay-16*uu,0,ax,ay-16*uu,40*uu);gl.addColorStop(0,'rgba(255,150,40,'+.32*fi+')');gl.addColorStop(1,'rgba(255,90,10,0)');x.fillStyle=gl;x.fillRect(ax-40*uu,ay-56*uu,80*uu,80*uu);
+ x.globalCompositeOperation='source-over';
+ /* lidah api: merah -> oranye -> kuning (seperti gambar referensi) */
+ const tg=(bx,w,h,ls,c0,c1,c2)=>{const g=x.createLinearGradient(0,ay,0,ay-h);g.addColorStop(0,c0);g.addColorStop(.55,c1);g.addColorStop(1,c2);x.fillStyle=g;x.beginPath();x.moveTo(bx-w,ay);
+  x.bezierCurveTo(bx-w*1.2,ay-h*.4,bx-w*.3+ls*.5,ay-h*.72,bx+ls,ay-h);x.bezierCurveTo(bx+w*.3+ls*.5,ay-h*.62,bx+w*1.2,ay-h*.38,bx+w,ay);x.closePath();x.fill()},
+  fl=(a,b)=>.8+.2*Math.sin(T*a+b),H=32*uu*fi;
+ const L=[[5,1,'rgba(235,50,10,.95)','rgba(200,30,0,.9)','rgba(120,15,0,0)',1],[3,.78,'rgba(255,150,25,.97)','rgba(255,110,15,.92)','rgba(235,60,0,0)',.82],[2,.5,'rgba(255,235,120,.98)','rgba(255,190,50,.9)','rgba(255,130,20,0)',.58]];
+ L.forEach((l,li)=>{for(let j=0;j<l[0];j++){const m=j-(l[0]-1)/2,mid=1-Math.abs(m)/(l[0]/2+.4),h=H*l[1]*(.55+.45*mid)*fl(8+j*1.3+li,j*2.1+li),w=(4.6+4*mid)*uu*(.55+.45*fi)*l[5],sw=Math.sin(T*6+j*1.4+li)*1.6*uu;
+  tg(ax+m*(2.6-li*.7)*uu,w,h,ln*(.6+.4*mid)+m*1.4*uu+sw,l[2],l[3],l[4])}});
+ /* percikan kecil */
+ x.globalCompositeOperation='lighter';
+ for(let i=0;i<8;i++){const r=hs(i*5.9+2),ph=(T*(.9+r)+r*5)%1,px=ax+(r-.5)*7*uu+ln*ph*2-ph*10*uu,py=ay-8*uu-ph*(34+r*30)*uu,z=(1.2+1.4*r)*uu*(1-ph*.5);x.fillStyle='rgba(255,'+(150+90*r|0)+',50,'+(1-ph)*fi+')';x.fillRect(px,py,z,z)}
+ x.restore()}
 function kobong(hx,gy,t){kobongX(hx,gy,t,10-G.kb,G.kb,G.v,u)}
 function banana(X,by,r){x.strokeStyle='#7cb342';x.lineWidth=5*u;x.beginPath();x.moveTo(X,by);x.lineTo(X+2*u,by-34*u);x.stroke();x.strokeStyle='#33691e';x.lineWidth=3.2*u;for(const a of[-2.7,-2.1,-1.5,-.9,-.4]){x.beginPath();x.moveTo(X+2*u,by-34*u);x.quadraticCurveTo(X+2*u+Math.cos(a)*16*u,by-34*u+Math.sin(a)*16*u-4*u,X+2*u+Math.cos(a)*30*u,by-20*u+Math.sin(a)*8*u);x.stroke()}x.fillStyle='#d4e157';x.beginPath();x.ellipse(X+5*u,by-26*u,3*u,6*u,.3,0,7);x.fill()}
 function bamboo(X,by,r){x.lineWidth=2.2*u;for(let j=0;j<5;j++){const bx=X+j*5*u,h=(60+hs(j+r*50)*30)*u,sw=Math.sin(tm*1.2+j)*2*u;x.strokeStyle=j%2?'#8bc34a':'#689f38';x.beginPath();x.moveTo(bx,by);x.quadraticCurveTo(bx+sw,by-h*.5,bx+sw*2,by-h);x.stroke();x.fillStyle='#7cb342';for(let l=0;l<4;l++){x.beginPath();x.ellipse(bx+sw*2+(l%2?5:-5)*u,by-h+l*7*u,6*u,1.6*u,l%2?.4:-.4,0,7);x.fill()}}}
