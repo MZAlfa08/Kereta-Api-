@@ -785,9 +785,9 @@ function endShear(cam,P,Ec){Ec=Ec||0;x=XM;const d=DPRv,cw=cv.width,ch=cv.height,
  x.setTransform(d,0,0,d,0,0)}
 /* kamera menyesuaikan panjang kereta: ekor kereta berhenti tepat di sisi kanan tuas REM (tidak lewat) */
 function camScale(){const hx=W*HXF,tl=trLw(TR[S.sel])*u;if(LIMX==null){const e=document.getElementById('lb');if(e){const r=e.getBoundingClientRect();if(r.width>0)LIMX=r.right+28}}
- const lim=LIMX==null?120:LIMX;return Math.max(.12,Math.min(1,(hx-lim)*.92/tl))}
-/* kamera: moncong lokomotif maju mendekati tuas GAS (berhenti 14px sebelum tuas, tidak menembus) */
-function hxAuto(){const e=document.getElementById('lt2');if(e&&W>0){const r=e.getBoundingClientRect();if(r.width>0)return Math.max(.8,Math.min(.95,(r.left-14)/W))}return .8}
+ const lim=LIMX==null?120:LIMX;return Math.max(.12,Math.min(1,(hx-lim)/tl))}
+/* kamera: moncong lokomotif maju mendekati tuas GAS (berhenti 70px sebelum tuas gas; ekor tetap di kanan tuas rem) */
+function hxAuto(){const e=document.getElementById('lt2');if(e&&W>0){const r=e.getBoundingClientRect();if(r.width>0)return Math.max(.8,Math.min(.95,(r.left-70)/W))}return .8}
 function draw(){HXF=hxAuto();const u0=u;if(ck!=W+'|'+H+'|'+TD())buildCaches();u=u0*camScale();try{draw0()}finally{u=u0}}
 function draw0(){
  const t=TR[S.sel],gy=H*.72,P=3.67*u,cam=G.pos*P-W*HXF,hx=W*HXF,LF=laneF(),fw=floodW(G.pos),bw=biomeW(G.pos),wF=bw[1],wC=bw[2],w0=bw[0],td=TD(),el=t.k=='krl'||t.k=='mrt'||t.k=='bullet';
