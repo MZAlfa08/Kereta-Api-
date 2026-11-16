@@ -265,7 +265,13 @@ function wheels(c,cx,gy,k,n,sp,dk){for(let i=0;i<n;i++){const wx=cx+(i-(n-1)/2)*
  const gg=c.createRadialGradient(wx-r*.2,wy-r*.2,0,wx,wy,r*.62);gg.addColorStop(0,dk?'#6a7378':'#b0bec5');gg.addColorStop(1,dk?'#23272a':'#546e7a');c.fillStyle=gg;c.beginPath();c.arc(wx,wy,r*.62,0,7);c.fill();
  c.fillStyle=dk?'#1a1d1f':'#37474f';c.beginPath();c.arc(wx,wy,r*.42,0,7);c.fill();
  c.globalAlpha=Math.max(0,1-G.v/22);c.strokeStyle='#cfd8dc';c.lineWidth=k*.7;c.beginPath();for(let s=0;s<3;s++){const b=a+s*Math.PI/3;c.moveTo(wx+Math.cos(b)*r*.55,wy+Math.sin(b)*r*.55);c.lineTo(wx-Math.cos(b)*r*.55,wy-Math.sin(b)*r*.55)}c.stroke();c.globalAlpha=1;
- c.fillStyle='#eceff1';c.beginPath();c.arc(wx,wy,r*.16,0,7);c.fill();c.strokeStyle='rgba(255,255,255,.32)';c.lineWidth=.55*k;c.beginPath();c.arc(wx,wy,r*.93,-2.5,-1.2);c.stroke()}}
+ c.fillStyle='#eceff1';c.beginPath();c.arc(wx,wy,r*.16,0,7);c.fill();c.strokeStyle='rgba(255,255,255,.32)';c.lineWidth=.55*k;c.beginPath();c.arc(wx,wy,r*.93,-2.5,-1.2);c.stroke();
+ /* detail tambahan: cincin logam mengkilap, cakram rem, baut hub berputar, kilau */
+ const rg=c.createLinearGradient(wx-r,wy-r,wx+r,wy+r);rg.addColorStop(0,dk?'rgba(190,200,205,.55)':'rgba(255,255,255,.7)');rg.addColorStop(.5,'rgba(255,255,255,0)');rg.addColorStop(1,'rgba(0,0,0,.55)');c.strokeStyle=rg;c.lineWidth=.8*k;c.beginPath();c.arc(wx,wy,r*.97,0,7);c.stroke();
+ c.strokeStyle=dk?'rgba(120,90,80,.55)':'rgba(141,110,99,.6)';c.lineWidth=.35*k;c.beginPath();c.arc(wx,wy,r*.5,0,7);c.stroke();
+ c.fillStyle=dk?'#8a949a':'#cfd8dc';for(let b=0;b<6;b++){const t2=a+b*Math.PI/3;c.beginPath();c.arc(wx+Math.cos(t2)*r*.3,wy+Math.sin(t2)*r*.3,.42*k,0,7);c.fill()}
+ c.fillStyle='rgba(255,255,255,.55)';c.beginPath();c.arc(wx-r*.3,wy-r*.32,r*.13,0,7);c.fill();
+ c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(wx,wy+r*.98,r*.9,.55*k,0,0,7);c.fill()}}
 function steamL(c,xl,xr,gy,k,cs){cs=cs||{};
  const bg=c.createLinearGradient(0,gy-35*k,0,gy-9*k);bg.addColorStop(0,cs.b0||'#555');bg.addColorStop(.3,cs.b1||'#1d1d1d');bg.addColorStop(1,cs.b2||'#050505');
  c.fillStyle=cs.cab||'#2a2a2a';c.fillRect(xl+3*k,gy-40*k,19*k,32*k);c.fillStyle=cs.roof||'#b71c1c';c.beginPath();c.roundRect(xl,gy-46*k,25*k,7*k,2*k);c.fill();win(c,xl+8*k,gy-34*k,9*k,11*k,0,k);
@@ -618,10 +624,17 @@ function mkc(w,h,s){s=s||DPRv;const c=document.createElement('canvas');c.width=M
 function drawTrain(c,t,hx,gy,k,ng){
  if(c!==x||t.k=='steam'){drawTrain0(c,t,hx,gy,k,ng);return}
  const key=TR.indexOf(t)+(S.cons&&S.cons[TR.indexOf(t)]||'')+'|'+k.toFixed(3)+'|'+ng+'|'+DPRv,tl=trLen(t)*k,pad=40*k,w=tl+pad+8*k,h=70*k;let s=SPR[key];
- if(!s){if(Object.keys(SPR).length>9)SPR={};const[cv2,q]=mkc(w,h,DPRv*1.3);REC=[];MIR=0;drawTrain0(q,t,w-pad,h-4*k,k,ng);s=SPR[key]={cv:cv2,wl:REC};REC=null;MIR=0}
+ if(!s){if(Object.keys(SPR).length>9)SPR={};const[cv2,q]=mkc(w,h,DPRv*1.3);REC=[];MIR=0;drawTrain0(q,t,w-pad,h-4*k,k,ng);trShine(q,w,h,k,ng);s=SPR[key]={cv:cv2,wl:REC};REC=null;MIR=0}
  const x0=hx-(w-pad),y0=gy-(h-4*k),ln=LNC&&c===x?q=>laneAtPos(G.pos-q/LNC)*LANEY*u:null;
  if(!ln||ln(0)==ln(tl)){const L0=ln?ln(0):0;c.drawImage(s.cv,x0,y0-L0,w,h);s.wl.forEach(p=>wheels(c,x0+p[0],gy-L0,k,p[1],p[2],p[3]))}
  else{const sc=s.cv.width/w,S=12;for(let sx=0;sx<w;sx+=S){const sw=Math.min(S,w-sx),L1=ln(hx-(x0+sx+sw/2));c.drawImage(s.cv,sx*sc,0,sw*sc,s.cv.height,x0+sx,y0-L1,sw+.6,h)}s.wl.forEach(p=>wheels(c,x0+p[0],gy-ln(hx-(x0+p[0])),k,p[1],p[2],p[3]))}}
+/* bodi mengkilau: lapisan kilap hanya menempel pada piksel kereta (source-atop) sehingga bentuk tidak berubah */
+function trShine(q,w,h,k,ng){const g0=ng?.45:1,yb=h-12*k,yt=h-68*k;q.save();q.globalCompositeOperation='source-atop';
+ let g=q.createLinearGradient(0,yt,0,yt+24*k);g.addColorStop(0,'rgba(255,255,255,'+.34*g0+')');g.addColorStop(.55,'rgba(255,255,255,'+.08*g0+')');g.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=g;q.fillRect(0,yt,w,24*k);
+ g=q.createLinearGradient(0,h-44*k,0,h-33*k);g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.5,'rgba(255,255,255,'+.13*g0+')');g.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=g;q.fillRect(0,h-44*k,w,11*k);
+ g=q.createLinearGradient(0,yb-16*k,0,yb+8*k);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,'+.26+')');q.fillStyle=g;q.fillRect(0,yb-16*k,w,24*k);
+ for(let X=18*k;X<w;X+=96*k){const sg=q.createLinearGradient(X,0,X+16*k,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,'+.17*g0+')');sg.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=sg;q.beginPath();q.moveTo(X+10*k,yt);q.lineTo(X+26*k,yt);q.lineTo(X+6*k,yb);q.lineTo(X-10*k,yb);q.closePath();q.fill()}
+ q.restore()}
 const RRf=CanvasRenderingContext2D.prototype.roundRect;
 function drawTrain0(...a){CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h){this.rect(x,y,w,h)};try{drawTrain1(...a)}finally{CanvasRenderingContext2D.prototype.roundRect=RRf}}
 function drawTrain1(c,t,hx,gy,k,ng){
