@@ -731,7 +731,7 @@ function crRoad(gy,P,cam){for(const c of G.r.cx){const px=c.x*P-cam;if(px<-250||
 function crFront(gy,P,cam){const T=cxT();for(const c of G.r.cx){const px=c.x*P-cam;if(px<-250||px>W+250)continue;
  c.veh.forEach(v=>{if(v.t>T.tt)drawV(c,v,px,T)});const y=gy+34*u;barrier(px-hw(y,gy)-4*u,y,1,c,hw(y,gy)*1.05)}}
 function zoneF(xm){let f=0;for(const s of G.r.st){const d=Math.abs(xm-(s.x+SP/2)),z=d<650?1:d>850?0:(850-d)/200;if(z>f)f=z}return f}
-function ai(dt){if(G.m=='play'&&(G.ln||laneF()>.001)){G.ai=[];G.at=8;return}const a=G.ai=G.ai||[];a.forEach(q=>{aiFireStep(q,dt);if(q.hold){if(!q.go){const s=q.stn;if(s.done&&G.r.st[G.ni-1]===s&&G.dw>0){q.gt=(q.gt||0)+dt;if(q.gt>5){q.go=1;q.v=0;autoHorn('loco',800)}}}else q.v=Math.min(34,q.v+1.3*dt);if(!q.go)return}q.x+=q.d*q.v*dt*(1-.55*zoneF(q.x))});
+function ai(dt){if(G.m=='play'&&(G.ln||laneF()>.001)){G.ai=[];G.at=8;return}const a=G.ai=G.ai||[];a.forEach(q=>{aiFireStep(q,dt);if(q.hold){if(!q.go){const s=q.stn;if(s.done&&G.r.st[G.ni-1]===s&&G.dw>0){q.gt=(q.gt||0)+dt;if(q.gt>5){q.go=1;q.v=0;autoHorn(hornRand(),800)}}}else q.v=Math.min(34,q.v+1.3*dt);if(!q.go)return}q.x+=q.d*q.v*dt*(1-.55*zoneF(q.x))});
  G.ai=a.filter(q=>q.x-G.pos<1800&&q.x-G.pos>-1800);G.at=(G.at||2)-dt;
  if(G.m!='play'){G.ai=[];return}
  /* kereta lain yang menunggu di Jalur 2 stasiun (berangkat setelah kita berhenti) */
@@ -752,7 +752,7 @@ function farTrack(gy,P,cam){const y2=gy-24*u,y3=gy-48*u,ra=(y,xa,xb,s)=>{x.fillS
  const sp=60*P;for(let i=Math.floor((cam-40)/sp);i<=Math.floor((cam+W)/sp)+1;i++){const px=i*sp-cam;x.fillStyle='#5d4037';x.fillRect(px-1.3*u,gy-92*u,2.6*u,62*u);x.fillRect(px-9*u,gy-90*u,18*u,2*u);x.strokeStyle='rgba(20,20,20,.7)';x.lineWidth=.9*u;[-7,0,7].forEach(d=>{x.beginPath();x.moveTo(px+d*u,gy-90*u);x.quadraticCurveTo(px+sp/2+d*u,gy-80*u,px+sp+d*u,gy-90*u);x.stroke()})}}
 /* kereta komputer: ~35% rangkaian akan terbakar 2-8 dtk setelah muncul, api menjalar dari lokomotif ke gerbong, padam setelah 30 dtk */
 function aiFireStep(q,dt){if(q.fz===undefined)q.fz=Math.random()<.35?2+Math.random()*6:-1;
- if(q.fz>=0&&!q.fb){q.fz-=dt;if(q.fz<0){q.fb=1;q.ft=0;if(Math.abs(q.x-G.pos)<1200){boom();autoHorn('loco',1800)}}}
+ if(q.fz>=0&&!q.fb){q.fz-=dt;if(q.fz<0){q.fb=1;q.ft=0;if(Math.abs(q.x-G.pos)<1200){boom();autoHorn(hornRand(),1800)}}}
  if(q.fb){q.ft+=dt;if(q.ft>30){q.fb=0;q.fz=-1}}}
 function aiTrains(gy,P,cam){const td=TD(),k=u*.92*TSC,y=gy-24*u;(G.ai||[]).forEach(q=>{const t=TR[q.i],px=q.x*P-cam,tl=trLen(t)*k;if(q.d>0?(px<-60||px-tl>W):(px+tl<-60||px>W+60))return;x.save();WPH=q.x;if(q.d<0){x.translate(px,0);x.scale(-1,1);drawTrain(x,t,0,y,k,td==2)}else drawTrain(x,t,px,y,k,td==2);if(q.fb){const d=q.d,uu=k/TSC;x.save();if(d<0){x.translate(px,0);x.scale(-1,1);kobongX(0,y,t,q.ft,30-q.ft,q.v,uu)}else kobongX(px,y,t,q.ft,30-q.ft,q.v,uu);x.restore()}WPH=null;x.restore()})}
 function village(gy,cam){const par=.3;for(let i=Math.floor((cam*par-40)/230);i<=Math.floor((cam*par+W)/230);i++){const r=hs(i+130);if(r<.3)continue;const X=i*230+r*80-cam*par,w2=(X+cam*par)*.007,y=gy-50*u-40*u*(.5+.3*Math.sin(w2*3)+.2*Math.sin(w2*7.1));
@@ -906,10 +906,10 @@ function setBk(v){v=Math.max(0,Math.min(5,v));if(v!=bk)tk();bk=v;if(v>0)th=0}
 function lever(id,mx,fn){const e=$(id);let d=0;const f=ev=>{const r=e.getBoundingClientRect();fn(Math.round(Math.max(0,Math.min(1,1-(ev.clientY-r.top)/r.height))*mx))};
  e.addEventListener('pointerdown',ev=>{ev.preventDefault();au();d=1;e.setPointerCapture(ev.pointerId);f(ev)});e.addEventListener('pointermove',ev=>{if(d)f(ev)});['pointerup','pointercancel'].forEach(n=>e.addEventListener(n,()=>d=0))}
 on('eg',startEng);on('gb',openSwap);on('gx',()=>{G.m='play';show(null)});on('ek',stopEng);lever('lt2',8,setTh);lever('lb',5,setBk);
-const hb=$('hrn'),eb=$('emg');hb.addEventListener('pointerdown',e=>{e.preventDefault();au();hornOn(TR[S.sel].k)});['pointerup','pointerleave','pointercancel'].forEach(n=>{hb.addEventListener(n,hornOff);eb.addEventListener(n,()=>em=0)});
+const hb=$('hrn'),eb=$('emg');hb.addEventListener('pointerdown',e=>{e.preventDefault();au();hornOn(hornFor(S.sel))});['pointerup','pointerleave','pointercancel'].forEach(n=>{hb.addEventListener(n,hornOff);eb.addEventListener(n,()=>em=0)});
 eb.addEventListener('pointerdown',e=>{e.preventDefault();au();em=1;th=0});
 addEventListener('keydown',e=>{au();K[e.code]=1;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(e.repeat)return;
- if(G.m=='play'){if(e.code=='ArrowUp'||e.code=='KeyW')setTh(th+1);if(e.code=='ArrowDown'||e.code=='KeyS')setTh(th-1);if(e.code=='ArrowRight'||e.code=='KeyD')setBk(bk+1);if(e.code=='ArrowLeft'||e.code=='KeyA')setBk(bk-1);if(e.code=='Space'){em=1;th=0}if(e.code=='KeyH')hornOn(TR[S.sel].k);if(e.code=='KeyE'){G.es?stopEng():startEng()}}
+ if(G.m=='play'){if(e.code=='ArrowUp'||e.code=='KeyW')setTh(th+1);if(e.code=='ArrowDown'||e.code=='KeyS')setTh(th-1);if(e.code=='ArrowRight'||e.code=='KeyD')setBk(bk+1);if(e.code=='ArrowLeft'||e.code=='KeyA')setBk(bk-1);if(e.code=='Space'){em=1;th=0}if(e.code=='KeyH')hornOn(hornFor(S.sel));if(e.code=='KeyE'){G.es?stopEng():startEng()}}
  if(e.code=='KeyP'||e.code=='Escape')pz()});
 addEventListener('keyup',e=>{K[e.code]=0;if(e.code=='Space')em=0;if(e.code=='KeyH')hornOff()});
 addEventListener('blur',()=>{K={};em=0;hornOff();if(G.m=='play')pz()});
@@ -922,11 +922,12 @@ function strucs(r,a,b){r.sc=r.sc||[];const tk=[];
  r.sg.forEach(s=>{if(s.x>=a-80&&s.x<=b+80)tk.push([s.x-60,s.x+60])});
  r.cx.forEach(c=>{if(c.x>=a&&c.x<=b)tk.push([c.x-200,c.x+200])});
  tk.push([a-100,a+350],[b-1100,b+100]);
- const n=3+(Math.random()*3|0);
- for(let i=0;i<n;i++)for(let k=0;k<14;k++){
-  const ty=Math.random()<.5?'tun':'brg',w=ty=='tun'?900+Math.random()*700:240+Math.random()*200,
+ /* terowongan dibanyakkan: 2 jembatan lebih dulu, lalu 7-9 percobaan terowongan (panjang 550-1250 m, jarak antar struktur 70 m) */
+ const ord=[];for(let i=0,nb=2;i<nb;i++)ord.push('brg');for(let i=0,nt=7+(Math.random()*3|0);i<nt;i++)ord.push('tun');
+ for(const ty of ord)for(let k=0;k<40;k++){
+  const w=ty=='tun'?550+Math.random()*700:240+Math.random()*200,
         x0=a+350+Math.random()*Math.max(1,b-a-1450-w);
-  if(x0+w>b-1100)continue;if(tk.some(q=>x0-40<q[1]&&x0+w+40>q[0]))continue;
+  if(x0+w>b-1100)continue;if(tk.some(q=>x0-70<q[1]&&x0+w+70>q[0]))continue;
   tk.push([x0,x0+w]);const ky=ty=='tun'?'ti':'bi';r[ky]=((r[ky]==null?-1:r[ky])+1+(Math.random()*5|0))%6;r.sc.push({k:ty,x:x0,w:Math.round(w),sy:r[ky],nm:(ty=='tun'?TNM:BNM)[Math.random()*8|0]});break}
  floodZones(r,a,b,tk)}
 
@@ -1204,8 +1205,8 @@ function stnAudio(){const near=(G.m=='play'||G.m=='menu')?zoneF(G.pos):0;crowd(n
  if(G.m!='play')return;const s=G.r.st[G.ni];if(!s||s.done)return;
  if(!s.a0&&G.pos<s.wx&&s.wx-G.pos<2200){s.a0=1;if(s.ln!=G.ln)toast('🔀 Wesel otomatis → JALUR '+(s.ln+1))}
  const d=s.x+SP-5-G.pos;if(d<0)return;const lead=Math.max(1000,G.v*10),tn=TR[S.sel].n;
- if(!s.a1&&d<lead){s.a1=1;chime();if(S.pa)say('Perhatian, perhatian. '+tn+locoSay()+' akan segera masuk di stasiun '+s.nm+', jalur '+(s.ln?'dua':'satu')+'. Mohon penumpang menunggu di belakang garis aman peron.')}
- if(!s.a2&&d<lead*.6){s.a2=1;bellSt();autoHorn(TR[S.sel].k,1500)}}
+ if(!s.a1&&d<lead){s.a1=1;if(!S.pa)chime();if(S.pa)say('Perhatian, perhatian. '+tn+locoSay()+' akan segera masuk di stasiun '+s.nm+', jalur '+(s.ln?'dua':'satu')+'. Mohon penumpang menunggu di belakang garis aman peron.')}
+ if(!s.a2&&d<lead*.6){s.a2=1;bellSt();autoHorn(hornFor(S.sel),1500)}}
 /* kalimat lokomotif untuk pengumuman suara, mis. ", ditarik lokomotif C C dua nol tiga nomor sembilan delapan dua dua," */
 function locoSay(){const t=TR[S.sel];if(t.k=='steam')return', ditarik lokomotif uap,';if(t.k!='loco'||!t.lv||!t.lv.no)return'';
  const dw=q=>q.replace(/\d/g,d=>['nol','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan'][d]+' ').replace(/\s+/g,' ').trim(),m=/^CC (\d{3})\s*(.*)$/.exec(t.lv.no);
@@ -1213,12 +1214,12 @@ function locoSay(){const t=TR[S.sel];if(t.k=='steam')return', ditarik lokomotif 
 function arriveCue(s){s.arr=tm;airRel();
  setTimeout(()=>{doorBeep(3);hiss(.5,.1,1800)},900);
  if(S.pa)setTimeout(()=>say(TR[S.sel].n+locoSay()+' tiba di stasiun '+s.nm+'. Periksa kembali barang bawaan Anda.'),700)}
-const dwellT=()=>S.pa&&S.snd&&window.speechSynthesis?11:3;
+const dwellT=()=>S.pa&&S.snd&&window.speechSynthesis?13:3;
 /* aba-aba PPKA lewat radio ke masinis menjelang berangkat, lalu peluit & "berangkat" */
 function ppkaCue(s){const tn=TR[S.sel].n,nx=G.r.st[G.ni]&&G.r.st[G.ni].nm||'stasiun berikutnya',k=Math.random()*3|0;
  sayPPKA(k==0?'Sinyal keluar aman. '+tn+locoSay()+' berangkat!':k==1?'PPKA '+s.nm+' ke masinis. Sinyal keluar aman. Silakan berangkat.':'Kereta api tujuan '+nx+', '+tn+locoSay()+' diberangkatkan. Hati-hati.',()=>{s.wr=1})}
 function departCue(){doorBeep(5)}
-function goHorn(){autoHorn(TR[S.sel].k,700)}
+function goHorn(){autoHorn(hornFor(S.sel),700)}
 
 /* loop */
 let last=0,dtA=.0167,hiN=0;
