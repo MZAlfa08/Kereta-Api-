@@ -116,7 +116,7 @@ function cxT(){const gy=H*.72,sp=(H-gy)+76*u;return{sp,tt:26*u/sp,tb:12*u/sp,tf:
 const hw=(y,gy)=>20*u+(y-gy+26*u)*.3;
 const nextCx=()=>G.r.cx&&G.r.cx.find(c=>!c.pass&&c.x>G.pos&&c.x-G.pos<Math.max(700,G.v*12));
 function traf(c,dt,T){
- if(Math.abs(c.x-G.pos)>600){c.veh=c.veh.filter(v=>v.hz);return}
+ const vs=visSpan();if(c.x<G.pos?G.pos-c.x>Math.max(600,vs.L):c.x-G.pos>Math.max(600,vs.R)){c.veh=c.veh.filter(v=>v.hz);return}
  c.sp-=dt;if(c.sp<=0&&c.veh.length<8){const l=Math.random()<.5?0:1;if(!c.veh.some(v=>v.l==l&&(l?v.t>.9:v.t<.1)))c.veh.push({l,t:l?1.05:-.04,ty:['mtr','mtr','car','ang','trk','bus'][Math.random()*6|0],col:PAL[Math.random()*7|0],v:.16+Math.random()*.1});c.sp=.4+Math.random()*1.2}
  c.veh.forEach(v=>{
   if(v.hz){if(v.st=='go'){v.t-=v.v*dt;if(v.t<=T.tt){v.t=T.tt;v.st='stall'}}else if(v.st=='flee')v.t+=v.v*1.6*dt;return}
@@ -705,8 +705,10 @@ function ai(dt){if(G.m=='play'&&(G.ln||laneF()>.001)){G.ai=[];G.at=8;return}cons
   else if(kd=='a'){x0=G.pos+800+L+Math.random()*300;v=Math.max(16,pv*.45+Math.random()*10)}
   else{x0=G.pos-380;v=Math.min(92,pv+14+Math.random()*14)}
   if(!G.ai.some(q=>Math.abs(q.x-x0)<500)){G.ai.push({x:x0,v,d,i});G.at=9+Math.random()*9}else G.at=1}}
-function traf2(dt){const a=G.tf=G.tf||[];a.forEach(v=>v.x+=v.v*dt);G.tf=a.filter(v=>v.x>G.pos-260&&v.x<G.pos+520);G.ts2=(G.ts2||0)-dt;
- if(G.ts2<=0&&G.tf.length<16){const l=Math.random()<.5?1:-1;G.tf.push({x:G.pos+140+Math.random()*300,v:l*(8+Math.random()*12),l,ty:['mtr','mtr','car','car','ang','trk','bus'][Math.random()*7|0],col:PAL[Math.random()*7|0]});G.ts2=Math.max(.25,1.2-G.v/80)*(.6+Math.random()*.8)}}
+/* jarak (meter) yang terlihat di layar ke kiri/kanan kereta, + margin di luar layar: kendaraan hanya dibuat/dihapus di luar layar */
+function visSpan(){const P=3.67*u*camScale(),hx=W*HXF;return{L:hx/P+110/P,R:(W-hx)/P+110/P}}
+function traf2(dt){const a=G.tf=G.tf||[],vs=visSpan();a.forEach(v=>v.x+=v.v*dt);G.tf=a.filter(v=>v.x>G.pos-vs.L-60&&v.x<G.pos+vs.R+60);G.ts2=(G.ts2||0)-dt;
+ if(G.ts2<=0&&G.tf.length<Math.max(16,Math.round((vs.L+vs.R)/22))){const l=Math.random()<.5?1:-1;G.tf.push({x:l>0?G.pos-vs.L-Math.random()*40:G.pos+vs.R+Math.random()*40,v:l*(8+Math.random()*12),l,ty:['mtr','mtr','car','car','ang','trk','bus'][Math.random()*7|0],col:PAL[Math.random()*7|0]});G.ts2=Math.max(.25,1.2-G.v/80)*(.6+Math.random()*.8)*Math.min(1,500/(vs.L+vs.R))}}
 function farTrack(gy,P,cam){const y2=gy-24*u,y3=gy-48*u,ra=(y,xa,xb,s)=>{x.fillStyle='#6b5d4a';x.fillRect(xa,y,xb-xa,4.5*u*s);x.fillStyle='#4e342e';for(let X=xa-((cam+xa)%(10*u));X<xb;X+=10*u)x.fillRect(X,y+1*u*s,5*u,2.6*u*s);x.fillStyle='#d5dde1';x.fillRect(xa,y,xb-xa,1.4*u)};
  x.fillStyle='rgba(60,50,38,.5)';x.fillRect(0,y2+3.5*u,W,3.2*u);ra(y2,0,W,1);
 
@@ -783,7 +785,7 @@ function endShear(cam,P,Ec){Ec=Ec||0;x=XM;const d=DPRv,cw=cv.width,ch=cv.height,
  x.setTransform(d,0,0,d,0,0)}
 /* kamera menyesuaikan panjang kereta: ekor kereta berhenti tepat di sisi kanan tuas REM (tidak lewat) */
 function camScale(){const hx=W*HXF,tl=trLw(TR[S.sel])*u;if(LIMX==null){const e=document.getElementById('lb');if(e){const r=e.getBoundingClientRect();if(r.width>0)LIMX=r.right+28}}
- const lim=LIMX==null?120:LIMX;return Math.max(.12,Math.min(1,(hx-lim)/tl))}
+ const lim=LIMX==null?120:LIMX;return Math.max(.12,Math.min(1,(hx-lim)*.92/tl))}
 /* kamera: moncong lokomotif maju mendekati tuas GAS (berhenti 14px sebelum tuas, tidak menembus) */
 function hxAuto(){const e=document.getElementById('lt2');if(e&&W>0){const r=e.getBoundingClientRect();if(r.width>0)return Math.max(.8,Math.min(.95,(r.left-14)/W))}return .8}
 function draw(){HXF=hxAuto();const u0=u;if(ck!=W+'|'+H+'|'+TD())buildCaches();u=u0*camScale();try{draw0()}finally{u=u0}}
