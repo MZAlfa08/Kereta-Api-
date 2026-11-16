@@ -1,4 +1,4 @@
-const $=id=>document.getElementById(id),cv=$('c'),XM=cv.getContext('2d',{alpha:false});let x=XM,OFFC=null,OFX=null,LIMX=null,QCAP=2,LNC=0,slowN=0;
+const $=id=>document.getElementById(id),cv=$('c'),XM=cv.getContext('2d',{alpha:false});let x=XM,OFFC=null,OFX=null,LIMX=null,QCAP=2,QMIN=1,LNC=0,slowN=0;
 let HXF=.8;const SP=720,TSC=1.18,LANEY=24,WLEN=90,
 TSTY=[{h:['#8fb56c','#5f8c49','#3a5834'],b:['#2e7d32','#3f9a3f'],bd:'#0d47a1',lamp:'#ffe9a8'},
  {h:['#7fae8c','#4f8a63','#2f5a45'],b:['#2f6f4a','#4c9a6a'],bd:'#1b5e20',lamp:'#ffe9a8'},
@@ -86,7 +86,7 @@ function envClock(dt){ENVT+=dt;const c=ENVT%(DAY_S*2),n=c<DAY_S-DUSK_S?0:c<DAY_S
  if(nw!==AWX){AWX=nw;if(S.wx==3&&G.m=='play')toast(nw==1?'🌧 Hujan turun (2 menit)':nw==2?'🌫 Kabut tebal (2 menit)':'🌤 Cuaca cerah')}}
 const DF=[.6,1,1.6],DN=['MUDAH','NORMAL','SULIT'],TN=['☀ SIANG','🌇 SORE','🌙 MALAM','🔄 OTOMATIS'],WN=['CERAH','HUJAN','BERKABUT','🔄 OTOMATIS'];
 let W,H,u,G={m:'menu',pos:0,v:10,r:{st:[],sg:[],cx:[]},pf:[],lp:0,lv:1,sc:0,sf:100,cg:0},tm=0,K={},th=0,bk=0,em=0,DPRv=1,ck="",REC=null,MIR=0,PPL=false,WPH=null,GK="",dtS=.016,SPR={};
-function rs(){const d=Math.max(1,Math.min((devicePixelRatio||1),QCAP,Math.sqrt(4.8e6/(innerWidth*innerHeight))));W=innerWidth;H=innerHeight;DPRv=d;cv.width=W*d;cv.height=H*d;x.setTransform(d,0,0,d,0,0);x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";u=Math.max(.5,Math.min(H/600,W/760));OFFC=null;LIMX=null}
+function rs(){const d=Math.max(QMIN,Math.min((devicePixelRatio||1),QCAP,Math.sqrt(3.4e6/(innerWidth*innerHeight))));W=innerWidth;H=innerHeight;DPRv=d;cv.width=W*d;cv.height=H*d;x.setTransform(d,0,0,d,0,0);x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";u=Math.max(.5,Math.min(H/600,W/760));OFFC=null;LIMX=null}
 addEventListener('resize',rs);rs();
 function toast(m){const e=$('toast');e.textContent=m;e.classList.remove('sh');void e.offsetWidth;e.classList.add('sh')}
 /* screens */
@@ -587,7 +587,8 @@ function coach(c,ty,xl,xr,gy,k,t,ng){const L=xr-xl,h=36*k,y0=gy-8*k-h,cx=(xl+xr)
  c.fillStyle='#6f7d85';[.28,.55,.78].forEach(q=>{c.beginPath();c.roundRect(xl+L*q-4*k,y0-5.5*k,8*k,3*k,1.4*k);c.fill()});
  const lx=xl+L*.16,ly2=y0+h*.77;c.fillStyle='#fff';c.beginPath();c.roundRect(lx,ly2,6*k,4*k,1*k);c.fill();c.fillStyle='#1565c0';c.fillRect(lx+.5*k,ly2+.5*k,2.8*k,3*k);c.fillStyle='#ff6f00';c.fillRect(lx+3.6*k,ly2+1*k,1.6*k,2*k);
   coachPolish(c,ty,xl,xr,gy,k);
- if(ty!='bag'){const nn=Math.round(xl/k),tx=(ty=='eks'?'K1 ':ty=='res'?'M1 ':'K3 ')+(10+(hs(nn*1.7)*89|0))+' '+(10+(hs(nn*3.1)*89|0)),px=xl+L*.7,py=y0+h*.86;c.font='bold '+3.3*k+'px sans-serif';c.textAlign='center';c.fillStyle='rgba(0,0,0,.45)';c.fillText(tx,px+.3*k,py+.3*k);c.fillStyle='#fff';c.fillText(tx,px,py)}
+ if(ty!='bag'){const nn=Math.round(xl/k),tx=(ty=='eks'?'K1 ':ty=='res'?'M1 ':'K3 ')+(10+(hs(nn*1.7)*89|0))+' '+(10+(hs(nn*3.1)*89|0)),px=xl+L*.8,py=y0+h*.86,T2=(txt,cxp,fs,st)=>{c.save();c.translate(cxp,0);c.scale(1/STF,1);c.font='bold '+fs*k+'px sans-serif';c.textAlign='center';c.lineJoin='round';if(st){c.strokeStyle='rgba(0,0,0,.6)';c.lineWidth=1.2*k;c.strokeText(txt,0,py)}else{c.fillStyle='rgba(0,0,0,.45)';c.fillText(txt,.3*k,py+.3*k)}c.fillStyle='#fff';c.fillText(txt,0,py);c.restore()};
+  T2(tx,px,3.3,0);const kn=(t.n||'').replace(/^KA /,'').toUpperCase().slice(0,22);if(kn)T2('KA '+kn,xl+L*.46,4.3,1)}
  bogie(c,xl+13*k,gy,k,2);bogie(c,xr-13*k,gy,k,2)}
 function car0(c,ty,xl,xr,gy,k,t,ng){
  const L=xr-xl,h=36*k,y0=gy-8*k-h,c1=t.c1,cb=t.cb||c1,c2=t.c2,c3=t.c3,cx=(xl+xr)/2,bg=(a,b)=>{bogie(c,xl+a*k,gy,k,2);bogie(c,xr-b*k,gy,k,2)};
@@ -641,7 +642,7 @@ function mkc(w,h,s){s=s||DPRv;const c=document.createElement('canvas');c.width=M
 function drawTrain(c,t,hx,gy,k,ng){
  if(c!==x||t.k=='steam'){drawTrain0(c,t,hx,gy,k,ng);return}
  const key=TR.indexOf(t)+(S.cons&&S.cons[TR.indexOf(t)]||'')+'|'+k.toFixed(3)+'|'+ng+'|'+DPRv,tl=trLen(t)*k,pad=40*k,w=tl+pad+8*k,h=70*k;let s=SPR[key];
- if(!s){if(Object.keys(SPR).length>9)SPR={};const[cv2,q]=mkc(w,h,DPRv*1.3);REC=[];MIR=0;drawTrain0(q,t,w-pad,h-4*k,k,ng);trShine(q,w,h,k,ng);s=SPR[key]={cv:cv2,wl:REC};REC=null;MIR=0}
+ if(!s){{const ks=Object.keys(SPR);if(ks.length>14)delete SPR[ks[0]]}const[cv2,q]=mkc(w,h,DPRv*1.3);REC=[];MIR=0;drawTrain0(q,t,w-pad,h-4*k,k,ng);trShine(q,w,h,k,ng);s=SPR[key]={cv:cv2,wl:REC};REC=null;MIR=0}
  const x0=hx-(w-pad),y0=gy-(h-4*k),ln=LNC&&c===x?q=>laneAtPos(G.pos-q/LNC)*LANEY*u:null;
  if(!ln||ln(0)==ln(tl)){const L0=ln?ln(0):0;c.drawImage(s.cv,x0,y0-L0,w,h);s.wl.forEach(p=>wheels(c,x0+p[0],gy-L0,k,p[1],p[2],p[3]))}
  else{const sc=s.cv.width/w,S=12;for(let sx=0;sx<w;sx+=S){const sw=Math.min(S,w-sx),L1=ln(hx-(x0+sx+sw/2));c.drawImage(s.cv,sx*sc,0,sw*sc,s.cv.height,x0+sx,y0-L1,sw+.6,h)}s.wl.forEach(p=>wheels(c,x0+p[0],gy-ln(hx-(x0+p[0])),k,p[1],p[2],p[3]))}}
@@ -816,7 +817,7 @@ function hillH(p){let f=1;for(let i=0;i<HZ.length;i++){const z=HZ[i],q=p<z[0]?z[
 const hillSlope=p=>(hillH(p+2)-hillH(p-2))/(4*3.67);
 /* lapisan dunia digambar di resolusi lebih rendah (OSC) lalu ditempel melengkung ke layar: jauh lebih ringan */
 let OSC=1;
-function beginShear(){OSC=Math.min(DPRv,2);const ow=Math.ceil(cv.width*OSC/DPRv),oh=Math.ceil(cv.height*OSC/DPRv);
+function beginShear(){OSC=Math.min(DPRv,1.25);const ow=Math.ceil(cv.width*OSC/DPRv),oh=Math.ceil(cv.height*OSC/DPRv);
  if(!OFFC||OFFC.width!=ow||OFFC.height!=oh){OFFC=document.createElement('canvas');OFFC.width=ow;OFFC.height=oh;OFX=OFFC.getContext('2d')}
  OFX.setTransform(1,0,0,1,0,0);OFX.clearRect(0,Math.max(0,Math.floor((H*.72-240*u)*OSC)),OFFC.width,OFFC.height);OFX.setTransform(OSC,0,0,OSC,0,0);OFX.imageSmoothingEnabled=true;OFX.imageSmoothingQuality='high';x=OFX}
 function endShear(cam,P,Ec){Ec=Ec||0;x=XM;const d=DPRv,cw=cv.width,ch=cv.height,r=OSC/d;
@@ -1197,20 +1198,24 @@ function stnAudio(){const near=(G.m=='play'||G.m=='menu')?zoneF(G.pos):0;crowd(n
  if(G.m!='play')return;const s=G.r.st[G.ni];if(!s||s.done)return;
  if(!s.a0&&G.pos<s.wx&&s.wx-G.pos<2200){s.a0=1;if(s.ln!=G.ln)toast('🔀 Wesel otomatis → JALUR '+(s.ln+1))}
  const d=s.x+SP-5-G.pos;if(d<0)return;const lead=Math.max(1000,G.v*10),tn=TR[S.sel].n;
- if(!s.a1&&d<lead){s.a1=1;chime();if(S.pa)say('Perhatian, perhatian. '+tn+' akan segera masuk di stasiun '+s.nm+', jalur '+(s.ln?'dua':'satu')+'. Mohon penumpang menunggu di belakang garis aman peron.')}
+ if(!s.a1&&d<lead){s.a1=1;chime();if(S.pa)say('Perhatian, perhatian. '+tn+locoSay()+' akan segera masuk di stasiun '+s.nm+', jalur '+(s.ln?'dua':'satu')+'. Mohon penumpang menunggu di belakang garis aman peron.')}
  if(!s.a2&&d<lead*.6){s.a2=1;bellSt();autoHorn(TR[S.sel].k,1500)}}
+/* kalimat lokomotif untuk pengumuman suara, mis. ", ditarik lokomotif C C dua nol tiga nomor sembilan delapan dua dua," */
+function locoSay(){const t=TR[S.sel];if(t.k=='steam')return', ditarik lokomotif uap,';if(t.k!='loco'||!t.lv||!t.lv.no)return'';
+ const dw=q=>q.replace(/\d/g,d=>['nol','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan'][d]+' ').replace(/\s+/g,' ').trim(),m=/^CC (\d{3})\s*(.*)$/.exec(t.lv.no);
+ return m?', ditarik lokomotif C C '+dw(m[1])+(m[2]?', nomor '+dw(m[2]):'')+',':''}
 function arriveCue(s){s.arr=tm;airRel();
  setTimeout(()=>{doorBeep(3);hiss(.5,.1,1800)},900);
- if(S.pa)setTimeout(()=>say(TR[S.sel].n+' tiba di stasiun '+s.nm+'. Periksa kembali barang bawaan Anda.'),700)}
+ if(S.pa)setTimeout(()=>say(TR[S.sel].n+locoSay()+' tiba di stasiun '+s.nm+'. Periksa kembali barang bawaan Anda.'),700)}
 const dwellT=()=>S.pa&&S.snd&&window.speechSynthesis?11:3;
 /* aba-aba PPKA lewat radio ke masinis menjelang berangkat, lalu peluit & "berangkat" */
 function ppkaCue(s){const tn=TR[S.sel].n,nx=G.r.st[G.ni]&&G.r.st[G.ni].nm||'stasiun berikutnya',k=Math.random()*3|0;
- sayPPKA(k==0?'Sinyal keluar aman. '+tn+', berangkat!':k==1?'PPKA '+s.nm+' ke masinis. Sinyal keluar aman. Silakan berangkat.':'Kereta api tujuan '+nx+' diberangkatkan. Hati-hati.',()=>{s.wr=1})}
+ sayPPKA(k==0?'Sinyal keluar aman. '+tn+locoSay()+' berangkat!':k==1?'PPKA '+s.nm+' ke masinis. Sinyal keluar aman. Silakan berangkat.':'Kereta api tujuan '+nx+', '+tn+locoSay()+' diberangkatkan. Hati-hati.',()=>{s.wr=1})}
 function departCue(){doorBeep(5)}
 function goHorn(){autoHorn(TR[S.sel].k,700)}
 
 /* loop */
-let last=0;function loop(ts){const raw=Math.min(.05,(ts-last)/1000||0);last=ts;dtS+=(raw-dtS)*.2;const dt=raw>.04?raw:dtS;if(G.m!='pause')tm+=dt;upd(dt);draw();if(G.m!='pause'){if(raw>.029)slowN++;else slowN=Math.max(0,slowN-2);if(slowN>40&&QCAP>1){QCAP=Math.max(1,QCAP-.25);slowN=0;ck='';rs()}}requestAnimationFrame(loop)}
+let last=0;function loop(ts){const raw=Math.min(.05,(ts-last)/1000||0);last=ts;dtS+=(raw-dtS)*.2;const dt=raw>.04?raw:dtS;if(G.m!='pause')tm+=dt;upd(dt);draw();if(G.m!='pause'){if(raw>.027)slowN++;else slowN=Math.max(0,slowN-2);if(slowN>14){slowN=0;if(QCAP>1){QCAP=Math.max(1,QCAP-.25);ck='';rs()}else if(QMIN>.7){QMIN=Math.max(.7,QMIN-.1);ck='';rs()}}}requestAnimationFrame(loop)}
 toMenu();requestAnimationFrame(loop);
 
 /* ---------- 2 JALUR PER STASIUN + WESEL (PINDAH JALUR) ----------
