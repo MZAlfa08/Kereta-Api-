@@ -232,6 +232,22 @@ Object.assign(CONS,{kls:R8('kls'),sgn:R8('sgn'),sun:R8('sun'),ung:R8('ung'),bsd:
 Object.assign(CP,{kls:2400,sgn:2500,sun:1300,ung:3000,bsd:1700,pnk:1200,blk:3600,tqa:1200,rtr:1800,tdb:2800,kyb:2800,kyc:2800,ksr:2600,mx1:4500,mx2:2400});
 Object.assign(CN,{kls:'Eksekutif Biru Malam',sgn:'Eksekutif Hijau Emas',sun:'Ekonomi Oranye Sunrise',ung:'Royal Ungu',bsd:'Bisnis Abu-Biru',pnk:'Ekonomi Sakura Pink',blk:'Black Gold Eksekutif',tqa:'Ekonomi Toska',rtr:'Retro Krem-Merah',tdb:'Kereta Tidur Hijau',kyb:'Wisata Kayu Biru',kyc:'Wisata Kayu Krem',ksr:'Eksekutif Biru + Restorasi',mx1:'Rangkaian Eksekutif Campur',mx2:'Rangkaian Ekonomi Warna-warni'});
 Object.assign(CD,{kls:'Eksekutif biru malam aksen emas',sgn:'Eksekutif hijau dengan garis emas',sun:'Ekonomi oranye cerah',ung:'Eksekutif ungu kerajaan',bsd:'Bisnis abu-abu dengan garis biru',pnk:'Ekonomi pink lembut',blk:'Eksekutif hitam dengan emas',tqa:'Ekonomi toska segar',rtr:'Gerbong retro krem-merah',tdb:'Kereta tidur hijau tua',kyb:'Gerbong kayu klasik biru laut',kyc:'Gerbong kayu klasik krem',ksr:'Eksekutif biru dengan gerbong restorasi',mx1:'Campuran 7 jenis gerbong eksekutif',mx2:'Campuran 8 jenis gerbong ekonomi/bisnis'});
+/* ===== RANGKAIAN PENUMPANG SESUAI KERETA: 13 gerbong, tiap gerbong berbeda (jenis, nuansa warna, garis & aksen) ===== */
+const HXC=(h,a)=>{if(!h||h[0]!='#')return '#888888';if(h.length==4)h='#'+h[1]+h[1]+h[2]+h[2]+h[3]+h[3];const n=parseInt(h.slice(1),16),f=a<0?0:255,q=Math.abs(a),m=v=>Math.round(v+(f-v)*q);return '#'+[m(n>>16),m(n>>8&255),m(n&255)].map(v=>v.toString(16).padStart(2,'0')).join('')};
+(function(){const NO=['cc','uap','tdr','bag'],ord=[];
+ TR.forEach((t,i)=>{if(!(t.k=='loco'))return;const f=(t.cars||[]).find(c=>!NO.includes(c));if(!f||FR.includes(f)||f=='kay')return;
+  const cb=t.cb||t.c1||'#f3f6f8',m1=t.c1||'#1565c0',m2=t.c2||m1,m3=t.c3||m2,exe=(f=='eks'||f=='bis'||f=='pan'||f=='res'),
+   seq=exe?['eks','eks','eks','res','eks','eks','eks','res','eks','eks','eks','eks','bag']:['eko','eko','eko','eks','eko','eko','res','eko','eko','eks','eko','eko','bag'],ids=[];
+  seq.forEach((b,j)=>{const id='x'+i+'_'+j;
+   if(b=='bag'){ids.push('bag');return}
+   const tone=((j*5)%7-3)*.07,body=HXC(cb,((j%3)-1)*.03),
+    c1=HXC([m1,m2,m3][j%3]==cb?m2:[m1,m2,m3][j%3],tone),c2=HXC([m2,m3,m1,m2][(j+1)%4],-tone),acc=['#ffffff',m3,'#ffd54f',m2,'#e0e0e0'][j%5];
+   PV[id]=[b,body,exe?m1==cb?m2:m1:c1,c2,acc];LEN[id]=66;ids.push(id)});
+  CONS['x'+i]=ids;ord.push('x'+i);CP['x'+i]=exe?3000:2200;CN['x'+i]='Seri '+t.n.replace(/^KA /,'');CD['x'+i]='13 gerbong berbeda-beda, warna sesuai '+t.n});
+ /* rangkaian kayu: 13 gerbong kayu berbeda warna */
+ const KW=['kay','kyh','kym','kyb','kyc'];CONS.kyx=[];for(let j=0;j<13;j++)CONS.kyx.push(KW[j%5]);CP.kyx=3200;CN.kyx='Wisata Kayu Aneka Warna';CD.kyx='13 gerbong kayu klasik dengan warna berbeda-beda';
+ /* gerbong yang cocok dengan kereta terpilih ditampilkan paling depan di toko */
+ window.SHOPORD=()=>{const sel='x'+S.sel,k=Object.keys(CONS);return k.sort((a,b)=>(b==sel)-(a==sel))}})();
 /* setiap rangkaian dibuat 14 unit (lokomotif + 13 gerbong): jenis gerbong pertama diperbanyak */
 const NCARS=14,P12={};
 function pad12(a){const r=a.slice();if(r.length>=NCARS)return r;const sk=['cc','uap','tdr','bh','ec','bag'],i=r.findIndex(q=>!sk.includes(q));if(i<0)return r;const ty=r[i];while(r.length<NCARS)r.splice(i,0,ty);return r}
@@ -243,7 +259,7 @@ const trLen=t=>carsOf(t).reduce((s,c)=>s+LEN[c]*fo(c)+3,0);
 function atSt(){return G.r.st.some(s=>G.pos>=s.x+5&&G.pos<=s.x+SP+20)}
 function canSwap(){const t=TR[S.sel];return G.m=='play'&&(t.k=='loco'||t.k=='steam')&&G.v<.5&&atSt()}
 function openSwap(){if(!canSwap()){toast('Berhenti di stasiun dulu (hanya lokomotif berasap)');return}G.m='swap';hornOff();const t=TR[S.sel],gg=$('gg');gg.innerHTML='';
- Object.keys(CONS).filter(cw).forEach(id=>{const d=document.createElement('div');d.className='cd';d.innerHTML='<canvas width="270" height="76"></canvas><b>'+CN[id]+'</b><small>'+(S.cons[S.sel]==id?'Sedang dipakai':CD[id])+'</small><button class="b sm bl">PILIH</button>';
+ SHOPORD().filter(cw).forEach(id=>{const d=document.createElement('div');d.className='cd';d.innerHTML='<canvas width="270" height="76"></canvas><b>'+CN[id]+'</b><small>'+(S.cons[S.sel]==id?'Sedang dipakai':CD[id])+'</small><button class="b sm bl">PILIH</button>';
   const c=d.querySelector('canvas').getContext('2d'),t2=Object.assign({},t,{pv:1,cars:t.k=='steam'?['uap','tdr',...CONS[id].slice(1)]:['cc',...CONS[id]]});
   c.fillStyle='#8d7b68';c.fillRect(0,68,270,8);c.fillStyle='#cfd8dc';c.fillRect(0,66,270,2);drawTrain(c,t2,236,66,Math.min(.55,235/trLen(t2)),0);
   d.querySelector('button').onclick=()=>{S.cons[S.sel]=id;sv();G.m='play';G.dw=Math.max(G.dw,2);show(null);toast('Gerbong diganti: '+CN[id])};gg.appendChild(d)});show('swap')}
@@ -571,6 +587,7 @@ function coach(c,ty,xl,xr,gy,k,t,ng){const L=xr-xl,h=36*k,y0=gy-8*k-h,cx=(xl+xr)
  c.fillStyle='#6f7d85';[.28,.55,.78].forEach(q=>{c.beginPath();c.roundRect(xl+L*q-4*k,y0-5.5*k,8*k,3*k,1.4*k);c.fill()});
  const lx=xl+L*.16,ly2=y0+h*.77;c.fillStyle='#fff';c.beginPath();c.roundRect(lx,ly2,6*k,4*k,1*k);c.fill();c.fillStyle='#1565c0';c.fillRect(lx+.5*k,ly2+.5*k,2.8*k,3*k);c.fillStyle='#ff6f00';c.fillRect(lx+3.6*k,ly2+1*k,1.6*k,2*k);
   coachPolish(c,ty,xl,xr,gy,k);
+ if(ty!='bag'){const nn=Math.round(xl/k),tx=(ty=='eks'?'K1 ':ty=='res'?'M1 ':'K3 ')+(10+(hs(nn*1.7)*89|0))+' '+(10+(hs(nn*3.1)*89|0)),px=xl+L*.7,py=y0+h*.86;c.font='bold '+3.3*k+'px sans-serif';c.textAlign='center';c.fillStyle='rgba(0,0,0,.45)';c.fillText(tx,px+.3*k,py+.3*k);c.fillStyle='#fff';c.fillText(tx,px,py)}
  bogie(c,xl+13*k,gy,k,2);bogie(c,xr-13*k,gy,k,2)}
 function car0(c,ty,xl,xr,gy,k,t,ng){
  const L=xr-xl,h=36*k,y0=gy-8*k-h,c1=t.c1,cb=t.cb||c1,c2=t.c2,c3=t.c3,cx=(xl+xr)/2,bg=(a,b)=>{bogie(c,xl+a*k,gy,k,2);bogie(c,xr-b*k,gy,k,2)};
@@ -865,7 +882,7 @@ function shop(){$('sc2').textContent=S.coin;$('tb1').className='b sm '+(ST?'bl':
   bt.textContent=o?(S.sel==i?'✔ DIPAKAI':'PILIH'):(S.coin>=t.p?'BELI 🪙'+t.p:'🔒 🪙'+t.p);bt.className='b sm '+(o?(S.sel==i?'g':'bl'):(S.coin>=t.p?'y':''));bt.disabled=!o&&S.coin<t.p;
   bt.onclick=()=>{au();if(!o){S.coin-=t.p;S.own.push(i);ding()}S.sel=i;sv();shop()}});
  else{const lk=TR[S.sel],can=lk.k=='loco'||lk.k=='steam',lt=can?lk:TR[0];
-  Object.keys(CONS).forEach(id=>{const o=cw(id),pr=CP[id],st=lt.k=='steam',t2=Object.assign({},lt,{pv:1,cars:st?['uap','tdr',...CONS[id].slice(1)]:['cc',...CONS[id]]}),use=o&&can&&S.cons[S.sel]==id,
+  SHOPORD().forEach(id=>{const o=cw(id),pr=CP[id],st=lt.k=='steam',t2=Object.assign({},lt,{pv:1,cars:st?['uap','tdr',...CONS[id].slice(1)]:['cc',...CONS[id]]}),use=o&&can&&S.cons[S.sel]==id,
    bt=card(t2,CN[id],CD[id]+(o?' • dimiliki':''),'');
    bt.textContent=o?(can?(use?'✔ DIPAKAI':'PAKAI'):'DIMILIKI'):(S.coin>=pr?'BELI 🪙'+pr:'🔒 🪙'+pr);bt.className='b sm '+(use?'g':o?'bl':S.coin>=pr?'y':'');bt.disabled=(!o&&S.coin<pr)||(o&&!can);
    bt.onclick=()=>{au();if(!o){S.coin-=pr;S.cw.push(id);ding()}if(can)S.cons[S.sel]=id;sv();shop()}})}}
