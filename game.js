@@ -88,7 +88,7 @@ const TR=[
 const SPD=2.5,lq=v=>Math.round(v*SPD/5)*5;TR.forEach(t=>{t.v=Math.min(800,Math.round(t.v*SPD));t.a*=SPD;t.b*=SPD});
 let S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1,map:'jawa',maps:['jawa']};
 try{Object.assign(S,JSON.parse(localStorage.getItem('kn1')||'{}'))}catch(e){}
-if(S.pa==null)S.pa=1;if(!S.au2){S.au2=1;S.tod=3;S.wx=3}if(!MAPS[S.map])S.map='jawa';S.maps=(S.maps||['jawa']).filter(k=>MAPS[k]);if(!S.maps.includes('jawa'))S.maps.push('jawa');if(!S.maps.includes(S.map))S.map='jawa';S.cons=S.cons||{};S.cw=S.cw||['eko',...Object.values(S.cons)];S.own=S.own.filter(i=>i<TR.length);if(!S.own.includes(0))S.own.push(0);if(!TR[S.sel]||!S.own.includes(S.sel))S.sel=0;
+if(S.pa==null)S.pa=1;if(S.dt==null)S.dt=0;if(!S.au2){S.au2=1;S.tod=3;S.wx=3}if(!MAPS[S.map])S.map='jawa';S.maps=(S.maps||['jawa']).filter(k=>MAPS[k]);if(!S.maps.includes('jawa'))S.maps.push('jawa');if(!S.maps.includes(S.map))S.map='jawa';S.cons=S.cons||{};S.cw=S.cw||['eko',...Object.values(S.cons)];S.own=S.own.filter(i=>i<TR.length);if(!S.own.includes(0))S.own.push(0);if(!TR[S.sel]||!S.own.includes(S.sel))S.sel=0;
 const sv=()=>{try{localStorage.setItem('kn1',JSON.stringify(S))}catch(e){}};
 
 /* ===== SIKLUS OTOMATIS WAKTU & CUACA =====
@@ -115,7 +115,7 @@ function hud(on){for(const k in HC)delete HC[k];HXV=null;LIMX=null;WARM=45;$('hu
 function toMenu(){hornOff();sayStop();S.hi=Math.max(S.hi,Math.floor(G.sc||0));sv();G={m:'menu',pos:0,v:10,r:{st:[],sg:[],cx:[]},pf:[],lp:0,lv:1,sc:0,sf:100,cg:0};hud(0);$('mi').textContent='🪙 '+S.coin+'  •  🏆 Skor Tertinggi '+S.hi+'  •  🗺 '+MD().nm;show('menu')}
 /* level */
 const STD=8000; /* jarak antar stasiun (meter) */
-function more(r,n){const t=TR[S.sel],sc=Math.max(1,t.v/200),L=[90,120,160,200,250,300,350].map(lq);
+function more(r,n){const t=effT(TR[S.sel]),sc=Math.max(1,t.v/200),L=[90,120,160,200,250,300,350].map(lq);
  for(let k=0;k<n;k++){const i=r.st.length,p=r.st[i-1],mx=Math.min(1+Math.floor(i/3),6),pk=()=>L[Math.floor(Math.random()*(mx+1))],b=p.x+STD,a=p.x+SP+40;
   r.st.push({x:b,nm:MD().st[i%MD().st.length],done:0,sty:Math.random()*5|0,pal:Math.random()*5|0,ln:Math.random()<.5?1:0,wx:b-450,ex:b+SP+350});
   /* rambu batas kecepatan: diurutkan menurut posisi (limAt memakai yang terakhir di array) */
@@ -126,7 +126,7 @@ function more(r,n){const t=TR[S.sel],sc=Math.max(1,t.v/200),L=[90,120,160,200,25
   for(const fr of[.2,.45,.7]){const x1=a+(b-a)*fr+(Math.random()-.5)*500;if(x1>a+500&&x1<b-1000*sc-300&&Math.random()<.8)r.cx.push({x:x1,ck:Math.random()<.55,a:0,veh:[],sp:0,hn:0,hh:0,w:0,pass:0})}
   strucs(r,a,b)}}
 function gen(){const r={st:[{x:0,nm:MD().st[0],done:1,sty:0,pal:0,ln:0,wx:-1e9,ex:-1e9}],sg:[],cx:[]};more(r,3);return r}
-function newLevel(){HILL=34*MD().hill;G.r=gen();G.pos=SP;G.v=0;G.ni=1;G.dw=0;G.ts=0;th=bk=em=0;G.dg=0;G.es=0;G.et=0;G.kb=0;G.sq=[];G.lt=0;G.lh=0;G.m='play';G.ln=0;G.wl=0;G.lb=0;G.lx=null;G.wp=null;G.bm=null;G.fl=null;G.pf=[];show(null);hud(1);toast(MD().nm+' • Tekan MULAI MESIN (E) → '+G.r.st[1].nm+' (JALUR '+(G.r.st[1].ln+1)+')')}
+function newLevel(){HILL=34*MD().hill;G.r=gen();G.pos=SP;G.v=0;G.ni=1;G.dw=0;G.ts=0;th=bk=em=0;G.dg=0;G.es=0;G.et=0;G.kb=0;G.sq=[];G.lt=0;G.lh=0;G.m='play';G.ln=0;G.wl=0;G.lb=0;G.lx=null;G.wp=null;G.bm=null;G.fl=null;G.pf=[];show(null);hud(1);toast(MD().nm+' • Tekan MULAI MESIN (E) → '+G.r.st[1].nm+' (JALUR '+(G.r.st[1].ln+1)+')'+(dtOn(TR[S.sel])?' • 🚂🚂 DOUBLE TRAKSI':''))}
 function startGame(){G={m:'play',pos:0,v:0,lv:1,sc:0,cg:0,pf:[],lp:0};newLevel()}
 const limAt=p=>{let l=lq(90);for(const s of G.r.sg)if(s.x<=p)l=s.l;return l};
 function pz(){if(G.m=='play'){G.m='pause';hornOff();sayStop();sv();show('pause')}else if(G.m=='pause'){G.m='play';show(null)}}
@@ -184,18 +184,18 @@ function phys(dt,t,mv,N){const kb=G.kb>0,mve=mv*(kb?1.25:1);
 function startEng(){if(G.m!='play'||G.es)return;G.es=1;G.et=2.2;crank();toast('Menyalakan mesin…');for(let i=0;i<4;i++)G.pf.push({x:G.pos-(TR[S.sel].k=='steam'?2.3:10.4)+i*.4,a:-i*.15,cl:'70,70,70',by:TR[S.sel].k=='steam'?50:47})}
 function stopEng(){if(G.m!='play'||G.es!=2)return;if(G.v>1.5){toast('Hentikan kereta dulu!');return}th=0;G.es=0;G.kb=0;engStop();toast('Mesin dimatikan')}
 function upd(dt){
- const t=TR[S.sel],mv=t.v/3.6,pl=G.m=='play',run=G.es==2,N=(run&&!(bk>0||em))?th:0;
+ const t=TR[S.sel],mv=effT(t).v/3.6,pl=G.m=='play',run=G.es==2,N=(run&&!(bk>0||em))?th:0;
  if(pl&&G.es==1){G.et-=dt;if(G.et<=0){G.es=2;toast('Mesin hidup ✔')}}
  if(G.kb>0){G.kb-=dt;if(G.kb<=0){G.kb=0;toast('Kobong padam')}}
  if(pl&&run){if(th!==G.lt){G.lt=th;G.lh=0}else{G.lh+=dt;if(G.lh>.3&&G.sq[G.sq.length-1]!==th){G.sq.push(th);G.sqt=tm}}
   if(G.sq.length&&tm-G.sqt>10)G.sq=[];if(G.sq.slice(-4).join('')=='2418'){G.sq=[];G.kb=10;boom();toast('🔥 KOBONG!')}}
  const sy=t.k=='steam',dz=t.k=='loco';
- if((sy||dz)&&(G.m=='menu'||(pl&&run))&&tm-G.lp>(sy?.09:.13)&&(sy?(G.v>0||G.m=='menu'):(N>0||G.m=='menu'))){G.lp=tm;G.pf.push(sy?{x:G.pos-2.3,a:0}:{x:G.pos-10.4,a:0,cl:'60,60,60',by:47})}
+ if((sy||dz)&&(G.m=='menu'||(pl&&run))&&tm-G.lp>(sy?.09:.13)&&(sy?(G.v>0||G.m=='menu'):(N>0||G.m=='menu'))){G.lp=tm;G.pf.push(sy?{x:G.pos-2.3,a:0}:{x:G.pos-10.4,a:0,cl:'60,60,60',by:47});if(dtOn(t)){const o=dtOffM(t);G.pf.push(sy?{x:G.pos-2.3-o,a:0}:{x:G.pos-10.4-o,a:0,cl:'60,60,60',by:47})}}
  G.pf.forEach(p=>p.a+=dt);G.pf=G.pf.filter(p=>p.a<2);
  if(G.m=='menu'||G.m=='play'){ai(dt);traf2(dt)}
  if(pl)envState(trLw(t)/3.67);else{TUN*=.9;BRG*=.9}
  envClock(dt);stnAudio();
- if(G.m=='menu'){G.pos+=25*dt;G.v=25}else if(pl&&!phys(dt,t,mv,N))return;
+ if(G.m=='menu'){G.pos+=25*dt;G.v=25}else if(pl&&!phys(dt,effT(t),mv,N))return;
  if(G.m=='menu'||pl){G.cd=(G.cd||0)+G.v*dt;if(G.cd>=12){G.cd-=12;clack(G.v/mv)}if(sy&&(run||G.m=='menu')){G.cs=(G.cs||0)+G.v*dt;if(G.cs>=4){G.cs-=4;chuff(G.v/mv)}}}
  const esv=G.m=='menu'?1:G.es==2?(G.kb>0?1.7:1):G.es==1?Math.min(1,Math.max(0,(2.2-G.et)/2.2)):0;
  eng(G.m=='menu'||pl,G.v/mv,N/8,em?1.4:bk/5,t.k,esv)}
@@ -271,8 +271,8 @@ const HXC=(h,a)=>{if(!h||h[0]!='#')return '#888888';if(h.length==4)h='#'+h[1]+h[
 /* setiap rangkaian dibuat 14 unit (lokomotif + 13 gerbong): jenis gerbong pertama diperbanyak */
 const NCARS=14,P12={};
 function pad12(a){const r=a.slice();if(r.length>=NCARS)return r;const sk=['cc','uap','tdr','bh','ec','bag'],i=r.findIndex(q=>!sk.includes(q));if(i<0)return r;const ty=r[i];while(r.length<NCARS)r.splice(i,0,ty);return r}
-function carsOf(t){if(t.pv)return t.cars;const i=TR.indexOf(t),c=S.cons&&S.cons[i],ok=c&&CONS[c]&&(t.k=='loco'||t.k=='steam'),key=i+'|'+(ok?c:'');
- return P12[key]||(P12[key]=pad12(ok?(t.k=='steam'?['uap','tdr',...CONS[c].slice(1)]:['cc',...CONS[c]]):t.cars))}
+function carsOf(t){if(t.pv)return t.cars;const i=TR.indexOf(t),c=S.cons&&S.cons[i],ok=c&&CONS[c]&&(t.k=='loco'||t.k=='steam'),key=i+'|'+(ok?c:'')+(dtOn(t)?'|D':'');
+ return P12[key]||(P12[key]=dtAdd(t,pad12(ok?(t.k=='steam'?['uap','tdr',...CONS[c].slice(1)]:['cc',...CONS[c]]):t.cars)))}
 /* pelebaran badan lokomotif & gerbong (1 = ukuran asli); lokomotif uap tidak dilebarkan */
 const STRF=2,fo=ty=>ty=='uap'||ty=='tdr'?1:ty=='cc'?2.2:STRF;let STX=0,STF=1,BDK=0; /* BDK=1: bogie gelap (CC 203 / CC 206 sesuai gambar) */
 const trLen=t=>carsOf(t).reduce((s,c)=>s+LEN[c]*fo(c)+3,0);
@@ -661,7 +661,7 @@ function mkc(w,h,s){s=s||DPRv;const c=document.createElement('canvas');c.width=M
 /* kereta digambar sekali ke sprite, lalu ditempel tiap frame (roda tetap berputar) */
 function drawTrain(c,t,hx,gy,k,ng){
  if(c!==x||t.k=='steam'){drawTrain0(c,t,hx,gy,k,ng);return}
- const key=TR.indexOf(t)+(S.cons&&S.cons[TR.indexOf(t)]||'')+'|'+k.toFixed(3)+'|'+ng+'|'+DPRv,tl=trLen(t)*k,pad=40*k,w=tl+pad+8*k,h=70*k;let s=SPR[key];
+ const key=TR.indexOf(t)+(S.cons&&S.cons[TR.indexOf(t)]||'')+(dtOn(t)?'D':'')+'|'+k.toFixed(3)+'|'+ng+'|'+DPRv,tl=trLen(t)*k,pad=40*k,w=tl+pad+8*k,h=70*k;let s=SPR[key];
  if(s){delete SPR[key];SPR[key]=s}
  if(!s){{const ks=Object.keys(SPR);if(ks.length>22)delete SPR[ks[0]]}const[cv2,q]=mkc(w,h,DPRv*1.3);REC=[];MIR=0;drawTrain0(q,t,w-pad,h-4*k,k,ng);trShine(q,w,h,k,ng);s=SPR[key]={cv:cv2,wl:REC};REC=null;MIR=0}
  const x0=hx-(w-pad),y0=gy-(h-4*k),ln=LNC&&c===x?q=>laneAtPos(G.pos-q/LNC)*LANEY*u:null;
@@ -680,7 +680,7 @@ function drawTrain1(c,t,hx,gy,k,ng){
  const cr=carsOf(t),n=cr.length,tl=trLen(t)*k;let xr=hx;
  c.save();c.translate(hx-tl/2,gy+1.5*k);c.scale(1,.022);{const sg=c.createRadialGradient(0,0,0,0,0,tl/2);sg.addColorStop(0,'rgba(0,0,0,.5)');sg.addColorStop(.7,'rgba(0,0,0,.3)');sg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=sg;c.fillRect(-tl/2,-tl/2,tl,tl)}c.restore();
  cr.forEach((ty,i)=>{const LNf=LNC&&c===x?laneAtPos(G.pos-(hx-(xr-LEN[ty]*k/2))/LNC):0;if(LNf>0){c.save();c.translate(0,-LNf*LANEY*u)}const L=LEN[ty]*k,xl=xr-L,mir=i>0&&(ty=='ec'||ty=='bh'),F=fo(ty),pv=mir?xl:xr,xl2=xr-L*F;STX=pv;STF=F;
-  MIR=mir?xl+xr:0;c.save();if(mir){c.translate(xl+xr,0);c.scale(-1,1)}c.translate(pv,0);c.scale(F,1);c.translate(-pv,0);PPL=!(ty=="cc"||ty=="bag"||ty=="uap"||ty=="tdr"||FR.includes(ty));car(c,ty,xl,xr,gy,k,t,ng);detail(c,ty,xl,xr,gy,k,t,ng,i==0);c.restore();STF=1;if(ty!="cc"&&ty!="uap"&&ty!="tdr"&&!FR.includes(ty)){c.fillStyle="rgba(255,255,255,.12)";c.fillRect(xl2+4*k,gy-43*k,xr-xl2-8*k,2*k)}
+  MIR=mir?xl+xr:0;c.save();if(mir){c.translate(xl+xr,0);c.scale(-1,1)}c.translate(pv,0);c.scale(F,1);c.translate(-pv,0);PPL=!(ty=="cc"||ty=="bag"||ty=="uap"||ty=="tdr"||FR.includes(ty));const _no=dtNo(t,i,ty);car(c,ty,xl,xr,gy,k,t,ng);detail(c,ty,xl,xr,gy,k,t,ng,i==0);if(_no!=null)t.lv.no=_no;c.restore();STF=1;if(ty!="cc"&&ty!="uap"&&ty!="tdr"&&!FR.includes(ty)){c.fillStyle="rgba(255,255,255,.12)";c.fillRect(xl2+4*k,gy-43*k,xr-xl2-8*k,2*k)}
   if(i<n-1){c.fillStyle='#1b1b1b';c.fillRect(xl2-3*k,gy-16*k,3*k,3*k);if(ty!='cc'&&ty!='uap'&&ty!='tdr'&&!FR.includes(ty)){c.fillStyle='#151515';c.fillRect(xl2-3*k,gy-40*k,3*k,28*k);c.fillStyle='rgba(255,255,255,.12)';c.fillRect(xl2-2*k,gy-39*k,.5*k,26*k);c.fillRect(xl2-1*k,gy-39*k,.5*k,26*k)}}
   xr=xl2-3*k;if(LNf>0)c.restore()})}
 function ly(par,base,amp,f,col,tri,gy,cam){const lg=x.createLinearGradient(0,gy-(base+amp)*u,0,gy);lg.addColorStop(0,sh(col,.28));lg.addColorStop(1,sh(col,-.08));x.fillStyle=lg;x.beginPath();x.moveTo(0,H);
@@ -710,7 +710,7 @@ function stFront(s,px,gy,P,cam){const w=SP*P;if(px>W||px+w<-50)return;
 const SK=[['#2e9bff','#bfe9ff','#fff3cf'],['#4a2a7a','#ff6f61','#ffd58a'],['#040a22','#16286b','#3a58a8']];
 const puff=(px,py,r,a,cl)=>{const g=x.createRadialGradient(px,py,0,px,py,r);const q2=cl||'255,255,255';g.addColorStop(0,'rgba('+q2+','+a+')');g.addColorStop(1,'rgba('+q2+',0)');x.fillStyle=g;x.beginPath();x.arc(px,py,r,0,7);x.fill()};
 let sm=0;
-function gauge(t){const kk=Math.round(sm*2)+"|"+Math.round(G.v*3.6)+"|"+limAt(G.pos)+"|"+S.sel;if(kk==GK)return;GK=kk;const c=$('gauge').getContext('2d'),mx=Math.ceil(t.v/50)*50,L=Math.min(limAt(G.pos),mx),a0=Math.PI*.75,ang=v=>a0+Math.PI*1.5*Math.min(1,v/mx),P=(a,r)=>[130+Math.cos(a)*r,130+Math.sin(a)*r];
+function gauge(t){const kk=Math.round(sm*2)+"|"+Math.round(G.v*3.6)+"|"+limAt(G.pos)+"|"+S.sel+"|"+(S.dt|0);if(kk==GK)return;GK=kk;const c=$('gauge').getContext('2d'),mx=Math.ceil(t.v/50)*50,L=Math.min(limAt(G.pos),mx),a0=Math.PI*.75,ang=v=>a0+Math.PI*1.5*Math.min(1,v/mx),P=(a,r)=>[130+Math.cos(a)*r,130+Math.sin(a)*r];
  c.clearRect(0,0,260,260);let g=c.createRadialGradient(130,120,10,130,130,125);g.addColorStop(0,'#2b3d5a');g.addColorStop(1,'#0a1222');c.fillStyle=g;c.beginPath();c.arc(130,130,122,0,7);c.fill();c.lineWidth=5;c.strokeStyle='#b0bec5';c.stroke();
  c.lineWidth=9;c.strokeStyle='#43d66f';c.beginPath();c.arc(130,130,100,ang(0),ang(L));c.stroke();c.strokeStyle='#ff5252';c.beginPath();c.arc(130,130,100,ang(L),ang(mx));c.stroke();
  c.textAlign='center';c.textBaseline='middle';
@@ -893,7 +893,7 @@ function draw0(){
  if(G.m=='play'||G.m=='pause'){sm+=(G.v*3.6-sm)*.2;hT('sc',Math.floor(G.sc));hT('cn',S.coin);
   hT('lim',limAt(G.pos));hC('lim','ov',G.ov);const tl=Math.floor(G.ts||0);hT('tl','⏱ '+Math.floor(tl/60)+':'+String(tl%60).padStart(2,'0'));
   const s=G.r.st[G.ni];{const cw=nextCx(),ss=s?'🚉 '+s.nm+' (JALUR '+((s.ln|0)+1)+') — '+Math.max(0,Math.round(s.x+SP-5-G.pos))+' m':'🚉 Selesai!';hT('nx',cw?'🚧 Perlintasan '+Math.round(cw.x-G.pos)+' m'+(cw.hn?' ✔':' — tahan KLAKSON!'):ss)}
-  hT('tt','GAS N'+th+(G.es==2?'':G.es==1?' (starter…)':' (mesin mati)'));hP('eg','disabled',G.es!=0);hP('gb','disabled',!canSwap());hS('gb','display',(t.k=='loco'||t.k=='steam')?'':'none');hP('ek','disabled',G.es!=2);hS('lt2','opacity',G.es==2?1:.4);hC('kobong','on',G.kb>0);if(G.kb>0)hT('kobong','🔥 KOBONG '+Math.ceil(G.kb)+' dtk');hT('tb',em?'DARURAT':'REM B'+bk);hS('kt','bottom',th/8*100+'%');hS('kb','bottom',(em?1:bk/5)*100+'%');gauge(t)}}
+  hT('tt','GAS N'+th+(G.es==2?'':G.es==1?' (starter…)':' (mesin mati)')+(dtOn(t)?' • 🚂🚂 2 LOKO':''));hP('eg','disabled',G.es!=0);hP('gb','disabled',!canSwap());hS('gb','display',(t.k=='loco'||t.k=='steam')?'':'none');hP('ek','disabled',G.es!=2);hS('lt2','opacity',G.es==2?1:.4);hC('kobong','on',G.kb>0);if(G.kb>0)hT('kobong','🔥 KOBONG '+Math.ceil(G.kb)+' dtk');hT('tb',em?'DARURAT':'REM B'+bk);hS('kt','bottom',th/8*100+'%');hS('kb','bottom',(em?1:bk/5)*100+'%');gauge(effT(t))}}
 /* shop & settings */
 const bar=(l,f)=>`<div class="st"><span>${l}</span><i><u style="width:${Math.round(Math.min(1,f)*100)}%"></u></i></div>`;
 let ST=0;
@@ -918,12 +918,12 @@ function shop(){$('sc2').textContent=S.coin;$('tb1').className='b sm '+(ST==0?'g
    bt=card(t2,CN[id],CD[id]+(o?' • dimiliki':''),'');
    bt.textContent=o?(can?(use?'✔ DIPAKAI':'PAKAI'):'DIMILIKI'):(S.coin>=pr?'BELI 🪙'+pr:'🔒 🪙'+pr);bt.className='b sm '+(use?'g':o?'bl':S.coin>=pr?'y':'');bt.disabled=(!o&&S.coin<pr)||(o&&!can);
    bt.onclick=()=>{au();if(!o){S.coin-=pr;S.cw.push(id);ding()}if(can)S.cons[S.sel]=id;sv();shop()}})}}
-function sets(){$('s1').textContent='🔊 Suara: '+(S.snd?'NYALA':'MATI');$('s2').textContent='🎯 Kesulitan: '+DN[S.df];$('s3').textContent='🕒 Waktu: '+TN[S.tod];$('s6').textContent='🌦 Cuaca: '+WN[S.wx||0];$('s7').textContent='📢 Pengumuman stasiun: '+(S.pa?'NYALA':'MATI')}
+function sets(){$('s1').textContent='🔊 Suara: '+(S.snd?'NYALA':'MATI');$('s2').textContent='🎯 Kesulitan: '+DN[S.df];$('s3').textContent='🕒 Waktu: '+TN[S.tod];$('s6').textContent='🌦 Cuaca: '+WN[S.wx||0];$('s7').textContent='📢 Pengumuman stasiun: '+(S.pa?'NYALA':'MATI');const e8=$('s8');if(e8)e8.textContent='🚂🚂 Double Traksi (2 loko): '+(S.dt?'NYALA':'MATI')}
 const on=(id,f)=>$(id).onclick=()=>{au();f()};
 $('tb1').onclick=()=>{au();ST=0;shop()};$('tb2').onclick=()=>{au();ST=1;shop()};$('tb3').onclick=()=>{au();ST=2;shop()};
 on('bm',startGame);on('bt',()=>{shop();show('shop')});on('bs',()=>{sets();show('set')});on('sb1',toMenu);on('s5',toMenu);
-on('s1',()=>{S.snd^=1;sv();sets();ding()});on('s2',()=>{S.df=(S.df+1)%3;sv();sets()});on('s3',()=>{S.tod=(S.tod+1)%4;sv();sets()});on('s6',()=>{S.wx=((S.wx||0)+1)%4;sv();sets()});on('s7',()=>{S.pa^=1;if(!S.pa)sayStop();sv();sets();ding()});
-on('s4',()=>{if(confirm('Hapus semua koin, kereta, dan skor tertinggi?')){S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1,cons:{},cw:['eko'],map:'jawa',maps:['jawa']};sv();sets()}});
+on('s1',()=>{S.snd^=1;sv();sets();ding()});on('s2',()=>{S.df=(S.df+1)%3;sv();sets()});on('s3',()=>{S.tod=(S.tod+1)%4;sv();sets()});on('s6',()=>{S.wx=((S.wx||0)+1)%4;sv();sets()});on('s7',()=>{S.pa^=1;if(!S.pa)sayStop();sv();sets();ding()});if($('s8'))on('s8',()=>{S.dt^=1;sv();sets();ding()});
+on('s4',()=>{if(confirm('Hapus semua koin, kereta, dan skor tertinggi?')){S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1,dt:0,cons:{},cw:['eko'],map:'jawa',maps:['jawa']};sv();sets()}});
 on('bp',pz);on('br',pz);on('bq',toMenu);
 /* kontrol: tuas gas (notch 0-8) dan tuas rem (0-5) seperti kereta asli */
 function setTh(v){v=Math.max(0,Math.min(8,v));if(G.m=='play'&&G.es!=2&&v>0){if(tm-(G.nt||0)>1.5){G.nt=tm;toast('Nyalakan mesin dulu! (tombol E)')}return}if(v!=th)tk();th=v;if(v>0){bk=0;em=0}}
@@ -1504,3 +1504,13 @@ function townBlock(X,by,r,i,td){const L=MLOOK(),k=u;
 function swampLife(gy,cam){const k=u;for(let i=Math.floor((cam*.9-90)/110);i<=Math.floor((cam*.9+W)/110);i++){const r=hs(i+400);if(r<.25)continue;const X=i*110+r*60-cam*.9;
  x.fillStyle=TD()==2?'rgba(20,40,60,.85)':'rgba(122,100,72,.85)';x.beginPath();x.ellipse(X,gy-10*k,(26+r*30)*k,5*k,0,0,7);x.fill();x.strokeStyle='rgba(255,255,255,.28)';x.lineWidth=1*k;x.beginPath();x.moveTo(X-14*k,gy-11*k);x.lineTo(X+10*k,gy-11*k);x.stroke();
  if(r>.78){x.strokeStyle='#cfd8dc';x.lineWidth=1.6*k;x.beginPath();x.moveTo(X+4*k,gy-10*k);x.lineTo(X+4*k,gy-22*k);x.quadraticCurveTo(X+4*k,gy-30*k,X+9*k,gy-30*k);x.stroke();x.fillStyle='#fff';x.beginPath();x.ellipse(X+2*k,gy-24*k,6*k,3.4*k,.3,0,7);x.fill();x.fillStyle='#ffb300';x.fillRect(X+9*k,gy-31*k,5*k,1.4*k)}}}
+
+
+/* ===== DOUBLE TRAKSI: 2 lokomotif di depan + 13 gerbong (kecepatan, tenaga, dan rem bertambah) ===== */
+const dtOn=t=>!!(S.dt&&t===TR[S.sel]&&(t.k=='loco'||t.k=='steam'));
+const effT=t=>dtOn(t)?(t._d||(t._d=Object.assign({},t,{v:Math.min(800,Math.round(t.v*1.25)),a:t.a*1.5,b:t.b*1.2}))):t;
+function dtAdd(t,r){if(!dtOn(t))return r;r=r.slice();if(t.k=='steam')r.splice(2,0,'uap','tdr');else r.splice(1,0,'cc');return r}
+/* jarak (meter) dari lokomotif depan ke lokomotif kedua */
+function dtOffM(t){const cr=carsOf(t),j=t.k=='steam'?2:1;let s=0;for(let i=0;i<j;i++)s+=LEN[cr[i]]*fo(cr[i])+3;return s*TSC/3.67}
+/* nomor lokomotif kedua dibuat berbeda (+1) */
+function dtNo(t,i,ty){if(i!=1||ty!='cc'||!dtOn(t)||!t.lv||!t.lv.no)return null;const o=t.lv.no;t.lv.no=o.replace(/(\d+)$/,m=>String(+m+1).padStart(m.length,'0'));return o}
