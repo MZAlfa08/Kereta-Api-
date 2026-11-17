@@ -9,6 +9,21 @@ TSTY=[{h:['#8fb56c','#5f8c49','#3a5834'],b:['#2e7d32','#3f9a3f'],bd:'#0d47a1',la
 DKC=[['#78909c','#37474f'],['#8d6e63','#4e342e'],['#b0bec5','#607d8b'],['#a1887f','#6d4c41'],['#ef9a9a','#8e2a2a'],['#90a4ae','#455a64']],
 hs=n=>{const v=Math.sin(n*127.1+311.7)*43758.5453;return v-Math.floor(v)};
 const NM=['Jakarta Kota','Manggarai','Gambir','Jatinegara','Bekasi','Cikarang','Karawang','Cikampek','Purwakarta','Padalarang','Bandung','Cirebon','Semarang Tawang','Yogyakarta','Solo Balapan','Madiun','Surabaya Gubeng'];
+
+/* ===== PETA (dibeli di toko): nama stasiun, medan, dan jumlah/panjang terowongan & jembatan berbeda tiap pulau ===== */
+const MAPS={
+ jawa:{nm:'Pulau Jawa',ds:'Jakarta - Surabaya: lintas utama padat, perbukitan sedang',p:0,ic:'🌋',hill:1,nb:[2,2],nt:[2,3],tl:[1000,1800],bl:[500,1000],sky:['#6ec1f2','#d6f0ff'],far:'#7aa5c9',mid:'#4f9a4a',gr:'#2f6f34',
+  st:NM,tn:['Sasaksaat','Lampegan','Notog','Wonokerto','Cipularang','Ciliwung','Bumiayu','Kebasen'],bn:['Cirahong','Cisomang','Kali Progo','Bengawan','Kalibodri','Citarum','Kali Serayu','Cikubang']},
+ bali:{nm:'Pulau Bali',ds:'Gilimanuk - Karangasem: pesisir, sawah terasering, banyak jembatan sungai',p:3500,ic:'🛕',hill:1.2,nb:[3,3],nt:[2,2],tl:[800,1400],bl:[450,900],sky:['#5fd0e8','#fff1cf'],far:'#6f9fb8',mid:'#6bbf4e',gr:'#3f8f3a',
+  st:['Gilimanuk','Negara','Pekutatan','Tabanan','Mengwi','Ubung','Denpasar','Sanur','Kuta','Ubud','Gianyar','Klungkung','Padangbai','Karangasem','Amlapura','Bedugul','Singaraja','Lovina','Seririt'],
+  tn:['Bedugul','Pupuan','Penelokan','Gitgit','Munduk','Kintamani','Batur','Tembuku'],bn:['Tukad Badung','Tukad Yeh Sumbul','Tukad Pakerisan','Tukad Unda','Tukad Ayung','Tukad Bangkung','Tukad Petanu','Tukad Mati']},
+ sumatra:{nm:'Pulau Sumatra',ds:'Medan - Lampung: pegunungan Bukit Barisan, terowongan sangat panjang',p:7000,ic:'⛰️',hill:1.5,nb:[2,3],nt:[2,3],tl:[1300,2400],bl:[600,1200],sky:['#7fb2e8','#e3eefc'],far:'#6d8aa8',mid:'#3f8a4d',gr:'#276b37',
+  st:['Medan','Binjai','Tebing Tinggi','Kisaran','Rantau Prapat','Siantar','Padang','Padang Panjang','Bukittinggi','Solok','Sawahlunto','Pekanbaru','Jambi','Palembang','Prabumulih','Lahat','Baturaja','Kertapati','Bandar Lampung','Tanjung Karang','Kotabumi'],
+  tn:['Bukit Barisan','Sitinjau Lauik','Padang Panjang','Lubuk Alung','Kerinci','Batu Raja','Sibolga','Karo'],bn:['Musi','Ampera','Siak','Batanghari','Kampar','Indragiri','Asahan','Rokan']},
+ kalimantan:{nm:'Pulau Kalimantan',ds:'Banjarmasin - Samarinda: dataran rawa, sungai besar, jembatan sangat panjang',p:12000,ic:'🌴',hill:.55,nb:[4,5],nt:[1,1],tl:[900,1500],bl:[800,1600],sky:['#8fd0c0','#f3f6d8'],far:'#7fa88f',mid:'#3d9a52',gr:'#1f6b3a',
+  st:['Banjarmasin','Banjarbaru','Martapura','Kandangan','Barabai','Tanjung','Balikpapan','Samarinda','Tenggarong','Bontang','Pontianak','Singkawang','Sampit','Palangka Raya','Pangkalan Bun','Kuala Kapuas','Muara Teweh','Tarakan'],
+  tn:['Meratus','Kapuas Hulu','Muller','Schwaner','Bukit Soeharto','Kelam','Palung','Tabalong'],bn:['Barito','Kapuas','Mahakam','Kahayan','Martapura','Landak','Mentaya','Kayan']}};
+const MD=()=>MAPS[S.map]||MAPS.jawa;
 const TR=[
 {n:'KA Lokal Bandung Raya',s:'Lokomotif CC 201 (GE U18C) krem-hijau + gerbong ekonomi',p:0,v:200,a:2.4,b:3.3,m:1,k:'loco',lv:{lg:'hc',pat:'cg',u:'#efe3c4',bd:'#1f4d2a',st:'#2e6b3a',st2:'#d4af37',r:'#c62828',no:'CC 201 45',img:'cc201',cl:{sty:'cream',body:'#f1e8cf',gr:'#3b5b47',pl:1},ty:-20},c1:'#2e6b3a',cb:'#efe3c4',c2:'#d4af37',c3:'#1f4d2a',cars:['cc','eko','eko','eko','eko','eko','eko','eko','eko','bag']},
 {n:'KA Bima',s:'Lokomotif CC 203 + gerbong eksekutif',p:1500,v:200,a:2.4,b:3.3,m:1.4,k:'loco',lv:{lg:'oh',pat:'ow',u:'#ee6a33',bd:'#9aa7ae',st:'#f57c00',st2:'#1b4f9c',r:'#c62828',no:'CC 203 95 06',img:'cc203',ty:-20},c1:'#f3f6f8',cb:'#f3f6f8',c2:'#f57c00',c3:'#1b4f9c',cars:['cc','eks','eks','eks','res','eks','eks','eks','eks','bag']},
@@ -71,9 +86,9 @@ const TR=[
    const t=JSON.parse(JSON.stringify(b));t.n=n;t.s=s;t.p=p;t.m=m;t.lv.img='cc205';t.lv.cl=cl;t.lv.no='CC 205 13 '+(n.length%2?'03':'11');t.c1=c1;t.cb='#f3f6f8';t.c2=c2;t.c3='#ffffff';t.cars=cars;TR.push(t)})}
 })();
 const SPD=2.5,lq=v=>Math.round(v*SPD/5)*5;TR.forEach(t=>{t.v=Math.min(800,Math.round(t.v*SPD));t.a*=SPD;t.b*=SPD});
-let S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1};
+let S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1,map:'jawa',maps:['jawa']};
 try{Object.assign(S,JSON.parse(localStorage.getItem('kn1')||'{}'))}catch(e){}
-if(S.pa==null)S.pa=1;if(!S.au2){S.au2=1;S.tod=3;S.wx=3}S.cons=S.cons||{};S.cw=S.cw||['eko',...Object.values(S.cons)];S.own=S.own.filter(i=>i<TR.length);if(!S.own.includes(0))S.own.push(0);if(!TR[S.sel]||!S.own.includes(S.sel))S.sel=0;
+if(S.pa==null)S.pa=1;if(!S.au2){S.au2=1;S.tod=3;S.wx=3}if(!MAPS[S.map])S.map='jawa';S.maps=(S.maps||['jawa']).filter(k=>MAPS[k]);if(!S.maps.includes('jawa'))S.maps.push('jawa');if(!S.maps.includes(S.map))S.map='jawa';S.cons=S.cons||{};S.cw=S.cw||['eko',...Object.values(S.cons)];S.own=S.own.filter(i=>i<TR.length);if(!S.own.includes(0))S.own.push(0);if(!TR[S.sel]||!S.own.includes(S.sel))S.sel=0;
 const sv=()=>{try{localStorage.setItem('kn1',JSON.stringify(S))}catch(e){}};
 
 /* ===== SIKLUS OTOMATIS WAKTU & CUACA =====
@@ -97,12 +112,12 @@ function toast(m){const e=$('toast');e.textContent=m;e.classList.remove('sh');vo
 /* screens */
 function show(id){document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id==id))}
 function hud(on){for(const k in HC)delete HC[k];HXV=null;LIMX=null;WARM=45;$('hud').classList.toggle('on',on);$('ctl').classList.toggle('on',on)}
-function toMenu(){hornOff();sayStop();S.hi=Math.max(S.hi,Math.floor(G.sc||0));sv();G={m:'menu',pos:0,v:10,r:{st:[],sg:[],cx:[]},pf:[],lp:0,lv:1,sc:0,sf:100,cg:0};hud(0);$('mi').textContent='🪙 '+S.coin+'  •  🏆 Skor Tertinggi '+S.hi;show('menu')}
+function toMenu(){hornOff();sayStop();S.hi=Math.max(S.hi,Math.floor(G.sc||0));sv();G={m:'menu',pos:0,v:10,r:{st:[],sg:[],cx:[]},pf:[],lp:0,lv:1,sc:0,sf:100,cg:0};hud(0);$('mi').textContent='🪙 '+S.coin+'  •  🏆 Skor Tertinggi '+S.hi+'  •  🗺 '+MD().nm;show('menu')}
 /* level */
 const STD=8000; /* jarak antar stasiun (meter) */
 function more(r,n){const t=TR[S.sel],sc=Math.max(1,t.v/200),L=[90,120,160,200,250,300,350].map(lq);
  for(let k=0;k<n;k++){const i=r.st.length,p=r.st[i-1],mx=Math.min(1+Math.floor(i/3),6),pk=()=>L[Math.floor(Math.random()*(mx+1))],b=p.x+STD,a=p.x+SP+40;
-  r.st.push({x:b,nm:NM[i%NM.length],done:0,sty:Math.random()*5|0,pal:Math.random()*5|0,ln:Math.random()<.5?1:0,wx:b-450,ex:b+SP+350});
+  r.st.push({x:b,nm:MD().st[i%MD().st.length],done:0,sty:Math.random()*5|0,pal:Math.random()*5|0,ln:Math.random()<.5?1:0,wx:b-450,ex:b+SP+350});
   /* rambu batas kecepatan: diurutkan menurut posisi (limAt memakai yang terakhir di array) */
   const sg=[{x:a,l:pk()},{x:a+(b-a)*.35,l:pk()},{x:b-1000*sc,l:lq(120)},{x:b-550,l:lq(100)},{x:b-300,l:lq(90)}];
   for(const fr of[.15,.5,.65,.8]){const xx=a+(b-a)*fr;if(xx<b-1000*sc-250)sg.push({x:xx,l:pk()})}
@@ -110,8 +125,8 @@ function more(r,n){const t=TR[S.sel],sc=Math.max(1,t.v/200),L=[90,120,160,200,25
   /* perlintasan kereta api: sampai 3 per segmen */
   for(const fr of[.2,.45,.7]){const x1=a+(b-a)*fr+(Math.random()-.5)*500;if(x1>a+500&&x1<b-1000*sc-300&&Math.random()<.8)r.cx.push({x:x1,ck:Math.random()<.55,a:0,veh:[],sp:0,hn:0,hh:0,w:0,pass:0})}
   strucs(r,a,b)}}
-function gen(){const r={st:[{x:0,nm:NM[0],done:1,sty:0,pal:0,ln:0,wx:-1e9,ex:-1e9}],sg:[],cx:[]};more(r,3);return r}
-function newLevel(){G.r=gen();G.pos=SP;G.v=0;G.ni=1;G.dw=0;G.ts=0;th=bk=em=0;G.dg=0;G.es=0;G.et=0;G.kb=0;G.sq=[];G.lt=0;G.lh=0;G.m='play';G.ln=0;G.wl=0;G.lb=0;G.lx=null;G.wp=null;G.bm=null;G.fl=null;G.pf=[];show(null);hud(1);toast('Tekan MULAI MESIN (E) → '+G.r.st[1].nm+' (JALUR '+(G.r.st[1].ln+1)+')')}
+function gen(){const r={st:[{x:0,nm:MD().st[0],done:1,sty:0,pal:0,ln:0,wx:-1e9,ex:-1e9}],sg:[],cx:[]};more(r,3);return r}
+function newLevel(){HILL=34*MD().hill;G.r=gen();G.pos=SP;G.v=0;G.ni=1;G.dw=0;G.ts=0;th=bk=em=0;G.dg=0;G.es=0;G.et=0;G.kb=0;G.sq=[];G.lt=0;G.lh=0;G.m='play';G.ln=0;G.wl=0;G.lb=0;G.lx=null;G.wp=null;G.bm=null;G.fl=null;G.pf=[];show(null);hud(1);toast(MD().nm+' • Tekan MULAI MESIN (E) → '+G.r.st[1].nm+' (JALUR '+(G.r.st[1].ln+1)+')')}
 function startGame(){G={m:'play',pos:0,v:0,lv:1,sc:0,cg:0,pf:[],lp:0};newLevel()}
 const limAt=p=>{let l=lq(90);for(const s of G.r.sg)if(s.x<=p)l=s.l;return l};
 function pz(){if(G.m=='play'){G.m='pause';hornOff();sayStop();sv();show('pause')}else if(G.m=='pause'){G.m='play';show(null)}}
@@ -142,7 +157,7 @@ function xing(dt,len){const T=cxT();
 /* update */
 const segT=i=>{const t=TR[S.sel],r=G.r.st,par=(r[i].x-r[i-1].x-SP)/(Math.min(t.v,200*SPD)*.6/3.6);return(par*1.5+20)/Math.sqrt(DF[S.df])};
 function phys(dt,t,mv,N){const kb=G.kb>0,mve=mv*(kb?1.25:1);
- if(G.dw>0){G.v=0;G.dw-=dt;{const s0=G.r.st[G.ni-1];if(s0){if(!s0.dp&&G.dw0>=8&&G.dw<=4.6&&G.dw>0){s0.dp=1;ppkaCue(s0)}
+ if(G.dw>0){G.v=0;G.dw-=dt;{const s0=G.r.st[G.ni-1];if(s0){if(!s0.dq&&G.dw0>=8&&G.dw<=8.4&&G.dw>0){s0.dq=1;departAnn()}if(!s0.dp&&G.dw0>=8&&G.dw<=1&&G.dw>0){s0.dp=1;ppkaCue(s0)}
   /* urutan berangkat: pengumuman suara PPKA selesai -> peluit PANJANG -> kereta berangkat */
   if(!s0.wst&&(s0.wr||(G.dw<=0&&(!s0.dp||(s0.hd=(s0.hd||0)+dt)>7)))){s0.wst=1;s0.wt=0;s0.wd=S.snd?WHD:.4;whistle();toast('📯 PPKA: peluit panjang, siap berangkat!')}
   if(s0.wst){s0.wt+=dt;if(s0.wt<s0.wd+.3)G.dw=Math.max(G.dw,.001);else G.dw=0}else if(G.dw<=0)G.dw=.001}}
@@ -816,7 +831,7 @@ function buildCaches(){ck=W+'|'+H+'|'+TD();SPR={};const gy=H*.72,td=TD(),sk=SK[t
  [VG,q]=mkc(W,H);g=q.createRadialGradient(W/2,H/2,H*.45,W/2,H/2,Math.max(W,H)*.75);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.35)');q.fillStyle=g;q.fillRect(0,0,W,H);
  [CL,q]=mkc(200*u,96*u);[[0,0,34],[28,-6,28],[-28,4,24],[54,5,20],[-52,6,18]].forEach(p=>{const cx=100*u+p[0]*u,cy=48*u+p[1]*u,r=p[2]*u,gg=q.createRadialGradient(cx,cy,0,cx,cy,r);gg.addColorStop(0,'rgba(255,255,255,.95)');gg.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=gg;q.beginPath();q.arc(cx,cy,r,0,7);q.fill()})}
 /* ===== TANJAKAN & TURUNAN: kontur halus (gabungan 2 gelombang sinus), datar di stasiun & perlintasan ===== */
-const HILL=34,GRAV=7;let HZ=[];
+let HILL=34;const GRAV=7;let HZ=[];
 function hillZones(){const a=G.pos-1400,b=G.pos+2600;HZ=[];for(const s of G.r.st)if(s.x+SP+560>a&&s.x-560<b)HZ.push([s.x-140,s.x+SP+140]);for(const c of(G.r.cx||[]))if(c.x+560>a&&c.x-560<b)HZ.push([c.x-110,c.x+110])}
 const sst=t=>t*t*(3-2*t);
 function hillH(p){let f=1;for(let i=0;i<HZ.length;i++){const z=HZ[i],q=p<z[0]?z[0]-p:p>z[1]?p-z[1]:0;if(q<420)f*=sst(q/420)}return f*HILL*(.62*Math.sin(p*.0049+.6)+.38*Math.sin(p*.0127+2.1))}
@@ -881,13 +896,22 @@ function draw0(){
 /* shop & settings */
 const bar=(l,f)=>`<div class="st"><span>${l}</span><i><u style="width:${Math.round(Math.min(1,f)*100)}%"></u></i></div>`;
 let ST=0;
-function shop(){$('sc2').textContent=S.coin;$('tb1').className='b sm '+(ST?'bl':'g');$('tb2').className='b sm '+(ST?'g':'bl');const g=$('grid');g.innerHTML='';
+function shop(){$('sc2').textContent=S.coin;$('tb1').className='b sm '+(ST==0?'g':'bl');$('tb2').className='b sm '+(ST==1?'g':'bl');$('tb3').className='b sm '+(ST==2?'g':'bl');const g=$('grid');g.innerHTML='';
  const card=(t2,nm,sub,extra,bt0)=>{const d=document.createElement('div');d.className='cd';d.innerHTML='<canvas width="270" height="76"></canvas><b>'+nm+'</b><small>'+sub+'</small>'+extra+'<button class="b sm"></button>';
   const c=d.querySelector('canvas').getContext('2d');c.fillStyle='#8d7b68';c.fillRect(0,68,270,8);c.fillStyle='#cfd8dc';c.fillRect(0,66,270,2);drawTrain(c,t2,262,66,Math.min(1.1,245/trLen(t2)),0);g.appendChild(d);return d.querySelector('button')};
  if(ST==0)TR.forEach((t,i)=>{const lo=t.k=='loco'||t.k=='steam',t2=lo?Object.assign({},t,{pv:1,cars:t.k=='steam'?['uap','tdr']:['cc']}):t,
    bt=card(t2,t.n,lo?(t.k=='steam'?'Lokomotif uap (dijual sendiri)':'Lokomotif '+t.lv.no.slice(0,6)+' (dijual sendiri)'):t.s,bar('Kecepatan',t.v/500)+bar('Akselerasi',t.a/4.5)+bar('Rem',t.b/5.75)+bar('Pendapatan',t.m/3)),o=S.own.includes(i);
   bt.textContent=o?(S.sel==i?'✔ DIPAKAI':'PILIH'):(S.coin>=t.p?'BELI 🪙'+t.p:'🔒 🪙'+t.p);bt.className='b sm '+(o?(S.sel==i?'g':'bl'):(S.coin>=t.p?'y':''));bt.disabled=!o&&S.coin<t.p;
   bt.onclick=()=>{au();if(!o){S.coin-=t.p;S.own.push(i);ding()}S.sel=i;sv();shop()}});
+/* tab PETA: 4 pulau, beli lalu pakai; peta dipakai untuk permainan berikutnya */
+ else if(ST==2)Object.keys(MAPS).forEach(id=>{const m=MAPS[id],o=S.maps.includes(id),use=S.map==id,d=document.createElement('div');d.className='cd';
+  d.innerHTML='<canvas width="270" height="76"></canvas><b>'+m.ic+' '+m.nm+'</b><small>'+m.ds+'</small><small>'+m.st.length+' stasiun • terowongan '+m.tl[0]+'-'+m.tl[1]+' m • jembatan '+m.bl[0]+'-'+m.bl[1]+' m'+(o?' • dimiliki':'')+'</small><button class="b sm"></button>';
+  const c=d.querySelector('canvas').getContext('2d'),sg=c.createLinearGradient(0,0,0,76);sg.addColorStop(0,m.sky[0]);sg.addColorStop(1,m.sky[1]);c.fillStyle=sg;c.fillRect(0,0,270,76);
+  const ridge=(col,base,amp,f,ph)=>{c.fillStyle=col;c.beginPath();c.moveTo(0,76);for(let X=0;X<=270;X+=6)c.lineTo(X,base-amp*(.55+.45*Math.sin(X*f+ph))*(.6+.4*Math.sin(X*f*2.3+ph*2)));c.lineTo(270,76);c.closePath();c.fill()};
+  ridge(m.far,50,24*Math.min(1.6,m.hill+.2),.035,id.length);ridge(m.mid,60,14*Math.min(1.4,m.hill+.2),.05,id.length*2);c.fillStyle=m.gr;c.fillRect(0,64,270,12);c.fillStyle='#8d7b68';c.fillRect(0,68,270,8);c.fillStyle='#cfd8dc';c.fillRect(0,66,270,2);
+  c.font='34px sans-serif';c.textAlign='center';c.fillText(m.ic,135,50);g.appendChild(d);
+  const bt=d.querySelector('button'),pr=m.p;bt.textContent=o?(use?'✔ DIPAKAI':'PAKAI'):(S.coin>=pr?'BELI 🪙'+pr:'🔒 🪙'+pr);bt.className='b sm '+(use?'g':o?'bl':S.coin>=pr?'y':'');bt.disabled=!o&&S.coin<pr;
+  bt.onclick=()=>{au();if(!o){S.coin-=pr;S.maps.push(id);ding()}S.map=id;sv();shop()}})
  else{const lk=TR[S.sel],can=lk.k=='loco'||lk.k=='steam',lt=can?lk:TR[0];
   SHOPORD().forEach(id=>{const o=cw(id),pr=CP[id],st=lt.k=='steam',t2=Object.assign({},lt,{pv:1,cars:st?['uap','tdr',...CONS[id].slice(1)]:['cc',...CONS[id]]}),use=o&&can&&S.cons[S.sel]==id,
    bt=card(t2,CN[id],CD[id]+(o?' • dimiliki':''),'');
@@ -895,10 +919,10 @@ function shop(){$('sc2').textContent=S.coin;$('tb1').className='b sm '+(ST?'bl':
    bt.onclick=()=>{au();if(!o){S.coin-=pr;S.cw.push(id);ding()}if(can)S.cons[S.sel]=id;sv();shop()}})}}
 function sets(){$('s1').textContent='🔊 Suara: '+(S.snd?'NYALA':'MATI');$('s2').textContent='🎯 Kesulitan: '+DN[S.df];$('s3').textContent='🕒 Waktu: '+TN[S.tod];$('s6').textContent='🌦 Cuaca: '+WN[S.wx||0];$('s7').textContent='📢 Pengumuman stasiun: '+(S.pa?'NYALA':'MATI')}
 const on=(id,f)=>$(id).onclick=()=>{au();f()};
-$('tb1').onclick=()=>{au();ST=0;shop()};$('tb2').onclick=()=>{au();ST=1;shop()};
+$('tb1').onclick=()=>{au();ST=0;shop()};$('tb2').onclick=()=>{au();ST=1;shop()};$('tb3').onclick=()=>{au();ST=2;shop()};
 on('bm',startGame);on('bt',()=>{shop();show('shop')});on('bs',()=>{sets();show('set')});on('sb1',toMenu);on('s5',toMenu);
 on('s1',()=>{S.snd^=1;sv();sets();ding()});on('s2',()=>{S.df=(S.df+1)%3;sv();sets()});on('s3',()=>{S.tod=(S.tod+1)%4;sv();sets()});on('s6',()=>{S.wx=((S.wx||0)+1)%4;sv();sets()});on('s7',()=>{S.pa^=1;if(!S.pa)sayStop();sv();sets();ding()});
-on('s4',()=>{if(confirm('Hapus semua koin, kereta, dan skor tertinggi?')){S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1,cons:{},cw:['eko']};sv();sets()}});
+on('s4',()=>{if(confirm('Hapus semua koin, kereta, dan skor tertinggi?')){S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1,cons:{},cw:['eko'],map:'jawa',maps:['jawa']};sv();sets()}});
 on('bp',pz);on('br',pz);on('bq',toMenu);
 /* kontrol: tuas gas (notch 0-8) dan tuas rem (0-5) seperti kereta asli */
 function setTh(v){v=Math.max(0,Math.min(8,v));if(G.m=='play'&&G.es!=2&&v>0){if(tm-(G.nt||0)>1.5){G.nt=tm;toast('Nyalakan mesin dulu! (tombol E)')}return}if(v!=th)tk();th=v;if(v>0){bk=0;em=0}}
@@ -916,19 +940,16 @@ addEventListener('blur',()=>{K={};em=0;hornOff();if(G.m=='play')pz()});
 /* ===== DUNIA: terowongan, jembatan, orang di stasiun, parkiran truk/mobil, dan suara stasiun ===== */
 
 /* ---------- penempatan terowongan & jembatan di antara dua stasiun ---------- */
-const TNM=['Sasaksaat','Lampegan','Notog','Wonokerto','Cipularang','Ciliwung','Bumiayu','Kebasen'],
-      BNM=['Cirahong','Cisomang','Kali Progo','Bengawan','Kalibodri','Citarum','Kali Serayu','Cikubang'];
 function strucs(r,a,b){r.sc=r.sc||[];const tk=[];
- r.sg.forEach(s=>{if(s.x>=a-80&&s.x<=b+80)tk.push([s.x-60,s.x+60])});
  r.cx.forEach(c=>{if(c.x>=a&&c.x<=b)tk.push([c.x-200,c.x+200])});
  tk.push([a-100,a+350],[b-1100,b+100]);
- /* terowongan dibanyakkan: 2 jembatan lebih dulu, lalu 7-9 percobaan terowongan (panjang 550-1250 m, jarak antar struktur 70 m) */
- const ord=[];for(let i=0,nb=2;i<nb;i++)ord.push('brg');for(let i=0,nt=7+(Math.random()*3|0);i<nt;i++)ord.push('tun');
- for(const ty of ord)for(let k=0;k<40;k++){
-  const w=ty=='tun'?550+Math.random()*700:240+Math.random()*200,
+ /* terowongan dulu lalu jembatan; jumlah & panjang mengikuti peta (terowongan 800-2400 m, jembatan 450-1600 m, jarak antar struktur 70 m) */
+ const M=MD(),RN=q=>q[0]+Math.floor(Math.random()*(q[1]-q[0]+1)),ord=[];for(let i=0,nt=RN(M.nt);i<nt;i++)ord.push('tun');for(let i=0,nb=RN(M.nb);i<nb;i++)ord.push('brg');
+ for(const ty of ord)for(let k=0;k<60;k++){
+  const rg=ty=='tun'?M.tl:M.bl,w=rg[0]+Math.random()*(rg[1]-rg[0]),
         x0=a+350+Math.random()*Math.max(1,b-a-1450-w);
   if(x0+w>b-1100)continue;if(tk.some(q=>x0-70<q[1]&&x0+w+70>q[0]))continue;
-  tk.push([x0,x0+w]);const ky=ty=='tun'?'ti':'bi';r[ky]=((r[ky]==null?-1:r[ky])+1+(Math.random()*5|0))%6;r.sc.push({k:ty,x:x0,w:Math.round(w),sy:r[ky],nm:(ty=='tun'?TNM:BNM)[Math.random()*8|0]});break}
+  tk.push([x0,x0+w]);r.sg=r.sg.filter(s=>s.x<x0-40||s.x>x0+w+40);const ky=ty=='tun'?'ti':'bi';r[ky]=((r[ky]==null?-1:r[ky])+1+(Math.random()*5|0))%6;r.sc.push({k:ty,x:x0,w:Math.round(w),sy:r[ky],nm:(ty=='tun'?M.tn:M.bn)[Math.random()*8|0]});break}
  floodZones(r,a,b,tk)}
 
 /* ---------- status untuk suara (di dalam terowongan / di atas jembatan) + info layar ---------- */
@@ -943,7 +964,7 @@ function envState(len){let tn=0,br=0;
 /* ---------- TEROWONGAN ---------- */
 const TIH=84;
 function domeH(X,m0,m1,mH,sd){const t=Math.max(0,Math.min(1,(X-m0)/(m1-m0)));return Math.pow(Math.sin(Math.PI*t),.5)*mH*(.9+.1*Math.sin(t*11+sd))}
-function domeP(m0,m1,gy,mH,sd){x.beginPath();x.moveTo(m0,gy+4*u);for(let X=m0;X<m1;X+=14*u)x.lineTo(X,gy+4*u-domeH(X,m0,m1,mH,sd));x.lineTo(m1,gy+4*u);x.closePath()}
+function domeP(m0,m1,gy,mH,sd){const st=14*u,xa=Math.max(m0,-40),xb=Math.min(m1,W+40),X0=m0+Math.ceil((xa-m0)/st)*st;x.beginPath();x.moveTo(xa,gy+4*u-domeH(xa,m0,m1,mH,sd));for(let X=X0;X<xb;X+=st)x.lineTo(X,gy+4*u-domeH(X,m0,m1,mH,sd));x.lineTo(xb,gy+4*u-domeH(xb,m0,m1,mH,sd));x.lineTo(xb,gy+4*u);x.lineTo(xa,gy+4*u);x.closePath()}
 function domeFill(m0,m1,gy,mH,sd,c){c=c||TSTY[0].h;const g=x.createLinearGradient(0,gy-mH,0,gy+4*u);g.addColorStop(0,c[0]);g.addColorStop(.4,c[1]);g.addColorStop(1,c[2]);domeP(m0,m1,gy,mH,sd);x.fillStyle=g;x.fill()}
 function tunBack(q,gy,P,cam){const px0=q.x*P-cam,px1=(q.x+q.w)*P-cam;if(px1<-150*u||px0>W+150*u)return;
  const m0=px0-90*u,m1=px1+90*u,mH=160*u,ih=TIH*u;
@@ -1205,7 +1226,7 @@ function stnAudio(){const near=(G.m=='play'||G.m=='menu')?zoneF(G.pos):0;crowd(n
  if(G.m!='play')return;const s=G.r.st[G.ni];if(!s||s.done)return;
  if(!s.a0&&G.pos<s.wx&&s.wx-G.pos<2200){s.a0=1;if(s.ln!=G.ln)toast('🔀 Wesel otomatis → JALUR '+(s.ln+1))}
  const d=s.x+SP-5-G.pos;if(d<0)return;const lead=Math.max(1000,G.v*10),tn=TR[S.sel].n;
- if(!s.a1&&d<lead){s.a1=1;if(!S.pa)chime();if(S.pa)say('Perhatian, perhatian. '+tn+locoSay()+' akan segera masuk di stasiun '+s.nm+', jalur '+(s.ln?'dua':'satu')+'. Mohon penumpang menunggu di belakang garis aman peron.')}
+ if(!s.a1&&d<lead){s.a1=1;if(!S.pa)chime();if(S.pa)say('Perhatian, perhatian. '+tn+locoSay()+' akan segera masuk di stasiun '+s.nm+', jalur '+(s.ln?'dua':'satu')+'. Para penumpang dimohon menunggu di belakang garis aman peron. Terima kasih.')}
  if(!s.a2&&d<lead*.6){s.a2=1;bellSt();autoHorn(hornFor(S.sel),1500)}}
 /* kalimat lokomotif untuk pengumuman suara, mis. ", ditarik lokomotif C C dua nol tiga nomor sembilan delapan dua dua," */
 function locoSay(){const t=TR[S.sel];if(t.k=='steam')return', ditarik lokomotif uap,';if(t.k!='loco'||!t.lv||!t.lv.no)return'';
@@ -1213,8 +1234,10 @@ function locoSay(){const t=TR[S.sel];if(t.k=='steam')return', ditarik lokomotif 
  return m?', ditarik lokomotif C C '+dw(m[1])+(m[2]?', nomor '+dw(m[2]):'')+',':''}
 function arriveCue(s){s.arr=tm;airRel();
  setTimeout(()=>{doorBeep(3);hiss(.5,.1,1800)},900);
- if(S.pa)setTimeout(()=>say(TR[S.sel].n+locoSay()+' tiba di stasiun '+s.nm+'. Periksa kembali barang bawaan Anda.'),700)}
-const dwellT=()=>S.pa&&S.snd&&window.speechSynthesis?13:3;
+ if(S.pa)setTimeout(()=>say('Perhatian. '+TR[S.sel].n+locoSay()+' telah tiba di stasiun '+s.nm+'. Periksa kembali barang bawaan Anda, dan hati-hati melangkah di celah antara kereta dan peron. Terima kasih.',1),700)}
+/* pengumuman pramugari sebelum berangkat */
+function departAnn(){if(!S.pa)return;const nx=G.r.st[G.ni]&&G.r.st[G.ni].nm||'stasiun berikutnya';say('Perhatian. '+TR[S.sel].n+locoSay()+' tujuan '+nx+' akan segera berangkat. Harap penumpang segera naik. Terima kasih.',1)}
+const dwellT=()=>S.pa&&S.snd&&window.speechSynthesis?20:3;
 /* aba-aba PPKA lewat radio ke masinis menjelang berangkat, lalu peluit & "berangkat" */
 function ppkaCue(s){const tn=TR[S.sel].n,nx=G.r.st[G.ni]&&G.r.st[G.ni].nm||'stasiun berikutnya',k=Math.random()*3|0;
  sayPPKA(k==0?'Sinyal keluar aman. '+tn+locoSay()+' berangkat!':k==1?'PPKA '+s.nm+' ke masinis. Sinyal keluar aman. Silakan berangkat.':'Kereta api tujuan '+nx+', '+tn+locoSay()+' diberangkatkan. Hati-hati.',()=>{s.wr=1})}
