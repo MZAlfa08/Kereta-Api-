@@ -92,12 +92,26 @@ function whistle(){if(!AC||!S.snd)return;hiss(.14,.03,2800);const t=AC.currentTi
   vg.connect(o.frequency);pg.gain.value=p[1];o.connect(pg);pg.connect(tg);o.start(t);o.stop(t+d+.1)});
  const s=AC.createBufferSource(),nf=AC.createBiquadFilter(),ng=AC.createGain();s.buffer=NZ;s.loop=true;nf.type='bandpass';nf.frequency.value=3300;nf.Q.value=2.2;ng.gain.value=.55;s.connect(nf);nf.connect(ng);ng.connect(tg);s.start(t,Math.random(),d+.1);
  tg.connect(g);g.connect(M);rv.gain.value=.6;g.connect(rv);rv.connect(RV);lf.start(t);vb.start(t);lf.stop(t+d+.1);vb.stop(t+d+.1)}
-/* pengumuman suara pramugari (Bahasa Indonesia): selalu didahului "neng-nong neng-nong", baru bicara lewat speechSynthesis bawaan browser */
-let SAYT=0;
+/* ---------- SUARA PENGUMUMAN (Bahasa Indonesia) ----------
+   - memilih suara Indonesia TERBAIK yang ada di perangkat (utamakan suara 'natural/online/Google'; perempuan untuk pramugari, laki-laki untuk PPKA)
+   - kalimat dipecah per kalimat supaya jeda alami dan tidak terpotong, singkatan dibaca benar (KA -> kereta api)
+   - didahului bunyi "neng-nong" (panjang untuk kereta datang, pendek untuk pengumuman lanjutan) */
+let SAYT=0,VPK={};
+try{if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{VPK={}}}catch(e){}
+function pickVoice(male){const k=male?'m':'f';if(VPK[k])return VPK[k];let vs=[];try{vs=speechSynthesis.getVoices()||[]}catch(e){}
+ const id=vs.filter(q=>/^id([-_]|$)/i.test(q.lang)||/indonesia/i.test(q.name));if(!id.length)return null;
+ const sc=q=>{const n=q.name;let s=0;if(/natural|neural|online|enhanced|premium|wavenet/i.test(n))s+=5;if(/google/i.test(n))s+=3;if(q.localService===false)s+=1;
+  const m=/andika|ardi|male|pria|rizki|jaya|bagus|budi|laki/i.test(n),f=/gadis|damayanti|female|wanita|perempuan|indah|ayu|sari|putri/i.test(n);
+  if(male){if(m)s+=6;if(f)s-=6}else{if(f)s+=6;if(m)s-=6}return s};
+ const v=id.slice().sort((x,y)=>sc(y)-sc(x))[0];if(vs.length)VPK[k]=v;return v}
+const isNat=v=>!!v&&/natural|neural|online|enhanced|premium|wavenet|google/i.test(v.name);
+function sayNorm(t){return t.replace(/\bPPKA\b/g,'P P K A').replace(/\bKRL\b/g,'K R L').replace(/\bKAI\b/g,'K A I').replace(/\bKA\b/g,'Kereta Api').replace(/\bCC\b/g,'C C').replace(/\s+/g,' ').trim()}
+function chimeShort(){[[784,0],[988,.42]].forEach(q=>{const f=q[0],d=q[1];tone(f,.7,'sine',.2,0,d);tone(f*2,.4,'sine',.06,0,d);tone(f*3.01,.2,'sine',.02,0,d);tone(f*.5,.5,'sine',.05,0,d)})}
+chimeShort.ms=1300;
 function sayStop(){clearTimeout(SAYT);try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}}
-function say(txt){if(!S.snd)return;clearTimeout(SAYT);chime();if(!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined')return;
- try{speechSynthesis.cancel();const ut=new SpeechSynthesisUtterance(txt);ut.lang='id-ID';ut.rate=.92;ut.pitch=1.08;ut.volume=.9;
-  const vs=speechSynthesis.getVoices(),v=vs.find(q=>/^id/i.test(q.lang));if(v)ut.voice=v;SAYT=setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){}},chime.ms)}catch(e){}}
+function say(txt,short){if(!S.snd)return;clearTimeout(SAYT);short?chimeShort():chime();if(!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined')return;
+ try{speechSynthesis.cancel();const v=pickVoice(false),nat=isNat(v),parts=sayNorm(txt).match(/[^.!?]+[.!?]*/g)||[txt];
+  SAYT=setTimeout(()=>{try{parts.forEach((p,i)=>{p=p.trim();if(!p)return;const ut=new SpeechSynthesisUtterance(p);ut.lang='id-ID';if(v)ut.voice=v;ut.rate=nat?.95:.88;ut.pitch=nat?1:1.12;ut.volume=1;speechSynthesis.speak(ut)})}catch(e){}},short?chimeShort.ms:chime.ms)}catch(e){}}
 
 /* ---------- PETUGAS PPKA: suara radio memberangkatkan kereta ---------- */
 /* bunyi "kreek" tombol radio (HT) ditekan / dilepas */
@@ -107,6 +121,6 @@ function sayPPKA(txt,cb){let dn=0;const fin=()=>{if(dn)return;dn=1;radioKey(0);c
  if(!S.snd){if(cb)setTimeout(()=>{if(!dn){dn=1;cb()}},500);return}
  radioKey(1);
  if(!window.speechSynthesis||typeof SpeechSynthesisUtterance=='undefined'){setTimeout(fin,900);return}
- try{speechSynthesis.cancel();const ut=new SpeechSynthesisUtterance(txt);ut.lang='id-ID';ut.rate=.9;ut.pitch=.5;ut.volume=1;
-  const vs=speechSynthesis.getVoices(),id=vs.filter(q=>/^id/i.test(q.lang)),v=id.find(q=>/andika|male|pria|rizki|jaya|ardi/i.test(q.name))||id[0];if(v)ut.voice=v;
+ try{speechSynthesis.cancel();const ut=new SpeechSynthesisUtterance(sayNorm(txt)),v=pickVoice(true);ut.lang='id-ID';ut.rate=.92;ut.pitch=isNat(v)?.95:.55;ut.volume=1;
+  if(v)ut.voice=v;
   ut.onend=fin;ut.onerror=fin;setTimeout(()=>{try{speechSynthesis.speak(ut)}catch(e){fin()}},380);setTimeout(fin,9000)}catch(e){fin()}}
