@@ -129,7 +129,7 @@ function gen(){const r={st:[{x:0,nm:MD().st[0],done:1,sty:0,pal:0,ln:0,wx:-1e9,e
 function newLevel(){HILL=34*MD().hill;G.r=gen();G.pos=SP;G.v=0;G.ni=1;G.dw=0;G.ts=0;th=bk=em=0;G.dg=0;G.es=0;G.et=0;G.kb=0;G.sq=[];G.lt=0;G.lh=0;G.m='play';G.ln=0;G.wl=0;G.lb=0;G.lx=null;G.wp=null;G.bm=null;G.fl=null;G.pf=[];show(null);hud(1);toast(MD().nm+' • Tekan MULAI MESIN (E) → '+G.r.st[1].nm+' (JALUR '+(G.r.st[1].ln+1)+')'+(dtOn(TR[S.sel])?' • 🚂🚂 DOUBLE TRAKSI':''))}
 function startGame(){G={m:'play',pos:0,v:0,lv:1,sc:0,cg:0,pf:[],lp:0};newLevel()}
 const limAt=p=>{let l=lq(90);for(const s of G.r.sg)if(s.x<=p)l=s.l;return l};
-function pz(){if(G.m=='play'){G.m='pause';hornOff();sayStop();sv();show('pause')}else if(G.m=='pause'){G.m='play';show(null)}}
+function pz(){if(G.m=='play'){G.m='pause';hornOff();sayStop();sv();dtBtn();show('pause')}else if(G.m=='pause'){G.m='play';show(null)}}
 /* perlintasan kereta api: palang, lampu, lonceng, dan kendaraan */
 const PAL=['#e53935','#1e88e5','#fdd835','#43a047','#8e24aa','#fb8c00','#eceff1'];
 function cxT(){const gy=H*.72,sp=(H-gy)+76*u;return{sp,tt:26*u/sp,tb:12*u/sp,tf:60*u/sp,y0:gy-26*u,gy}}
@@ -918,11 +918,11 @@ function shop(){$('sc2').textContent=S.coin;$('tb1').className='b sm '+(ST==0?'g
    bt=card(t2,CN[id],CD[id]+(o?' • dimiliki':''),'');
    bt.textContent=o?(can?(use?'✔ DIPAKAI':'PAKAI'):'DIMILIKI'):(S.coin>=pr?'BELI 🪙'+pr:'🔒 🪙'+pr);bt.className='b sm '+(use?'g':o?'bl':S.coin>=pr?'y':'');bt.disabled=(!o&&S.coin<pr)||(o&&!can);
    bt.onclick=()=>{au();if(!o){S.coin-=pr;S.cw.push(id);ding()}if(can)S.cons[S.sel]=id;sv();shop()}})}}
-function sets(){$('s1').textContent='🔊 Suara: '+(S.snd?'NYALA':'MATI');$('s2').textContent='🎯 Kesulitan: '+DN[S.df];$('s3').textContent='🕒 Waktu: '+TN[S.tod];$('s6').textContent='🌦 Cuaca: '+WN[S.wx||0];$('s7').textContent='📢 Pengumuman stasiun: '+(S.pa?'NYALA':'MATI');const e8=$('s8');if(e8)e8.textContent='🚂🚂 Double Traksi (2 loko): '+(S.dt?'NYALA':'MATI')}
+function sets(){$('s1').textContent='🔊 Suara: '+(S.snd?'NYALA':'MATI');$('s2').textContent='🎯 Kesulitan: '+DN[S.df];$('s3').textContent='🕒 Waktu: '+TN[S.tod];$('s6').textContent='🌦 Cuaca: '+WN[S.wx||0];$('s7').textContent='📢 Pengumuman stasiun: '+(S.pa?'NYALA':'MATI')}
 const on=(id,f)=>$(id).onclick=()=>{au();f()};
 $('tb1').onclick=()=>{au();ST=0;shop()};$('tb2').onclick=()=>{au();ST=1;shop()};$('tb3').onclick=()=>{au();ST=2;shop()};
 on('bm',startGame);on('bt',()=>{shop();show('shop')});on('bs',()=>{sets();show('set')});on('sb1',toMenu);on('s5',toMenu);
-on('s1',()=>{S.snd^=1;sv();sets();ding()});on('s2',()=>{S.df=(S.df+1)%3;sv();sets()});on('s3',()=>{S.tod=(S.tod+1)%4;sv();sets()});on('s6',()=>{S.wx=((S.wx||0)+1)%4;sv();sets()});on('s7',()=>{S.pa^=1;if(!S.pa)sayStop();sv();sets();ding()});if($('s8'))on('s8',()=>{S.dt^=1;sv();sets();ding()});
+on('s1',()=>{S.snd^=1;sv();sets();ding()});on('s2',()=>{S.df=(S.df+1)%3;sv();sets()});on('s3',()=>{S.tod=(S.tod+1)%4;sv();sets()});on('s6',()=>{S.wx=((S.wx||0)+1)%4;sv();sets()});on('s7',()=>{S.pa^=1;if(!S.pa)sayStop();sv();sets();ding()});
 on('s4',()=>{if(confirm('Hapus semua koin, kereta, dan skor tertinggi?')){S={coin:0,own:[0],sel:0,hi:0,snd:1,df:1,tod:3,wx:3,au2:1,pa:1,dt:0,cons:{},cw:['eko'],map:'jawa',maps:['jawa']};sv();sets()}});
 on('bp',pz);on('br',pz);on('bq',toMenu);
 /* kontrol: tuas gas (notch 0-8) dan tuas rem (0-5) seperti kereta asli */
@@ -1514,3 +1514,9 @@ function dtAdd(t,r){if(!dtOn(t))return r;r=r.slice();if(t.k=='steam')r.splice(2,
 function dtOffM(t){const cr=carsOf(t),j=t.k=='steam'?2:1;let s=0;for(let i=0;i<j;i++)s+=LEN[cr[i]]*fo(cr[i])+3;return s*TSC/3.67}
 /* nomor lokomotif kedua dibuat berbeda (+1) */
 function dtNo(t,i,ty){if(i!=1||ty!='cc'||!dtOn(t)||!t.lv||!t.lv.no)return null;const o=t.lv.no;t.lv.no=o.replace(/(\d+)$/,m=>String(+m+1).padStart(m.length,'0'));return o}
+
+/* tombol Double Traksi ada di menu jeda (saat bermain); hanya bisa diganti ketika berhenti di stasiun */
+function dtBtn(){const b=$('bd');if(!b)return;const t=TR[S.sel],ok=t.k=='loco'||t.k=='steam';b.textContent='🚂🚂 Double Traksi (2 loko): '+(ok?(S.dt?'NYALA':'MATI'):'tidak tersedia');b.disabled=!ok}
+if($('bd'))on('bd',()=>{const t=TR[S.sel];if(!(t.k=='loco'||t.k=='steam')){toast('Double traksi hanya untuk kereta berlokomotif');return}
+ if(!(G.v<.5&&atSt())){toast('Berhenti di stasiun dulu untuk memasang/melepas lokomotif kedua');return}
+ S.dt^=1;sv();dtBtn();toast(S.dt?'🚂🚂 Double traksi AKTIF: 2 lokomotif + 13 gerbong':'🚂 Kembali ke 1 lokomotif')});
